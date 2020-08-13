@@ -52,13 +52,13 @@ August 13, 2020
 * Build the image from Docker file (from within /path_to/deepspeech2/2020-08-13)
 
   ```commandline
-  sudo docker build -t crnnacl .
+  sudo docker build -t ds2 .
   ```
   
 * Run the container
 
   ```commandline
-  sudo docker run --runtime=nvidia --shm-size 8G -v /local/dir:/container/dir -it crnnacl
+  sudo docker run --runtime=nvidia --shm-size 8G -v /local/dir:/container/dir -it ds2
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
