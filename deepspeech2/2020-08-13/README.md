@@ -64,7 +64,25 @@ August 13, 2020
 
 ### Usage
 
-* TODO
+* [Training](https://github.com/SeanNaren/deepspeech.pytorch#training) - `python train.py` is available via `ds2_train`
+
+  ```commandline
+  ds2_train data.train_manifest=data/train_manifest.csv data.val_manifest=data/val_manifest.csv
+  ```
+
+* [Testing/inference](https://github.com/SeanNaren/deepspeech.pytorch#testinginference)
+
+  * Testing (`python test.py` is available via `ds2_test`)
+  
+    ```commandline
+    ds2_test model.model_path=models/deepspeech.pth test_manifest=/path/to/test_manifest.csv
+    ```
+  
+  * Inference (`python transcribe.py` is available via `ds2_transcribe`)
+  
+    ```commandline
+    ds2_transcribe model.model_path=models/deepspeech.pth audio_path=/path/to/audio.wav
+    ```
 
 ## Pre-built images
 
