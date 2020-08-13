@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /deepspeech.pytorch
+python train.py "$@"

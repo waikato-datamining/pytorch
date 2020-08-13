@@ -46,3 +46,5 @@ RUN git clone https://github.com/SeanNaren/deepspeech.pytorch.git /deepspeech.py
     pip install --no-cache-dir -e .
 
 COPY bash.bashrc /etc/bash.bashrc
+COPY ds2_train /usr/bin/ds2_train
+COPY ds2_transcribe /usr/bin/ds2_transcribe
