@@ -63,12 +63,15 @@ May 18, 2020
 
 ### Usage
 
-* TODO 
+* Example configurations
+
+  * [training](https://github.com/ksanjeevan/crnn-audio-classification/blob/master/config.json)
+  * [network](https://github.com/ksanjeevan/crnn-audio-classification/blob/master/crnn.cfg)
 
 * Train
 
   ```commandline
-  crnnaclass train -c config.json --cfg arch.cfg
+  crnnaclass train -c config.json --cfg crnn.cfg
   ```
   
 * Evaluation 
