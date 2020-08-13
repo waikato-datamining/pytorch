@@ -68,19 +68,19 @@ May 18, 2020
 * Train
 
   ```commandline
-  ./run.py train -c config.json --cfg arch.cfg
+  crnnaclass train -c config.json --cfg arch.cfg
   ```
   
 * Evaluation 
 
   ```commandline
-  ./run.py eval -r /path/to/saved/model.pth
+  crnnaclass eval -r /path/to/saved/model.pth
   ```
 
 * Inference
 
   ```commandline
-  ./run.py /path/to/audio/file.wav -r path/to/saved/model.pth 
+  crnnaclass /path/to/audio/file.wav -r path/to/saved/model.pth 
   ```
 
 ## Pre-built images
