@@ -33,7 +33,10 @@ def main(args=None):
 
     with torch.no_grad():
         print("Loading state...")
-        params = torch.load(parsed.model)
+        if torch.cuda.is_available():
+            params = torch.load(parsed.model)
+        else:
+            params = torch.load(parsed.model, map_location='cpu')
         model = models.__dict__[params['arch']]()
         model.load_state_dict(params['state_dict'])
         model.eval()
