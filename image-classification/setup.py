@@ -35,6 +35,11 @@ setup(
     version="0.0.1",
     author='Peter Reutemann',
     author_email='fracpete@waikato.ac.nz',
+    install_requires=[
+        "torch==1.6.0",
+        "torchvision==0.7.0",
+        "scipy==1.6.0",
+    ],
     entry_points={
         "console_scripts": [
             "pic-main=pic.main:sys_main",
