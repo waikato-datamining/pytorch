@@ -1,7 +1,7 @@
 # Image classification
 
-The **pytorch-image-classification** can be used for building image classification
-models with PyTorch using various model architectures.
+The **pytorch-image-classification** command-line tools can be used for building 
+image classification models with PyTorch using various model architectures.
 
 The code is base on the PyTorch imagenet example code:
 
