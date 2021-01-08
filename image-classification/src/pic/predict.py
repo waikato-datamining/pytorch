@@ -19,10 +19,6 @@ def main(args=None):
     :type args: list
     """
 
-    model_names = sorted(name for name in models.__dict__
-        if name.islower() and not name.startswith("__")
-        and callable(models.__dict__[name]))
-
     parser = argparse.ArgumentParser(description='PyTorch Image Prediction',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-m', '--model', metavar='FILE',
