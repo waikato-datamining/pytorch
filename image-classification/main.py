@@ -23,8 +23,10 @@ model_names = sorted(name for name in models.__dict__
     and callable(models.__dict__[name]))
 
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
-parser.add_argument('data', metavar='DIR',
-                    help='path to dataset')
+parser.add_argument('-t', '--train_dir', metavar='DIR',
+                    help='path to top-level directory of training set, with each sub-directory being treated as a category')
+parser.add_argument('-T', '--test_dir', metavar='DIR',
+                    help='path to top-level directory of test, with each sub-directory being treated as a category')
 parser.add_argument('-a', '--arch', metavar='ARCH', default='resnet18',
                     choices=model_names,
                     help='model architecture: ' +
@@ -199,8 +201,8 @@ def main_worker(gpu, ngpus_per_node, args):
     cudnn.benchmark = True
 
     # Data loading code
-    traindir = os.path.join(args.data, 'train')
-    valdir = os.path.join(args.data, 'val')
+    traindir = args.train_dir
+    valdir = args.test_dir
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                      std=[0.229, 0.224, 0.225])
 
