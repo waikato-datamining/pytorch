@@ -22,25 +22,29 @@ model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")
     and callable(models.__dict__[name]))
 
-parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
+parser = argparse.ArgumentParser(description='PyTorch ImageNet Training',
+                                 formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('-t', '--train_dir', metavar='DIR',
                     help='path to top-level directory of training set, with each sub-directory being treated as a category')
 parser.add_argument('-T', '--test_dir', metavar='DIR',
                     help='path to top-level directory of test, with each sub-directory being treated as a category')
+parser.add_argument('--width', default=256, type=int,
+                    metavar='WIDTH', help='The image width to scale to')
+parser.add_argument('--height', default=256, type=int,
+                    metavar='HEIGHT', help='The image height to scale to')
 parser.add_argument('-a', '--arch', metavar='ARCH', default='resnet18',
                     choices=model_names,
                     help='model architecture: ' +
-                        ' | '.join(model_names) +
-                        ' (default: resnet18)')
+                        ' | '.join(model_names))
 parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
-                    help='number of data loading workers (default: 4)')
+                    help='number of data loading workers')
 parser.add_argument('--epochs', default=90, type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                     help='manual epoch number (useful on restarts)')
 parser.add_argument('-b', '--batch-size', default=256, type=int,
                     metavar='N',
-                    help='mini-batch size (default: 256), this is the total '
+                    help='mini-batch size, this is the total '
                          'batch size of all GPUs on the current node when '
                          'using Data Parallel or Distributed Data Parallel')
 parser.add_argument('--lr', '--learning-rate', default=0.1, type=float,
@@ -201,15 +205,14 @@ def main_worker(gpu, ngpus_per_node, args):
     cudnn.benchmark = True
 
     # Data loading code
-    traindir = args.train_dir
-    valdir = args.test_dir
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                      std=[0.229, 0.224, 0.225])
 
     train_dataset = datasets.ImageFolder(
-        traindir,
+        args.train_dir,
         transforms.Compose([
-            transforms.RandomResizedCrop(224),
+            transforms.Resize((args.width, args.height)),
+            transforms.RandomResizedCrop((int(args.width*0.9), int(args.height*0.9))),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             normalize,
@@ -225,12 +228,14 @@ def main_worker(gpu, ngpus_per_node, args):
         num_workers=args.workers, pin_memory=True, sampler=train_sampler)
 
     val_loader = torch.utils.data.DataLoader(
-        datasets.ImageFolder(valdir, transforms.Compose([
-            transforms.Resize(256),
-            transforms.CenterCrop(224),
-            transforms.ToTensor(),
-            normalize,
-        ])),
+        datasets.ImageFolder(
+            args.test_dir,
+            transforms.Compose([
+                transforms.Resize((args.width, args.height)),
+                transforms.CenterCrop((int(args.width*0.9), int(args.height*0.9))),
+                transforms.ToTensor(),
+                normalize,
+            ])),
         batch_size=args.batch_size, shuffle=False,
         num_workers=args.workers, pin_memory=True)
 
