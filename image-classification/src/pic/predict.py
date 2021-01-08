@@ -1,4 +1,5 @@
 import argparse
+import os
 import traceback
 
 from PIL import Image
@@ -25,6 +26,8 @@ def main(args=None):
                         help='The model state to use')
     parser.add_argument('-i', '--image', metavar='FILE',
                         help='The image to apply the model to')
+    parser.add_argument('--top_x', metavar='INT', type=int, default=5,
+                        help='The top X categories to return')
     parsed = parser.parse_args(args=args)
 
     with torch.no_grad():
@@ -39,7 +42,7 @@ def main(args=None):
         width = params['width']
         height = params['height']
 
-        print("Making prediction...")
+        print("Making predictions...")
         transform = transforms.Compose([
             transforms.Resize((width, height)),
             transforms.ToTensor(),
@@ -50,7 +53,11 @@ def main(args=None):
         out = model(batch_t)
         prob = torch.nn.functional.softmax(out, dim=1)[0] * 100
         _, indices = torch.sort(out, descending=True)
-        print([(classes[idx], prob[idx].item()) for idx in indices[0][:5]])
+        top = ([(classes[idx], prob[idx].item()) for idx in indices[0][:parsed.top_x]])
+        print("Image: %s" % os.path.basename(parsed.image))
+        print("Predictions:")
+        for t in top:
+            print("- %s: %.2f" % (t[0], t[1]))
 
 
 def sys_main():
