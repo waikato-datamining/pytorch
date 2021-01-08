@@ -354,6 +354,7 @@ def main(args=None):
         and callable(models.__dict__[name]))
 
     parser = argparse.ArgumentParser(description='PyTorch ImageNet Training',
+                                     prog="pic-main",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-t', '--train_dir', metavar='DIR',
                         help='path to top-level directory of training set, with each sub-directory being treated as a category')

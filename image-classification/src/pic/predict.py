@@ -21,6 +21,7 @@ def main(args=None):
     """
 
     parser = argparse.ArgumentParser(description='PyTorch Image Prediction',
+                                     prog="pic-predict",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-m', '--model', metavar='FILE',
                         help='The model state to use')
