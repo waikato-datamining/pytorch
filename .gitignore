@@ -134,4 +134,5 @@ dmypy.json
 *~
 *.swp
 *.bak
-
+*.tar
+*.pth
