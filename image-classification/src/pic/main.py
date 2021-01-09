@@ -170,16 +170,21 @@ def main_worker(gpu, ngpus_per_node, args):
 
         if not args.multiprocessing_distributed or (args.multiprocessing_distributed
                 and args.rank % ngpus_per_node == 0):
-            save_checkpoint({
-                'epoch': epoch + 1,
-                'arch': args.arch,
-                'width': args.width,
-                'height': args.height,
-                'classes': classes,
-                'state_dict': model.state_dict(),
-                'best_acc1': best_acc1,
-                'optimizer' : optimizer.state_dict(),
-            }, is_best, output_dir=args.output_dir)
+            if (args.output_interval == -1) or (((epoch + 1) % args.output_interval) == 0) or (epoch + 1 == args.epochs):
+                if args.output_interval == -1:
+                    checkpoint_filename = 'checkpoint.pth'
+                else:
+                    checkpoint_filename = None
+                save_checkpoint({
+                    'epoch': epoch + 1,
+                    'arch': args.arch,
+                    'width': args.width,
+                    'height': args.height,
+                    'classes': classes,
+                    'state_dict': model.state_dict(),
+                    'best_acc1': best_acc1,
+                    'optimizer' : optimizer.state_dict(),
+                }, is_best, filename=checkpoint_filename, output_dir=args.output_dir)
 
 
 def train(train_loader, model, criterion, optimizer, epoch, args):
@@ -274,7 +279,9 @@ def validate(val_loader, model, criterion, args):
     return top1.avg
 
 
-def save_checkpoint(state, is_best, filename='checkpoint.pth', output_dir="."):
+def save_checkpoint(state, is_best, filename=None, output_dir="."):
+    if filename is None:
+        filename = 'checkpoint-%s.pth' % str(state['epoch'])
     checkpoint_filename = os.path.join(output_dir, filename)
     torch.save(state, checkpoint_filename)
     if is_best:
@@ -369,6 +376,8 @@ def main(args=None):
                         help='path to top-level directory of test, with each sub-directory being treated as a category')
     parser.add_argument('-o', '--output_dir', metavar='DIR', default=".",
                         help='the directory to store the models and checkpoints in')
+    parser.add_argument('-i', '--output_interval', metavar='INT', default=-1, type=int,
+                        help='the output interval in epochs for checkpoints. Use -1 to always overwrite last checkpoint.')
     parser.add_argument('--width', default=256, type=int,
                         metavar='WIDTH', help='The image width to scale to')
     parser.add_argument('--height', default=256, type=int,

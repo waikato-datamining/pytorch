@@ -12,7 +12,7 @@ https://github.com/pytorch/examples/tree/master/imagenet
 ### Train
 
 ```commandline
-usage: pic-main [-h] [-t DIR] [-T DIR] [-o DIR] [--width WIDTH]
+usage: pic-main [-h] [-t DIR] [-T DIR] [-o DIR] [-i INT] [--width WIDTH]
                 [--height HEIGHT] [-a ARCH] [-j N] [--epochs N]
                 [--start-epoch N] [-b N] [--lr LR] [--momentum M] [--wd W]
                 [-p N] [--resume PATH] [-e] [--pretrained]
@@ -34,6 +34,9 @@ optional arguments:
   -o DIR, --output_dir DIR
                         the directory to store the models and checkpoints in
                         (default: .)
+  -i INT, --output_interval INT
+                        the output interval in epochs for checkpoints. Use -1
+                        to always overwrite last checkpoint. (default: -1)
   --width WIDTH         The image width to scale to (default: 256)
   --height HEIGHT       The image height to scale to (default: 256)
   -a ARCH, --arch ARCH  model architecture: alexnet | densenet121 |
