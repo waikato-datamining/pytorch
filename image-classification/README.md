@@ -12,14 +12,15 @@ https://github.com/pytorch/examples/tree/master/imagenet
 ### Train
 
 ```commandline
-usage: pic-main [-h] [-t DIR] [-T DIR] [--width WIDTH] [--height HEIGHT]
-                [-a ARCH] [-j N] [--epochs N] [--start-epoch N] [-b N]
-                [--lr LR] [--momentum M] [--wd W] [-p N] [--resume PATH] [-e]
-                [--pretrained] [--world-size WORLD_SIZE] [--rank RANK]
-                [--dist-url DIST_URL] [--dist-backend DIST_BACKEND]
-                [--seed SEED] [--gpu GPU] [--multiprocessing-distributed]
+usage: pic-main [-h] [-t DIR] [-T DIR] [-o DIR] [--width WIDTH]
+                [--height HEIGHT] [-a ARCH] [-j N] [--epochs N]
+                [--start-epoch N] [-b N] [--lr LR] [--momentum M] [--wd W]
+                [-p N] [--resume PATH] [-e] [--pretrained]
+                [--world-size WORLD_SIZE] [--rank RANK] [--dist-url DIST_URL]
+                [--dist-backend DIST_BACKEND] [--seed SEED] [--gpu GPU]
+                [--multiprocessing-distributed]
 
-PyTorch ImageNet Training
+PyTorch Image Classification Training
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -30,6 +31,9 @@ optional arguments:
   -T DIR, --test_dir DIR
                         path to top-level directory of test, with each sub-
                         directory being treated as a category (default: None)
+  -o DIR, --output_dir DIR
+                        the directory to store the models and checkpoints in
+                        (default: .)
   --width WIDTH         The image width to scale to (default: 256)
   --height HEIGHT       The image height to scale to (default: 256)
   -a ARCH, --arch ARCH  model architecture: alexnet | densenet121 |

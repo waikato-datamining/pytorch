@@ -179,7 +179,7 @@ def main_worker(gpu, ngpus_per_node, args):
                 'state_dict': model.state_dict(),
                 'best_acc1': best_acc1,
                 'optimizer' : optimizer.state_dict(),
-            }, is_best)
+            }, is_best, output_dir=args.output_dir)
 
 
 def train(train_loader, model, criterion, optimizer, epoch, args):
@@ -274,10 +274,12 @@ def validate(val_loader, model, criterion, args):
     return top1.avg
 
 
-def save_checkpoint(state, is_best, filename='checkpoint.pth'):
-    torch.save(state, filename)
+def save_checkpoint(state, is_best, filename='checkpoint.pth', output_dir="."):
+    checkpoint_filename = os.path.join(output_dir, filename)
+    torch.save(state, checkpoint_filename)
     if is_best:
-        shutil.copyfile(filename, 'model_best.pth')
+        best_filename = os.path.join(output_dir, 'model_best.pth')
+        shutil.copyfile(checkpoint_filename, best_filename)
 
 
 class AverageMeter(object):
@@ -358,13 +360,15 @@ def main(args=None):
         if name.islower() and not name.startswith("__")
         and callable(models.__dict__[name]))
 
-    parser = argparse.ArgumentParser(description='PyTorch ImageNet Training',
+    parser = argparse.ArgumentParser(description='PyTorch Image Classification Training',
                                      prog="pic-main",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-t', '--train_dir', metavar='DIR',
                         help='path to top-level directory of training set, with each sub-directory being treated as a category')
     parser.add_argument('-T', '--test_dir', metavar='DIR',
                         help='path to top-level directory of test, with each sub-directory being treated as a category')
+    parser.add_argument('-o', '--output_dir', metavar='DIR', default=".",
+                        help='the directory to store the models and checkpoints in')
     parser.add_argument('--width', default=256, type=int,
                         metavar='WIDTH', help='The image width to scale to')
     parser.add_argument('--height', default=256, type=int,
