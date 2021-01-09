@@ -77,10 +77,15 @@ def main_worker(gpu, ngpus_per_node, args):
     # create model
     if args.pretrained:
         print("=> using pre-trained model '{}'".format(args.arch))
-        model = models.__dict__[args.arch](pretrained=True, num_classes=len(classes))
+        model = models.__dict__[args.arch](pretrained=True)
     else:
         print("=> creating model '{}'".format(args.arch))
-        model = models.__dict__[args.arch](num_classes=len(classes))
+        model = models.__dict__[args.arch]()
+
+    # configure output layer for new classes
+    num_ftrs = model.fc.in_features
+    model.fc = nn.Linear(num_ftrs, len(classes))
+    model.fc = model.fc.cuda() if torch.cuda.is_available() else model.fc
 
     if not torch.cuda.is_available():
         print('using CPU, this will be slow')
