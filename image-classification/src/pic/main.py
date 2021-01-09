@@ -29,6 +29,39 @@ def main_worker(gpu, ngpus_per_node, args):
     global best_acc1
     args.gpu = gpu
 
+    # Data loading code
+    train_dataset = datasets.ImageFolder(
+        args.train_dir,
+        transforms.Compose([
+            transforms.Resize((args.width, args.height)),
+            transforms.RandomResizedCrop((int(args.width*0.9), int(args.height*0.9))),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            NORMALIZE,
+        ]))
+
+    if args.distributed:
+        train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
+    else:
+        train_sampler = None
+
+    train_loader = torch.utils.data.DataLoader(
+        train_dataset, batch_size=args.batch_size, shuffle=(train_sampler is None),
+        num_workers=args.workers, pin_memory=True, sampler=train_sampler)
+
+    classes = train_loader.dataset.classes
+    val_loader = torch.utils.data.DataLoader(
+        datasets.ImageFolder(
+            args.test_dir,
+            transforms.Compose([
+                transforms.Resize((args.width, args.height)),
+                transforms.CenterCrop((int(args.width*0.9), int(args.height*0.9))),
+                transforms.ToTensor(),
+                NORMALIZE,
+            ])),
+        batch_size=args.batch_size, shuffle=False,
+        num_workers=args.workers, pin_memory=True)
+
     if args.gpu is not None:
         print("Use GPU: {} for training".format(args.gpu))
 
@@ -44,10 +77,10 @@ def main_worker(gpu, ngpus_per_node, args):
     # create model
     if args.pretrained:
         print("=> using pre-trained model '{}'".format(args.arch))
-        model = models.__dict__[args.arch](pretrained=True)
+        model = models.__dict__[args.arch](pretrained=True, num_classes=len(classes))
     else:
         print("=> creating model '{}'".format(args.arch))
-        model = models.__dict__[args.arch]()
+        model = models.__dict__[args.arch](num_classes=len(classes))
 
     if not torch.cuda.is_available():
         print('using CPU, this will be slow')
@@ -110,39 +143,6 @@ def main_worker(gpu, ngpus_per_node, args):
             print("=> no checkpoint found at '{}'".format(args.resume))
 
     cudnn.benchmark = True
-
-    # Data loading code
-    train_dataset = datasets.ImageFolder(
-        args.train_dir,
-        transforms.Compose([
-            transforms.Resize((args.width, args.height)),
-            transforms.RandomResizedCrop((int(args.width*0.9), int(args.height*0.9))),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            NORMALIZE,
-        ]))
-
-    if args.distributed:
-        train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
-    else:
-        train_sampler = None
-
-    train_loader = torch.utils.data.DataLoader(
-        train_dataset, batch_size=args.batch_size, shuffle=(train_sampler is None),
-        num_workers=args.workers, pin_memory=True, sampler=train_sampler)
-
-    classes = train_loader.dataset.classes
-    val_loader = torch.utils.data.DataLoader(
-        datasets.ImageFolder(
-            args.test_dir,
-            transforms.Compose([
-                transforms.Resize((args.width, args.height)),
-                transforms.CenterCrop((int(args.width*0.9), int(args.height*0.9))),
-                transforms.ToTensor(),
-                NORMALIZE,
-            ])),
-        batch_size=args.batch_size, shuffle=False,
-        num_workers=args.workers, pin_memory=True)
 
     if args.evaluate:
         validate(val_loader, model, criterion, args)

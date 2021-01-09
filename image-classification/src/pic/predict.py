@@ -37,14 +37,14 @@ def main(args=None):
             params = torch.load(parsed.model)
         else:
             params = torch.load(parsed.model, map_location='cpu')
-        model = models.__dict__[params['arch']]()
+        classes = params['classes']
+        width = params['width']
+        height = params['height']
+        model = models.__dict__[params['arch']](num_classes=len(classes))
         model.load_state_dict(params['state_dict'])
         model.eval()
         if torch.cuda.is_available():
             model.cuda()
-        classes = params['classes']
-        width = params['width']
-        height = params['height']
 
         print("Making predictions...")
         transform = transforms.Compose([
