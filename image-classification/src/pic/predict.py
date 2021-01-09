@@ -41,10 +41,12 @@ def main(args=None):
         width = params['width']
         height = params['height']
         model = models.__dict__[params['arch']](num_classes=len(classes))
+        # remove module. prefix in keys
+        for k in list(params['state_dict'].keys()):
+            params['state_dict'][k.replace("module.", "")] = params['state_dict'][k]
+            del params['state_dict'][k]
         model.load_state_dict(params['state_dict'])
         model.eval()
-        if torch.cuda.is_available():
-            model.cuda()
 
         print("Making predictions...")
         transform = transforms.Compose([
