@@ -40,7 +40,7 @@ setup(
         "torchvision==0.7.0",
         "scipy==1.6.0",
         "simple-file-poller>=0.0.9",
-        "image-complete",
+        "python-image-complete",
     ],
     entry_points={
         "console_scripts": [
