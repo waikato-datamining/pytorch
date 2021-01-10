@@ -20,12 +20,12 @@ def main(args=None):
     :type args: list
     """
 
-    parser = argparse.ArgumentParser(description='PyTorch Image Prediction',
+    parser = argparse.ArgumentParser(description='PyTorch Image Classification - Prediction',
                                      prog="pic-predict",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('-m', '--model', metavar='FILE',
+    parser.add_argument('-m', '--model', metavar='FILE', required=True,
                         help='The model state to use')
-    parser.add_argument('-i', '--image', metavar='FILE',
+    parser.add_argument('-i', '--image', metavar='FILE', required=True,
                         help='The image to apply the model to')
     parser.add_argument('--top_x', metavar='INT', type=int, default=5,
                         help='The top X categories to return')

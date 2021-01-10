@@ -367,12 +367,12 @@ def main(args=None):
         if name.islower() and not name.startswith("__")
         and callable(models.__dict__[name]))
 
-    parser = argparse.ArgumentParser(description='PyTorch Image Classification Training',
+    parser = argparse.ArgumentParser(description='PyTorch Image Classification - Training',
                                      prog="pic-main",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('-t', '--train_dir', metavar='DIR',
+    parser.add_argument('-t', '--train_dir', metavar='DIR', required=True,
                         help='path to top-level directory of training set, with each sub-directory being treated as a category')
-    parser.add_argument('-T', '--test_dir', metavar='DIR',
+    parser.add_argument('-T', '--test_dir', metavar='DIR', required=True,
                         help='path to top-level directory of test, with each sub-directory being treated as a category')
     parser.add_argument('-o', '--output_dir', metavar='DIR', default=".",
                         help='the directory to store the models and checkpoints in')

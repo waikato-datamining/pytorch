@@ -12,7 +12,7 @@ https://github.com/pytorch/examples/tree/master/imagenet
 ### Train
 
 ```commandline
-usage: pic-main [-h] [-t DIR] [-T DIR] [-o DIR] [-i INT] [--width WIDTH]
+usage: pic-main [-h] -t DIR -T DIR [-o DIR] [-i INT] [--width WIDTH]
                 [--height HEIGHT] [-a ARCH] [-j N] [--epochs N]
                 [--start-epoch N] [-b N] [--lr LR] [--momentum M] [--wd W]
                 [-p N] [--resume PATH] [-e] [--pretrained]
@@ -20,7 +20,7 @@ usage: pic-main [-h] [-t DIR] [-T DIR] [-o DIR] [-i INT] [--width WIDTH]
                 [--dist-backend DIST_BACKEND] [--seed SEED] [--gpu GPU]
                 [--multiprocessing-distributed]
 
-PyTorch Image Classification Training
+PyTorch Image Classification - Training
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -84,9 +84,9 @@ optional arguments:
 ### Predict (single image)
 
 ```commandline
-usage: pic-predict [-h] [-m FILE] [-i FILE] [--top_x INT]
+usage: pic-predict [-h] -m FILE -i FILE [--top_x INT]
 
-PyTorch Image Prediction
+PyTorch Image Classification - Prediction
 
 optional arguments:
   -h, --help            show this help message and exit
