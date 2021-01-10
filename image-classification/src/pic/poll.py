@@ -125,7 +125,7 @@ def poll(model, input_dir, output_dir, tmp_dir=None, delete_input=False, quiet=F
 
 def main(args=None):
     """
-    Performs the single image prediction.
+    Performs the polling and processing of the images.
     Use -h to see all options.
 
     :param args: the command-line arguments to use, uses sys.argv if None
