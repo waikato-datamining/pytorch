@@ -1,8 +1,21 @@
+import os
+import shutil
 import torch
 import torchvision.models as models
 import torchvision.transforms as transforms
 
-from pic.main import NORMALIZE
+NORMALIZE = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                 std=[0.229, 0.224, 0.225])
+
+
+def save_checkpoint(state, is_best, filename=None, output_dir="."):
+    if filename is None:
+        filename = 'checkpoint-%s.pth' % str(state['epoch'])
+    checkpoint_filename = os.path.join(output_dir, filename)
+    torch.save(state, checkpoint_filename)
+    if is_best:
+        best_filename = os.path.join(output_dir, 'model_best.pth')
+        shutil.copyfile(checkpoint_filename, best_filename)
 
 
 def load_state(model_filename):

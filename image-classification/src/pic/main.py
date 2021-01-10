@@ -1,7 +1,6 @@
 import argparse
 import os
 import random
-import shutil
 import time
 import traceback
 import warnings
@@ -19,8 +18,7 @@ import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import torchvision.models as models
 
-NORMALIZE = transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                 std=[0.229, 0.224, 0.225])
+from pic.utils import save_checkpoint, NORMALIZE
 
 best_acc1 = 0
 
@@ -277,16 +275,6 @@ def validate(val_loader, model, criterion, args):
               .format(top1=top1, top5=top5))
 
     return top1.avg
-
-
-def save_checkpoint(state, is_best, filename=None, output_dir="."):
-    if filename is None:
-        filename = 'checkpoint-%s.pth' % str(state['epoch'])
-    checkpoint_filename = os.path.join(output_dir, filename)
-    torch.save(state, checkpoint_filename)
-    if is_best:
-        best_filename = os.path.join(output_dir, 'model_best.pth')
-        shutil.copyfile(checkpoint_filename, best_filename)
 
 
 class AverageMeter(object):
