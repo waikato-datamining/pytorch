@@ -11,14 +11,12 @@ Specifically, commit **49e1a8847c8c4d8d3c576479cb2fe2fd2ac583de**:
 
 https://github.com/pytorch/examples/tree/49e1a8847c8c4d8d3c576479cb2fe2fd2ac583de/imagenet
 
-## Tools
+## Usage
 
 ### Train
 
 For training models, either from scratch or using transfer learning, you can use the
-`pic-main` command-line utility. The tool expects the train and test directory to 
-contain sub-directories which get interpreted as the categories of the images they
-contain.
+`pic-main` command-line utility:
 
 ```commandline
 usage: pic-main [-h] -t DIR -T DIR [-o DIR] [-i INT] [--width WIDTH]
@@ -90,64 +88,87 @@ optional arguments:
                         multi node data parallel training (default: False)
 ```
 
-### Predict (single image)
 
-For applying a built model to a single image, use the `pic-predict` command-line utility:
+#### Training data
 
-```commandline
-usage: pic-predict [-h] -m FILE -i FILE [--top_x INT]
+All the data for building the model must be located in a single directory, with each sub-directory representing
+a *label*. For instance for building a model for distinguishing flowers (daisy, dandelion, roses, sunflowers, tulip),
+the data directory looks like this::
 
-PyTorch Image Classification - Prediction
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -m FILE, --model FILE
-                        The model state to use (default: None)
-  -i FILE, --image FILE
-                        The image to apply the model to (default: None)
-  --top_x INT           The top X categories to return (default: 5)
+```
+   |
+   +- flowers
+      |
+      +- daisy
+      |
+      +- dandelion
+      |
+      +- roses
+      |
+      +- sunflowers
+      |
+      +- tulip
 ```
 
-### Poll (batch/continuous processing)
 
-For batch processing or continuous processing of images, you can use the
+### Predict
+
+Once you have built a model, you can use as follows:
+
+* For applying a built model to a **single image**, use the `pic-predict` command-line utility:
+
+  ```commandline
+  usage: pic-predict [-h] -m FILE -i FILE [--top_x INT]
+
+  PyTorch Image Classification - Prediction
+
+  optional arguments:
+    -h, --help            show this help message and exit
+    -m FILE, --model FILE
+                          The model state to use (default: None)
+    -i FILE, --image FILE
+                          The image to apply the model to (default: None)
+    --top_x INT           The top X categories to return (default: 5)
+  ```
+
+* For **batch processing or continuous processing** of images, you can use the
 `pic-poll` command-line utility:
 
-```commandline
-usage: pic-poll [-h] -m FILE -i DIR -o DIR [-t DIR] [--top_x INT]
-                [--poll_wait POLL_WAIT] [--continuous] [--use_watchdog]
-                [--watchdog_check_interval WATCHDOG_CHECK_INTERVAL]
-                [--delete_input] [--verbose] [--quiet]
+  ```commandline
+  usage: pic-poll [-h] -m FILE -i DIR -o DIR [-t DIR] [--top_x INT]
+                  [--poll_wait POLL_WAIT] [--continuous] [--use_watchdog]
+                  [--watchdog_check_interval WATCHDOG_CHECK_INTERVAL]
+                  [--delete_input] [--verbose] [--quiet]
 
-PyTorch Image Classification - Poll
+  PyTorch Image Classification - Poll
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -m FILE, --model FILE
-                        The model state to use (default: None)
-  -i DIR, --prediction_in DIR
-                        The input directory to poll for images to make
-                        predictions for (default: None)
-  -o DIR, --prediction_out DIR
-                        The directory to place predictions in and move input
-                        images to (default: None)
-  -t DIR, --prediction_tmp DIR
-                        The directory to place the prediction files in first
-                        before moving them to the output directory (default:
-                        None)
-  --top_x INT           The top X categories to return (default: 5)
-  --poll_wait POLL_WAIT
-                        poll interval in seconds when not using watchdog mode
-                        (default: 1.0)
-  --continuous          Whether to continuously load test images and perform
-                        prediction (default: False)
-  --use_watchdog        Whether to react to file creation events rather than
-                        performing fixed-interval polling (default: False)
-  --watchdog_check_interval WATCHDOG_CHECK_INTERVAL
-                        check interval in seconds for the watchdog (default:
-                        10.0)
-  --delete_input        Whether to delete the input images rather than move
-                        them to --prediction_out directory (default: False)
-  --verbose             Whether to output more logging info (default: False)
-  --quiet               Whether to suppress output (default: False)
-```
+  optional arguments:
+    -h, --help            show this help message and exit
+    -m FILE, --model FILE
+                          The model state to use (default: None)
+    -i DIR, --prediction_in DIR
+                          The input directory to poll for images to make
+                          predictions for (default: None)
+    -o DIR, --prediction_out DIR
+                          The directory to place predictions in and move input
+                          images to (default: None)
+    -t DIR, --prediction_tmp DIR
+                          The directory to place the prediction files in first
+                          before moving them to the output directory (default:
+                          None)
+    --top_x INT           The top X categories to return (default: 5)
+    --poll_wait POLL_WAIT
+                          poll interval in seconds when not using watchdog mode
+                          (default: 1.0)
+    --continuous          Whether to continuously load test images and perform
+                          prediction (default: False)
+    --use_watchdog        Whether to react to file creation events rather than
+                          performing fixed-interval polling (default: False)
+    --watchdog_check_interval WATCHDOG_CHECK_INTERVAL
+                          check interval in seconds for the watchdog (default:
+                          10.0)
+    --delete_input        Whether to delete the input images rather than move
+                          them to --prediction_out directory (default: False)
+    --verbose             Whether to output more logging info (default: False)
+    --quiet               Whether to suppress output (default: False)
+  ```
