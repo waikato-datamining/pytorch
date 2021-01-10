@@ -163,12 +163,12 @@ def main_worker(gpu, ngpus_per_node, args):
         acc1 = validate(val_loader, model, criterion, args)
 
         # remember best acc@1 and save checkpoint
-        is_best = acc1 > best_acc1
-        best_acc1 = max(acc1, best_acc1)
-
         if not args.multiprocessing_distributed or (args.multiprocessing_distributed
                 and args.rank % ngpus_per_node == 0):
             if (args.output_interval == -1) or (((epoch + 1) % args.output_interval) == 0) or (epoch + 1 == args.epochs):
+                is_best = acc1 > best_acc1
+                best_acc1 = max(acc1, best_acc1)
+
                 if args.output_interval == -1:
                     checkpoint_filename = 'checkpoint.pth'
                 else:
