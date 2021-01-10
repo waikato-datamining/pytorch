@@ -107,3 +107,47 @@ optional arguments:
                         The image to apply the model to (default: None)
   --top_x INT           The top X categories to return (default: 5)
 ```
+
+### Poll (batch/continuous processing)
+
+For batch processing or continuous processing of images, you can use the
+`pic-poll` command-line utility:
+
+```commandline
+usage: pic-poll [-h] -m FILE -i DIR -o DIR [-t DIR] [--top_x INT]
+                [--poll_wait POLL_WAIT] [--continuous] [--use_watchdog]
+                [--watchdog_check_interval WATCHDOG_CHECK_INTERVAL]
+                [--delete_input] [--verbose] [--quiet]
+
+PyTorch Image Classification - Poll
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -m FILE, --model FILE
+                        The model state to use (default: None)
+  -i DIR, --prediction_in DIR
+                        The input directory to poll for images to make
+                        predictions for (default: None)
+  -o DIR, --prediction_out DIR
+                        The directory to place predictions in and move input
+                        images to (default: None)
+  -t DIR, --prediction_tmp DIR
+                        The directory to place the prediction files in first
+                        before moving them to the output directory (default:
+                        None)
+  --top_x INT           The top X categories to return (default: 5)
+  --poll_wait POLL_WAIT
+                        poll interval in seconds when not using watchdog mode
+                        (default: 1.0)
+  --continuous          Whether to continuously load test images and perform
+                        prediction (default: False)
+  --use_watchdog        Whether to react to file creation events rather than
+                        performing fixed-interval polling (default: False)
+  --watchdog_check_interval WATCHDOG_CHECK_INTERVAL
+                        check interval in seconds for the watchdog (default:
+                        10.0)
+  --delete_input        Whether to delete the input images rather than move
+                        them to --prediction_out directory (default: False)
+  --verbose             Whether to output more logging info (default: False)
+  --quiet               Whether to suppress output (default: False)
+```

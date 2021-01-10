@@ -6,9 +6,8 @@ from PIL import Image
 
 import torch
 import torchvision.models as models
-import torchvision.transforms as transforms
 
-from pic.main import NORMALIZE
+from pic.utils import load_state, state_to_model, state_to_transforms
 
 
 def main(args=None):
@@ -32,30 +31,12 @@ def main(args=None):
     parsed = parser.parse_args(args=args)
 
     with torch.no_grad():
-        print("Loading state...")
-        if torch.cuda.is_available():
-            params = torch.load(parsed.model)
-        else:
-            params = torch.load(parsed.model, map_location='cpu')
-        classes = params['classes']
-        width = params['width']
-        height = params['height']
-        model = models.__dict__[params['arch']](num_classes=len(classes))
-        # remove "module." prefix in keys introduced by nn.DataParallel
-        # https://discuss.pytorch.org/t/solved-keyerror-unexpected-key-module-encoder-embedding-weight-in-state-dict/1686/2
-        for k in list(params['state_dict'].keys()):
-            if k.startswith("module."):
-                params['state_dict'][k.replace("module.", "")] = params['state_dict'][k]
-                del params['state_dict'][k]
-        model.load_state_dict(params['state_dict'])
-        model.eval()
+        state = load_state(parsed.model)
+        model = state_to_model(state)
+        transform = state_to_transforms(state)
+        classes = state['classes']
 
         print("Making predictions...")
-        transform = transforms.Compose([
-            transforms.Resize((width, height)),
-            transforms.ToTensor(),
-            NORMALIZE,
-        ])
         img = Image.open(parsed.image)
         batch_t = torch.unsqueeze(transform(img), 0)
         out = model(batch_t)
