@@ -47,6 +47,7 @@ setup(
             "pic-main=pic.main:sys_main",
             "pic-predict=pic.predict:sys_main",
             "pic-poll=pic.poll:sys_main",
+            "pic-export=pic.export:sys_main",
         ]
     }
 )

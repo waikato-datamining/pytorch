@@ -71,3 +71,15 @@ def state_to_transforms(state):
         transforms.ToTensor(),
         NORMALIZE,
     ])
+
+
+def state_to_dims(state):
+    """
+    Turns the state into image dimensions (widht, height).
+
+    :param state: the state to use
+    :type state: dict
+    :return: the width/height, tuple
+    :rtype: transforms
+    """
+    return state['width'], state['height']

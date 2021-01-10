@@ -172,3 +172,25 @@ Once you have built a model, you can use as follows:
     --verbose             Whether to output more logging info (default: False)
     --quiet               Whether to suppress output (default: False)
   ```
+
+### Export
+
+With the `pic-export` command-line tool, you can export a trained model 
+to [TorchScript](https://pytorch.org/docs/stable/jit.html), which can be
+used on mobile devices:
+
+```commandline
+usage: pic-export [-h] -m FILE -o DIR [-n NAME]
+
+PyTorch Image Classification - Export
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -m FILE, --model FILE
+                        The model state to use (default: None)
+  -o DIR, --output_dir DIR
+                        The directory to store the exported model in (default:
+                        None)
+  -n NAME, --output_name NAME
+                        The name of the model file (default: model.pt)
+```
