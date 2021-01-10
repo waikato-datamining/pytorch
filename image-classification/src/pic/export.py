@@ -9,7 +9,7 @@ from pic.utils import load_state, state_to_model, state_to_dims
 
 def export(model, output_dir, output_name="model.pt"):
     """
-    Performs the polling and processing of the images.
+    Performs the export of a model to TorchScript.
 
     :param model: the model file to export
     :type model: str
@@ -33,7 +33,7 @@ def export(model, output_dir, output_name="model.pt"):
 
 def main(args=None):
     """
-    Performs the single image prediction.
+    Performs the export of a model to TorchScript.
     Use -h to see all options.
 
     :param args: the command-line arguments to use, uses sys.argv if None
