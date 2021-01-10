@@ -7,9 +7,18 @@ The code is base on the PyTorch imagenet example code:
 
 https://github.com/pytorch/examples/tree/master/imagenet
 
+Specifically, commit **49e1a8847c8c4d8d3c576479cb2fe2fd2ac583de**:
+
+https://github.com/pytorch/examples/tree/49e1a8847c8c4d8d3c576479cb2fe2fd2ac583de/imagenet
+
 ## Tools
 
 ### Train
+
+For training models, either from scratch or using transfer learning, you can use the
+`pic-main` command-line utility. The tool expects the train and test directory to 
+contain sub-directories which get interpreted as the categories of the images they
+contain.
 
 ```commandline
 usage: pic-main [-h] -t DIR -T DIR [-o DIR] [-i INT] [--width WIDTH]
@@ -82,6 +91,8 @@ optional arguments:
 ```
 
 ### Predict (single image)
+
+For applying a built model to a single image, use the `pic-predict` command-line utility:
 
 ```commandline
 usage: pic-predict [-h] -m FILE -i FILE [--top_x INT]
