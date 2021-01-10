@@ -194,3 +194,56 @@ optional arguments:
   -n NAME, --output_name NAME
                         The name of the model file (default: model.pt)
 ```
+
+### Info
+
+If you want to output information from a trained model, you can
+use the `pic-info` command-line utility:
+
+```commandline
+usage: pic-info [-h] -m FILE [-f {text,json}] [-o FILE]
+
+PyTorch Image Classification - Info
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -m FILE, --model FILE
+                        The model state to output the information from
+                        (default: None)
+  -f {text,json}, --format {text,json}
+                        The format in which to output the information
+                        (default: text)
+  -o FILE, --output FILE
+                        The file to write the information to; outputs to
+                        stdout if not specified (default: None)
+```
+
+The output looks like this:
+
+* text
+
+  ```
+  Architecture: resnet18
+  Width: 320
+  Height: 320
+  Classes: class1, class2, ...
+  Epoch: 5
+  Best acc1: 23.16%
+  ```
+  
+* json
+
+  ```json
+  {
+    "architecture": "resnet18",
+    "width": 320,
+    "height": 320,
+    "classes": [
+      "class1",
+      "class2",
+      ...
+    ],
+    "epoch": 5,
+    "best_acc1": 23.157894134521484
+  }
+  ```
