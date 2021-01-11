@@ -44,7 +44,7 @@ def state_to_model(state):
     :rtype: object
     """
 
-    model = models.__dict__[state['arch']](num_classes=state['network_classes'])
+    model = models.__dict__[state['arch']](num_classes=state['num_network_classes'])
     # remove "module." from keys introduced by nn.DataParallel
     # https://discuss.pytorch.org/t/solved-keyerror-unexpected-key-module-encoder-embedding-weight-in-state-dict/1686/2
     for k in list(state['state_dict'].keys()):
