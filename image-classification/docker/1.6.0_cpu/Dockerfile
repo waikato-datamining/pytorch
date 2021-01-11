@@ -9,6 +9,7 @@ RUN apt-get update && \
           libsm6 \
           libxrender-dev \
           libxext6 \
+          git \
           python3.7 \
           python3-setuptools \
           python3-pip && \
