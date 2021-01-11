@@ -23,6 +23,16 @@ from pic.utils import save_checkpoint, NORMALIZE
 best_acc1 = 0
 
 
+def enable_cuda(layer):
+    """
+    Enables CUDA in the layer, if possible.
+
+    :param layer: the layer to enable cuda for
+    :return: the original layer or the cuda-enabled layer
+    """
+    return layer.cuda() if torch.cuda.is_available() else layer
+
+
 def main_worker(gpu, ngpus_per_node, args):
     global best_acc1
     args.gpu = gpu
@@ -81,9 +91,32 @@ def main_worker(gpu, ngpus_per_node, args):
         model = models.__dict__[args.arch]()
 
     # configure output layer for new classes
-    num_ftrs = model.fc.in_features
-    model.fc = nn.Linear(num_ftrs, len(classes))
-    model.fc = model.fc.cuda() if torch.cuda.is_available() else model.fc
+    # this is, unfortunately, architecture-specific. see example discussion here:
+    # https://github.com/pytorch/examples/pull/58
+    if args.arch.startswith("resnet"):
+        # https://pytorch.org/tutorials/beginner/finetuning_torchvision_models_tutorial.html#resnet
+        model.fc = enable_cuda(nn.Linear(model.fc.in_features, len(classes)))
+    elif args.arch == "mobilenet_v2":
+        # https://stackoverflow.com/a/57286341/4698227
+        model.classifier[1] = enable_cuda(torch.nn.Linear(in_features=model.classifier[1].in_features, out_features=len(classes)))
+    elif args.arch == "densenet":
+        # https://discuss.pytorch.org/t/pytorch-transfer-learning-with-densenet/15579/5
+        model.classifier = enable_cuda(torch.nn.Linear(in_features=model.classifier.in_features, out_features=len(classes)))
+    elif args.arch.startswith("vgg"):
+        # https://discuss.pytorch.org/t/how-to-perform-finetuning-in-pytorch/419/10
+        layers = list(model.classifier.children())
+        old_layer = layers.pop()
+        layers.append(torch.nn.Linear(old_layer.in_features, len(classes)))
+        new_layer = enable_cuda(torch.nn.Sequential(*layers))
+        model.classifier = new_layer
+    elif args.arch == "inception_v3":
+        # https://discuss.pytorch.org/t/runtimeerror-when-fine-tuning-using-inception-v3/22629
+        num_aux_in = model.AuxLogits.fc.in_features
+        model.AuxLogits.fc = enable_cuda(nn.Linear(num_aux_in, len(classes)))
+        num_final_in = model.fc.in_features
+        model.fc = enable_cuda(nn.Linear(num_final_in, len(classes)))
+    else:
+        print("WARNING: cannot replace final layer for new classes on architecture '%s', will stick with imagenet's 1000 classes!" % args.arch)
 
     if not torch.cuda.is_available():
         print('using CPU, this will be slow')
