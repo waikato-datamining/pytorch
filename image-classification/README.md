@@ -1,6 +1,6 @@
 # Image classification
 
-The **wai.imageclassification** command-line tools can be used for building 
+The **wai.pytorchimageclass** command-line tools can be used for building 
 image classification models with PyTorch using various model architectures.
 
 The code is base on the PyTorch imagenet example code:
