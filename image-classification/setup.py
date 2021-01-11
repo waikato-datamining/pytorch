@@ -13,7 +13,7 @@ def _read(f):
 
 
 setup(
-    name="pytorch-image-classification",
+    name="wai.pytorchimageclass",
     description="Command-line tools for building and applying PyTorch image classification models.",
     long_description=(
         _read('DESCRIPTION.rst') + b'\n' +
