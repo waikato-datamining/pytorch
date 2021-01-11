@@ -102,13 +102,6 @@ def main_worker(gpu, ngpus_per_node, args):
     elif args.arch == "densenet":
         # https://discuss.pytorch.org/t/pytorch-transfer-learning-with-densenet/15579/5
         model.classifier = enable_cuda(torch.nn.Linear(in_features=model.classifier.in_features, out_features=len(classes)))
-    elif args.arch.startswith("vgg"):
-        # https://discuss.pytorch.org/t/how-to-perform-finetuning-in-pytorch/419/10
-        layers = list(model.classifier.children())
-        old_layer = layers.pop()
-        layers.append(torch.nn.Linear(old_layer.in_features, len(classes)))
-        new_layer = enable_cuda(torch.nn.Sequential(*layers))
-        model.classifier = new_layer
     else:
         print("WARNING: cannot replace final layer for new classes on architecture '%s', will stick with imagenet's 1000 classes!" % args.arch)
 
