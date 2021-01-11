@@ -13,6 +13,8 @@ RUN apt-get update && \
           python3.7 \
           python3-setuptools \
           python3-pip && \
+        update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1 && \
+        update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 2 && \
         pip3 --no-cache-dir install --upgrade pip setuptools && \
         rm -rf /var/lib/apt/lists/* && \
         ln -s /usr/bin/pip3 /usr/bin/pip && \
