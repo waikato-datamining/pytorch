@@ -46,10 +46,10 @@ def state_to_model(state):
 
     classes = state['classes']
     model = models.__dict__[state['arch']](num_classes=len(classes))
-    # remove "module." prefix in keys introduced by nn.DataParallel
+    # remove "module." from keys introduced by nn.DataParallel
     # https://discuss.pytorch.org/t/solved-keyerror-unexpected-key-module-encoder-embedding-weight-in-state-dict/1686/2
     for k in list(state['state_dict'].keys()):
-        if k.startswith("module."):
+        if "module." in k:
             state['state_dict'][k.replace("module.", "")] = state['state_dict'][k]
             del state['state_dict'][k]
     model.load_state_dict(state['state_dict'])
