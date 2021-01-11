@@ -6,7 +6,7 @@ FROM ${DOCKER_REGISTRY}pytorch/pytorch:1.6.0-cuda10.1-cudnn7-devel
 RUN apt-get update && \
         rm -rf /var/lib/apt/lists/* && \
         pip install Cython && \
-        pip install wai.pytorchimageclass==0.0.1 && \
+        pip install -e "git+https://github.com/waikato-datamining/pytorch.git#egg=wai.pytorchimageclass&subdirectory=image-classification" && \
         rm -Rf /root/.cache/pip
 
 COPY bash.bashrc /etc/bash.bashrc

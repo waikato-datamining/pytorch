@@ -17,7 +17,7 @@ RUN apt-get update && \
         ln -s /usr/bin/pip3 /usr/bin/pip && \
         ln -s /usr/bin/python3 /usr/bin/python && \
         pip install Cython && \
-        pip install wai.pytorchimageclass==0.0.1 && \
+        pip install -e "git+https://github.com/waikato-datamining/pytorch.git#egg=wai.pytorchimageclass&subdirectory=image-classification" && \
         rm -Rf /root/.cache/pip && \
         rm -rf /var/lib/apt/lists/*
 
