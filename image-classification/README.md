@@ -15,9 +15,17 @@ https://github.com/pytorch/examples/tree/49e1a8847c8c4d8d3c576479cb2fe2fd2ac583d
 
 You can install the library/tools with the following command:
 
-```commandline
-pip install -e "git+https://github.com/waikato-datamining/pytorch.git#egg=wai.pytorchimageclass&subdirectory=image-classification"
-``` 
+* from PyPI
+
+  ```commandline
+  pip install wai.pytorchimageclass
+  ```
+
+* from the repository
+
+  ```commandline
+  pip install -e "git+https://github.com/waikato-datamining/pytorch.git#egg=wai.pytorchimageclass&subdirectory=image-classification"
+  ``` 
 
 ## Usage
 
