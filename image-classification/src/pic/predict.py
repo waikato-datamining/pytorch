@@ -34,6 +34,9 @@ def main(args=None):
         model = state_to_model(state)
         transform = state_to_transforms(state)
         classes = state['classes']
+        # in case network couldn't be fine-tuned
+        while len(classes) < state['num_network_classes']:
+            classes.append("dummy-%d" % len(classes))
 
         print("Making predictions...")
         img = Image.open(parsed.image)
