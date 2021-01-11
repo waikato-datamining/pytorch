@@ -119,3 +119,21 @@ the container):
 docker run -u $(id -u):$(id -g) -e USER=$USER ...
 ```
 
+## Caching models
+
+PyTorch downloads base models, if necessary. However, by using Docker, this means that 
+models will get downloaded with each Docker image, using up unnecessary bandwidth and
+slowing down the startup. To avoid this, you can map a directory on the host machine
+to cache the base models for all processes (usually, there would be only one concurrent
+model being trained):  
+
+```
+-v /somewhere/local/cache:/.cache
+```
+
+Or specifically for PyTorch:
+
+```
+-v /somewhere/local/cache/torch:/.cache/torch
+```
+
