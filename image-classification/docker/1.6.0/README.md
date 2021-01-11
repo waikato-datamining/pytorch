@@ -34,13 +34,13 @@ Allows labeling of images with PyTorch's image classification capabilities, usin
 * Build the image from Docker file (from within /path_to/pytorch/image-classification/docker/1.6)
 
   ```commandline
-  docker build -t tfic .
+  docker build -t pic .
   ```
 
 * Run the container
 
   ```commandline
-  docker run --gpus=all -v /local/dir:/container/dir -it tfic
+  docker run --gpus=all -v /local/dir:/container/dir -it pic
   ```
 
 ### Pre-built images
