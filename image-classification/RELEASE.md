@@ -16,22 +16,13 @@ rm dist/*
 ./venv/bin/twine upload dist/*
 ```
 
-# Debian
-
-Generate Debian package with the following commands (requires `python3-all` and `python3-stdeb`):
-
-```commandline
-rm -Rf deb_dist/*
-python3 setup.py --command-packages=stdeb.command bdist_deb
-```
-
 # Github
 
 Steps:
 
 * start new release (version: `vX.Y.Z`)
 * enter release notes, i.e., significant changes since last release
-* upload `pytorch-image-classification-X.Y.Z.tar.gz` previously generated with `setyp.py`
+* upload `wai.pytorchimageclass-X.Y.Z.tar.gz` previously generated with `setyp.py`
 * publish
 
 
