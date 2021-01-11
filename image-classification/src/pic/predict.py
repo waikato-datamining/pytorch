@@ -5,7 +5,6 @@ import traceback
 from PIL import Image
 
 import torch
-import torchvision.models as models
 
 from pic.utils import load_state, state_to_model, state_to_transforms
 
