@@ -40,7 +40,7 @@ Allows labeling of images with PyTorch's image classification capabilities, usin
 * Run the container
 
   ```commandline
-  docker run --gpus=all -v /local/dir:/container/dir -it pic_cpu
+  docker run --shm-size 8G -v /local/dir:/container/dir -it pic_cpu
   ```
 
 ### Pre-built images
@@ -93,7 +93,7 @@ Allows labeling of images with PyTorch's image classification capabilities, usin
 * <a name="run">Run</a>
 
   ```commandline
-  docker run --gpus=all -v /local/dir:/container/dir -it pytorch/image-classification:1.6_cpu
+  docker run --shm-size 8G -v /local/dir:/container/dir -it pytorch/image-classification:1.6_cpu
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
