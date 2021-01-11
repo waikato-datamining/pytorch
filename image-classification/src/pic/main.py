@@ -93,6 +93,7 @@ def main_worker(gpu, ngpus_per_node, args):
     # configure output layer for new classes
     # this is, unfortunately, architecture-specific. see example discussion here:
     # https://github.com/pytorch/examples/pull/58
+    num_network_classes= len(classes)
     if args.arch.startswith("resnet"):
         # https://pytorch.org/tutorials/beginner/finetuning_torchvision_models_tutorial.html#resnet
         model.fc = enable_cuda(nn.Linear(model.fc.in_features, len(classes)))
@@ -103,6 +104,7 @@ def main_worker(gpu, ngpus_per_node, args):
         # https://discuss.pytorch.org/t/pytorch-transfer-learning-with-densenet/15579/5
         model.classifier = enable_cuda(torch.nn.Linear(in_features=model.classifier.in_features, out_features=len(classes)))
     else:
+        num_network_classes = 1000 # imagenet
         print("WARNING: cannot replace final layer for new classes on architecture '%s', will stick with imagenet's 1000 classes!" % args.arch)
 
     if not torch.cuda.is_available():
@@ -199,6 +201,7 @@ def main_worker(gpu, ngpus_per_node, args):
                     'width': args.width,
                     'height': args.height,
                     'classes': classes,
+                    'num_network_classes': num_network_classes,
                     'state_dict': model.state_dict(),
                     'best_acc1': best_acc1,
                     'optimizer' : optimizer.state_dict(),

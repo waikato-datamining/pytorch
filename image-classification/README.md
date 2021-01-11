@@ -226,9 +226,11 @@ The output looks like this:
   Architecture: resnet18
   Width: 320
   Height: 320
-  Classes: class1, class2, ...
   Epoch: 5
   Best acc1: 23.16%
+  Classes: class1, class2, ...
+  # classes: 6
+  # network classes: 6
   ```
   
 * json
@@ -238,12 +240,18 @@ The output looks like this:
     "architecture": "resnet18",
     "width": 320,
     "height": 320,
+    "epoch": 5,
+    "best_acc1": 23.157894134521484,
     "classes": [
       "class1",
       "class2",
       ...
     ],
-    "epoch": 5,
-    "best_acc1": 23.157894134521484
+    "num_classes": 6, 
+    "num_network_classes": 6 
   }
   ```
+
+Notes:
+* If the network's architecture could not be fine-tuned, then the number
+  of *network classes* will be 1000 (= ImageNet classes). 

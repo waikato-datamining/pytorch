@@ -18,20 +18,27 @@ def generate_info(state, output_format="text"):
     """
 
     if output_format == "text":
-        return "Architecture: %s\n" % state['arch'] \
-               + "Width: %d\n" % state['width'] \
-               + "Height: %d\n" % state['height'] \
-               + "Classes: %s\n" % ", ".join(state['classes']) \
-               + "Epoch: %d\n" % state['epoch'] \
-               + "Best acc1: %.2f%%" % float(state['best_acc1'])
+        result = "Architecture: %s\n" % state['arch'] \
+                 + "Width: %d\n" % state['width'] \
+                 + "Height: %d\n" % state['height'] \
+                 + "Epoch: %d\n" % state['epoch'] \
+                 + "Best acc1: %.2f%%" % float(state['best_acc1']) \
+                 + "Classes: %s\n" % ", ".join(state['classes']) \
+                 + "# classes: %d\n" % len(state['classes'])
+        if 'num_network_classes' in state:
+            result += "# network classes: %d\n" % state['num_network_classes']
+        return result
     elif output_format == "json":
         result = dict()
         result['architecture'] = state['arch']
         result['width'] = state['width']
         result['height'] = state['height']
-        result['classes'] = state['classes']
         result['epoch'] = state['epoch']
         result['best_acc1'] = float(state['best_acc1'])
+        result['classes'] = state['classes']
+        result['num_classes'] = len(state['classes'])
+        if 'num_network_classes' in state:
+            result['num_network_classes'] = state['num_network_classes']
         return json.dumps(result, indent=2)
     else:
         raise Exception("Unknown format: %s" % output_format)
