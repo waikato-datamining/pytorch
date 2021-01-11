@@ -109,12 +109,6 @@ def main_worker(gpu, ngpus_per_node, args):
         layers.append(torch.nn.Linear(old_layer.in_features, len(classes)))
         new_layer = enable_cuda(torch.nn.Sequential(*layers))
         model.classifier = new_layer
-    elif args.arch == "inception_v3":
-        # https://discuss.pytorch.org/t/runtimeerror-when-fine-tuning-using-inception-v3/22629
-        num_aux_in = model.AuxLogits.fc.in_features
-        model.AuxLogits.fc = enable_cuda(nn.Linear(num_aux_in, len(classes)))
-        num_final_in = model.fc.in_features
-        model.fc = enable_cuda(nn.Linear(num_final_in, len(classes)))
     else:
         print("WARNING: cannot replace final layer for new classes on architecture '%s', will stick with imagenet's 1000 classes!" % args.arch)
 
