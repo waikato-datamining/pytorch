@@ -22,7 +22,7 @@ def generate_info(state, output_format="text"):
                  + "Width: %d\n" % state['width'] \
                  + "Height: %d\n" % state['height'] \
                  + "Epoch: %d\n" % state['epoch'] \
-                 + "Best acc1: %.2f%%" % float(state['best_acc1']) \
+                 + "Best acc1: %.2f%%\n" % float(state['best_acc1']) \
                  + "Classes: %s\n" % ", ".join(state['classes']) \
                  + "# classes: %d\n" % len(state['classes'])
         if 'num_network_classes' in state:
