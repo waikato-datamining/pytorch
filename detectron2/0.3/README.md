@@ -1,6 +1,6 @@
 # Detectron2
 
-Uses [Detectron2](https://github.com/facebookresearch/detectron2). 
+Uses [Detectron2](https://github.com/facebookresearch/detectron2) ([documentation](https://detectron2.readthedocs.io/en/v0.3/)). 
 
 Uses PyTorch 1.6, CUDA 10.1 and Detectron2 0.3.
 
