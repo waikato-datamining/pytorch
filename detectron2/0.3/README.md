@@ -4,6 +4,13 @@ Uses [Detectron2](https://github.com/facebookresearch/detectron2) ([documentatio
 
 Uses PyTorch 1.6, CUDA 10.1 and Detectron2 0.3.
 
+Though Detectron2 is installed via a wheel file, you can find Detectron2's source code \
+inside the container in:
+
+```commandline
+/opt/detectron2
+```
+
 ## Version
 
 Detectron2 github repo hash:
