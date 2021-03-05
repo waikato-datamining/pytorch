@@ -11,6 +11,12 @@ inside the container in:
 /opt/detectron2
 ```
 
+Additional code is located in:
+
+```commandline
+/opt/detectron2_ext
+```
+
 ## Version
 
 Detectron2 github repo hash:
@@ -148,3 +154,10 @@ to download them constantly, you can the cache directory to the host machine:
   ```commandline
   -v /some/where/cache:/.torch \
   ```
+
+
+## Scripts
+
+The following additional scripts are available:
+
+* `d2_train_coco` - for building a model using a COCO-based train/test set (calls `/opt/detectron2_ext/d2_train_coco.py`)

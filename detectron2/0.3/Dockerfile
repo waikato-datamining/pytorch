@@ -22,4 +22,5 @@ RUN git clone https://github.com/facebookresearch/detectron2.git && \
     git reset --hard 4841e70ee48da72c32304f9ebf98138c2a70048d
 
 COPY bash.bashrc /etc/bash.bashrc
-
+COPY train_coco.py /opt/detectron2_ext/train_coco.py
+COPY d2_train_coco /usr/bin/d2_train_coco

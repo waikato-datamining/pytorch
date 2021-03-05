@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /opt/detectron2_ext
+python d2_train_coco.py "$@"
