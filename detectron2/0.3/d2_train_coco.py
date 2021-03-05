@@ -141,8 +141,6 @@ def main(args=None):
 
     parsed = parser.parse_args(args=args)
 
-    print(parsed)
-
     # load config
     print("Loading config...")
     cfg = get_cfg()
