@@ -121,6 +121,21 @@ def train(cfg):
     return trainer.train()
 
 
+def load_labels(labels_file):
+    """
+    Loads the labels from the specified file.
+
+    :param labels_file: the file to load (comma-separated list)
+    :type labels_file: str
+    :return: the list of labels
+    :rtype: list
+    """
+    with open(labels_file) as lf:
+        line = lf.readline()
+        line = line.strip()
+        return line.split(",")
+
+
 def main(args=None):
     """
     Performs the model building/evaluation.
@@ -137,9 +152,19 @@ def main(args=None):
     parser.add_argument('--test_annotations', metavar='FILE', required=True, help='the COCO test JSON file')
     parser.add_argument('--test_images', metavar='DIR', required=True, help='the directory with the test images')
     parser.add_argument('--config', metavar='FILE', required=True, help='the model config file to use')
+    parser.add_argument('--labels', metavar='FILE', required=True, help='the file with the labels (comma-separate list)')
     parser.add_argument('--output_dir', metavar='DIR', required=True, help='the directory for storing the output')
+    parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
 
     parsed = parser.parse_args(args=args)
+
+    # loads labels
+    print("Loading labels...")
+    labels = load_labels(parsed.labels)
+    num_classes = len(labels)
+    if parsed.verbose:
+        print("# classes:", num_classes)
+        print("classes:", labels)
 
     # load config
     print("Loading config...")
@@ -148,6 +173,8 @@ def main(args=None):
     cfg.OUTPUT_DIR = parsed.output_dir
     cfg.DATASETS.TRAIN = ("coco_ext_train",)
     cfg.DATASETS.TEST = ("coco_ext_test",)
+    cfg.MODEL.ROI_HEADS.NUM_CLASSES = num_classes
+    cfg.MODEL.RETINANET.NUM_CLASSES = num_classes
     cfg.freeze()
 
     # register datasets
