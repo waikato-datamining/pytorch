@@ -1,13 +1,21 @@
 import argparse
 import numpy as np
+import os
 import torch
 import traceback
+
 from detectron2.config import get_cfg
 from detectron2.data.detection_utils import read_image
 from detectron2.engine.defaults import DefaultPredictor
 from detectron2.utils.visualizer import GenericMask
 from image_complete import auto
+from PIL import Image
 from sfp import Poller
+from wai.annotations.image_utils import image_to_numpyarray, remove_alpha_channel, mask_to_polygon, polygon_to_minrect, polygon_to_lists, lists_to_polygon, polygon_to_bbox
+from wai.annotations.core import ImageInfo
+from wai.annotations.roi import ROIObject
+from wai.annotations.roi.io import ROIWriter
+
 
 SUPPORTED_EXTS = [".jpg", ".jpeg", ".png", ".bmp"]
 """ supported file extensions (lower case). """
@@ -29,44 +37,92 @@ def check_image(fname, poller):
     return result
 
 
-def process_image(cfg, image, labels, score_threshold=0.5):
-    cpu_device = torch.device("cpu")
-    predictor = DefaultPredictor(cfg)
-    img = read_image(image, format="BGR")
-    predictions = predictor(img)
-    if not "instances" in predictions:
-        raise Exception("Didn't find 'instances' in the predictions dictionary!")
-    instances = predictions["instances"].to(cpu_device)
-    print(instances)
-    num_instances = len(instances)
-    image_height, image_width = instances.image_size
-    boxes = instances.pred_boxes if instances.has("pred_boxes") else None
-    classes = instances.pred_classes if instances.has("pred_classes") else None
-    scores = instances.scores if instances.has("scores") else None
-    if instances.has("pred_masks"):
-        masks = np.asarray(instances.pred_masks)
-        masks = [GenericMask(x, image_height, image_width) for x in masks]
-        polygons = [x.polygons for x in masks]
-    else:
-        masks = None
-        polygons = None
-    print("index score box class polygon")
-    for i in range(num_instances):
-        score = scores[i].item()
-        if score >= score_threshold:
-            cls = classes[i].item()
-            cls_str = labels[cls]
-            if polygons is None:
-                poly = ""
-            else:
-                poly = polygons[i]
-            print(i, score, boxes[i], cls_str, poly)
-    #print(predictions["instances"].to(cpu_device))
+def process_image(poller, fname, output_dir, labels, score_threshold=0.5):
+    result = []
+
+    try:
+        predictor = poller.params.predictor
+        img = read_image(fname, format="BGR")
+        predictions = predictor(img)
+        if not "instances" in predictions:
+            raise Exception("Didn't find 'instances' in the predictions dictionary!")
+        instances = predictions["instances"].to(poller.params.cpu_device)
+        print(instances)
+        num_instances = len(instances)
+        image_height, image_width = instances.image_size
+        boxes = instances.pred_boxes if instances.has("pred_boxes") else None
+        classes = instances.pred_classes if instances.has("pred_classes") else None
+        scores = instances.scores if instances.has("scores") else None
+        if instances.has("pred_masks"):
+            masks = np.asarray(instances.pred_masks)
+            masks = [GenericMask(x, image_height, image_width) for x in masks]
+            polygons = [x.polygons for x in masks]
+        else:
+            masks = None
+            polygons = None
+        print("index score box class polygon")
+
+        roi_path = "{}/{}-rois.csv".format(output_dir, os.path.splitext(os.path.basename(fname))[0])
+        img_path = "{}/{}-mask.png".format(output_dir, os.path.splitext(os.path.basename(fname))[0])
+
+        roiobjs = []
+        mask_comb = None
+        for i in range(num_instances):
+            score = scores[i].item()
+            if score >= score_threshold:
+                label = classes[i].item()
+                label_str = labels[label]
+                box = boxes[i].tensor.numpy()
+                x0, y0, x1, y1 = box[0]
+                x0n = x0 / image_width
+                y0n = y0 / image_height
+                x1n = x1 / image_width
+                y1n = y1 / image_height
+
+                px = None
+                py = None
+                pxn = None
+                pyn = None
+                bw = None
+                bh = None
+
+                if polygons is not None:
+                    poly = polygons[i]
+                    if poller.params.output_minrect:
+                        pass
+
+                if poller.params.output_mask_image:
+                    pass
+
+                roiobj = ROIObject(x0, y0, x1, y1, x0n, y0n, x1n, y1n, label, label_str, score=score,
+                                   poly_x=px, poly_y=py, poly_xn=pxn, poly_yn=pyn,
+                                   minrect_w=bw, minrect_h=bh)
+                roiobjs.append(roiobj)
+
+        info = ImageInfo(filename=os.path.basename(fname), size=(image_width, image_height))
+        roiext = (info, roiobjs)
+        options = ["--output", output_dir, "--no-images"]
+        if poller.params.output_width_height:
+            options.append("--size-mode")
+        roiwriter = ROIWriter(options)
+        roiwriter.save([roiext])
+        result.append(roi_path)
+
+        if mask_comb is not None:
+            im = Image.fromarray(np.uint8(mask_comb), 'P')
+            im.save(img_path, "PNG")
+            result.append(img_path)
+        #print(predictions["instances"].to(poller.params.cpu_device))
+    except KeyboardInterrupt:
+        poller.keyboard_interrupt()
+    except:
+        poller.error("Failed to process image: %s\n%s" % (fname, traceback.format_exc()))
+    return result
 
 
 def predict(cfg, input_dir, output_dir, tmp_dir, class_names, score_threshold=0.0,
             poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
-            delete_input=False, output_width_height=False, output_mask_image=False,
+            delete_input=False, output_width_height=False, output_minrect=False, output_mask_image=False,
             verbose=False, quiet=False):
     """
     Method for performing predictions on images.
@@ -95,6 +151,8 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, score_threshold=0.
     :type delete_input: bool
     :param output_width_height: whether to output x/y/w/h instead of x0/y0/x1/y1
     :type output_width_height: bool
+    :param output_minrect: when predicting polygons, whether to output the minimal rectangles around the objects as well
+    :type output_minrect: bool
     :param output_mask_image: when generating masks, whether to output a combined mask image as well
     :type output_mask_image: bool
     :param verbose: whether to output more logging information
@@ -122,6 +180,9 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, score_threshold=0.
     poller.params.score_threshold = score_threshold
     poller.params.output_mask_image = output_mask_image
     poller.params.output_width_height = output_width_height
+    poller.params.output_minrect = output_minrect
+    poller.params.cpu_device = torch.device("cpu")
+    poller.params.predictor = DefaultPredictor(cfg)
     poller.poll()
 
 
@@ -163,13 +224,14 @@ def main(args=None):
     # parser.add_argument('--watchdog_check_interval', type=float, help='check interval in seconds for the watchdog', required=False, default=10.0)
     # parser.add_argument('--delete_input', action='store_true', help='Whether to delete the input images rather than move them to --prediction_out directory', required=False, default=False)
     # parser.add_argument('--output_width_height', action='store_true', help="Whether to output x/y/w/h instead of x0/y0/x1/y1 in the ROI CSV files", required=False, default=False)
+    # parser.add_argument('--output_minrect', action='store_true', help='When outputting polygons whether to store the minimal rectangle around the objects in the CSV files as well', required=False, default=False)
     # parser.add_argument('--output_mask_image', action='store_true', help="Whether to output a mask image (PNG) when predictions generate masks", required=False, default=False)
     parser.add_argument('--labels', metavar='FILE', required=True, help='the file with the labels (comma-separate list)')
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
     # parser.add_argument('--quiet', action='store_true', help='Whether to suppress output', required=False, default=False)
     # TODO only for testing
-    parser.add_argument('--image', metavar='FILE',
-                        help='The image to process')
+    parser.add_argument('--image', metavar='FILE', help='The image to process')
+    parser.add_argument('--output_dir', metavar='DIR', help='The image to process')
 
     parsed = parser.parse_args(args=args)
 
@@ -189,11 +251,18 @@ def main(args=None):
     cfg.MODEL.WEIGHTS = parsed.model
 
     # TODO switch to predict
-    process_image(cfg, parsed.image, labels, score_threshold=parsed.score_threshold)
+    poller = Poller()
+    poller.params.config = cfg
+    poller.params.cpu_device = torch.device("cpu")
+    poller.params.predictor = DefaultPredictor(cfg)
+    poller.params.output_width_height = False
+    poller.params.output_minrect = False
+    poller.params.output_mask_image = False
+    process_image(poller, parsed.image, parsed.output_dir, labels, score_threshold=parsed.score_threshold)
     # predict(cfg, parsed.prediction_in, parsed.prediction_out, parsed.prediction_tmp, labels,
     #         score_threshold=parsed.score_threshold, poll_wait=parsed.poll_wait, continuous=parsed.continuous,
     #         use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
-    #         delete_input=parsed.delete_input, output_width_height=parsed.output_width_height,
+    #         delete_input=parsed.delete_input, output_width_height=parsed.output_width_height, output_minrect=parsed.output_minrect,
     #         output_mask_image=parsed.output_mask_image, verbose=parsed.verbose, quiet=parsed.quiet)
 
 
