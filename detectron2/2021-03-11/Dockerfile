@@ -11,15 +11,15 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+WORKDIR /opt
+
 RUN git clone https://github.com/facebookresearch/detectron2.git && \
     cd detectron2 && \
     git reset --hard 083a70b98959f59cd9ec6960fabd655deaabd742 && \
     pip install --no-cache-dir . && \
     pip install --no-cache-dir python-image-complete "wai.annotations<=0.3.5" "simple-file-poller>=0.0.9" && \
-    pip install opencv-python
-
-WORKDIR /opt
-
+    pip install --no-cache-dir opencv-python && \
+    pip install --no-cache-dir onnx
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY d2_train_coco.py /opt/detectron2_ext/d2_train_coco.py
