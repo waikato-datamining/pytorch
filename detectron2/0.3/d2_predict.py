@@ -11,7 +11,7 @@ from detectron2.utils.visualizer import GenericMask
 from image_complete import auto
 from PIL import Image
 from sfp import Poller
-from wai.annotations.image_utils import image_to_numpyarray, remove_alpha_channel, mask_to_polygon, polygon_to_minrect, polygon_to_lists, lists_to_polygon, polygon_to_bbox
+from wai.annotations.image_utils import polygon_to_minrect, lists_to_polygon, polygon_to_bbox
 from wai.annotations.core import ImageInfo
 from wai.annotations.roi import ROIObject
 from wai.annotations.roi.io import ROIWriter
@@ -37,7 +37,19 @@ def check_image(fname, poller):
     return result
 
 
-def process_image(poller, fname, output_dir, labels, score_threshold=0.5):
+def process_image(fname, output_dir, poller):
+    """
+    Method for processing an image.
+
+    :param fname: the image to process
+    :type fname: str
+    :param output_dir: the directory to write the image to
+    :type output_dir: str
+    :param poller: the Poller instance that called the method
+    :type poller: Poller
+    :return: the list of generated output files
+    :rtype: list
+    """
     result = []
 
     try:
@@ -47,7 +59,6 @@ def process_image(poller, fname, output_dir, labels, score_threshold=0.5):
         if not "instances" in predictions:
             raise Exception("Didn't find 'instances' in the predictions dictionary!")
         instances = predictions["instances"].to(poller.params.cpu_device)
-        print(instances)
         num_instances = len(instances)
         image_height, image_width = instances.image_size
         boxes = instances.pred_boxes if instances.has("pred_boxes") else None
@@ -60,7 +71,6 @@ def process_image(poller, fname, output_dir, labels, score_threshold=0.5):
         else:
             masks = None
             polygons = None
-        print("index score box class polygon")
 
         roi_path = "{}/{}-rois.csv".format(output_dir, os.path.splitext(os.path.basename(fname))[0])
         img_path = "{}/{}-mask.png".format(output_dir, os.path.splitext(os.path.basename(fname))[0])
@@ -69,9 +79,9 @@ def process_image(poller, fname, output_dir, labels, score_threshold=0.5):
         mask_comb = None
         for i in range(num_instances):
             score = scores[i].item()
-            if score >= score_threshold:
+            if score >= poller.params.score_threshold:
                 label = classes[i].item()
-                label_str = labels[label]
+                label_str = poller.params.class_names[label]
                 box = boxes[i].tensor.numpy()
                 x0, y0, x1, y1 = box[0]
                 x0n = x0 / image_width
@@ -87,12 +97,28 @@ def process_image(poller, fname, output_dir, labels, score_threshold=0.5):
                 bh = None
 
                 if polygons is not None:
-                    poly = polygons[i]
+                    poly = polygons[i][0]
+                    px = []
+                    py = []
+                    pxn = []
+                    pyn = []
+                    for n in range(len(poly)):
+                        if n % 2 == 0:
+                            px.append(poly[n])
+                            pxn.append(poly[n] / image_width)
+                        else:
+                            py.append(poly[n])
+                            pyn.append(poly[n] / image_height)
                     if poller.params.output_minrect:
-                        pass
+                        bw, bh = polygon_to_minrect(lists_to_polygon(px, py))
+                    if poller.params.fit_bbox_to_polygon:
+                        if len(px) >= 3:
+                            x0, y0, x1, y1 = polygon_to_bbox(lists_to_polygon(px, py))
+                            x0n, y0n, x1n, y1n = polygon_to_bbox(lists_to_polygon(pxn, pyn))
 
                 if poller.params.output_mask_image:
-                    pass
+                    if masks is not None:
+                        pass
 
                 roiobj = ROIObject(x0, y0, x1, y1, x0n, y0n, x1n, y1n, label, label_str, score=score,
                                    poly_x=px, poly_y=py, poly_xn=pxn, poly_yn=pyn,
@@ -112,7 +138,7 @@ def process_image(poller, fname, output_dir, labels, score_threshold=0.5):
             im = Image.fromarray(np.uint8(mask_comb), 'P')
             im.save(img_path, "PNG")
             result.append(img_path)
-        #print(predictions["instances"].to(poller.params.cpu_device))
+
     except KeyboardInterrupt:
         poller.keyboard_interrupt()
     except:
@@ -123,7 +149,7 @@ def process_image(poller, fname, output_dir, labels, score_threshold=0.5):
 def predict(cfg, input_dir, output_dir, tmp_dir, class_names, score_threshold=0.0,
             poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
             delete_input=False, output_width_height=False, output_minrect=False, output_mask_image=False,
-            verbose=False, quiet=False):
+            fit_bbox_to_polygon=False, verbose=False, quiet=False):
     """
     Method for performing predictions on images.
 
@@ -155,6 +181,8 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, score_threshold=0.
     :type output_minrect: bool
     :param output_mask_image: when generating masks, whether to output a combined mask image as well
     :type output_mask_image: bool
+    :param fit_bbox_to_polygon: whether to fit the bounding box to the polygon
+    :type fit_bbox_to_polygon: bool
     :param verbose: whether to output more logging information
     :type verbose: bool
     :param quiet: whether to suppress output
@@ -181,6 +209,7 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, score_threshold=0.
     poller.params.output_mask_image = output_mask_image
     poller.params.output_width_height = output_width_height
     poller.params.output_minrect = output_minrect
+    poller.params.fit_bbox_to_polygon = fit_bbox_to_polygon
     poller.params.cpu_device = torch.device("cpu")
     poller.params.predictor = DefaultPredictor(cfg)
     poller.poll()
@@ -214,6 +243,7 @@ def main(args=None):
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-m', '--model', metavar='FILE', required=True, help='The model state to use')
     parser.add_argument('-c', '--config', metavar='FILE', required=True, help='The model config file to use')
+    parser.add_argument('--labels', metavar='FILE', required=True, help='the file with the labels (comma-separate list)')
     parser.add_argument('--score_threshold', type=float, default=0.5, help="Minimum score for instance predictions to be shown")
     # parser.add_argument('-i', '--prediction_in', metavar='DIR', required=True, help='The input directory to poll for images to make predictions for')
     # parser.add_argument('-o', '--prediction_out', metavar='DIR', required=True, help='The directory to place predictions in and move input images to')
@@ -226,7 +256,7 @@ def main(args=None):
     # parser.add_argument('--output_width_height', action='store_true', help="Whether to output x/y/w/h instead of x0/y0/x1/y1 in the ROI CSV files", required=False, default=False)
     # parser.add_argument('--output_minrect', action='store_true', help='When outputting polygons whether to store the minimal rectangle around the objects in the CSV files as well', required=False, default=False)
     # parser.add_argument('--output_mask_image', action='store_true', help="Whether to output a mask image (PNG) when predictions generate masks", required=False, default=False)
-    parser.add_argument('--labels', metavar='FILE', required=True, help='the file with the labels (comma-separate list)')
+    # parser.add_argument('--fit_bbox_to_polygon', action='store_true', help='Whether to fit the bounding box to the polygon', required=False, default=False)
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
     # parser.add_argument('--quiet', action='store_true', help='Whether to suppress output', required=False, default=False)
     # TODO only for testing
@@ -258,7 +288,10 @@ def main(args=None):
     poller.params.output_width_height = False
     poller.params.output_minrect = False
     poller.params.output_mask_image = False
-    process_image(poller, parsed.image, parsed.output_dir, labels, score_threshold=parsed.score_threshold)
+    poller.params.fit_bbox_to_polygon = False
+    poller.params.class_names = labels
+    poller.params.score_threshold = parsed.score_threshold
+    process_image(parsed.image, parsed.output_dir, poller)
     # predict(cfg, parsed.prediction_in, parsed.prediction_out, parsed.prediction_tmp, labels,
     #         score_threshold=parsed.score_threshold, poll_wait=parsed.poll_wait, continuous=parsed.continuous,
     #         use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
