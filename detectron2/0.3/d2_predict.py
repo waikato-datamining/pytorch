@@ -118,6 +118,7 @@ def process_image(fname, output_dir, poller):
 
                 if poller.params.output_mask_image:
                     if masks is not None:
+                        # TODO combine masks into single image
                         pass
 
                 roiobj = ROIObject(x0, y0, x1, y1, x0n, y0n, x1n, y1n, label, label_str, score=score,
@@ -241,27 +242,24 @@ def main(args=None):
     parser = argparse.ArgumentParser(description='Detectron2 - Prediction',
                                      prog="d2_predict",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('-m', '--model', metavar='FILE', required=True, help='The model state to use')
-    parser.add_argument('-c', '--config', metavar='FILE', required=True, help='The model config file to use')
+    parser.add_argument('--model', metavar='FILE', required=True, help='The model state to use')
+    parser.add_argument('--config', metavar='FILE', required=True, help='The model config file to use')
     parser.add_argument('--labels', metavar='FILE', required=True, help='the file with the labels (comma-separate list)')
     parser.add_argument('--score_threshold', type=float, default=0.5, help="Minimum score for instance predictions to be shown")
-    # parser.add_argument('-i', '--prediction_in', metavar='DIR', required=True, help='The input directory to poll for images to make predictions for')
-    # parser.add_argument('-o', '--prediction_out', metavar='DIR', required=True, help='The directory to place predictions in and move input images to')
-    # parser.add_argument('-t', '--prediction_tmp', metavar='DIR', help='The directory to place the prediction files in first before moving them to the output directory')
-    # parser.add_argument('--poll_wait', type=float, help='poll interval in seconds when not using watchdog mode', required=False, default=1.0)
-    # parser.add_argument('--continuous', action='store_true', help='Whether to continuously load test images and perform prediction', required=False, default=False)
-    # parser.add_argument('--use_watchdog', action='store_true', help='Whether to react to file creation events rather than performing fixed-interval polling', required=False, default=False)
-    # parser.add_argument('--watchdog_check_interval', type=float, help='check interval in seconds for the watchdog', required=False, default=10.0)
-    # parser.add_argument('--delete_input', action='store_true', help='Whether to delete the input images rather than move them to --prediction_out directory', required=False, default=False)
-    # parser.add_argument('--output_width_height', action='store_true', help="Whether to output x/y/w/h instead of x0/y0/x1/y1 in the ROI CSV files", required=False, default=False)
-    # parser.add_argument('--output_minrect', action='store_true', help='When outputting polygons whether to store the minimal rectangle around the objects in the CSV files as well', required=False, default=False)
-    # parser.add_argument('--output_mask_image', action='store_true', help="Whether to output a mask image (PNG) when predictions generate masks", required=False, default=False)
-    # parser.add_argument('--fit_bbox_to_polygon', action='store_true', help='Whether to fit the bounding box to the polygon', required=False, default=False)
+    parser.add_argument('--prediction_in', metavar='DIR', required=True, help='The input directory to poll for images to make predictions for')
+    parser.add_argument('--prediction_out', metavar='DIR', required=True, help='The directory to place predictions in and move input images to')
+    parser.add_argument('--prediction_tmp', metavar='DIR', help='The directory to place the prediction files in first before moving them to the output directory')
+    parser.add_argument('--poll_wait', type=float, help='poll interval in seconds when not using watchdog mode', required=False, default=1.0)
+    parser.add_argument('--continuous', action='store_true', help='Whether to continuously load test images and perform prediction', required=False, default=False)
+    parser.add_argument('--use_watchdog', action='store_true', help='Whether to react to file creation events rather than performing fixed-interval polling', required=False, default=False)
+    parser.add_argument('--watchdog_check_interval', type=float, help='check interval in seconds for the watchdog', required=False, default=10.0)
+    parser.add_argument('--delete_input', action='store_true', help='Whether to delete the input images rather than move them to --prediction_out directory', required=False, default=False)
+    parser.add_argument('--output_width_height', action='store_true', help="Whether to output x/y/w/h instead of x0/y0/x1/y1 in the ROI CSV files", required=False, default=False)
+    parser.add_argument('--output_minrect', action='store_true', help='When outputting polygons whether to store the minimal rectangle around the objects in the CSV files as well', required=False, default=False)
+    parser.add_argument('--output_mask_image', action='store_true', help="Whether to output a mask image (PNG) when predictions generate masks", required=False, default=False)
+    parser.add_argument('--fit_bbox_to_polygon', action='store_true', help='Whether to fit the bounding box to the polygon', required=False, default=False)
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
-    # parser.add_argument('--quiet', action='store_true', help='Whether to suppress output', required=False, default=False)
-    # TODO only for testing
-    parser.add_argument('--image', metavar='FILE', help='The image to process')
-    parser.add_argument('--output_dir', metavar='DIR', help='The image to process')
+    parser.add_argument('--quiet', action='store_true', help='Whether to suppress output', required=False, default=False)
 
     parsed = parser.parse_args(args=args)
 
@@ -280,23 +278,11 @@ def main(args=None):
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = num_classes
     cfg.MODEL.WEIGHTS = parsed.model
 
-    # TODO switch to predict
-    poller = Poller()
-    poller.params.config = cfg
-    poller.params.cpu_device = torch.device("cpu")
-    poller.params.predictor = DefaultPredictor(cfg)
-    poller.params.output_width_height = False
-    poller.params.output_minrect = False
-    poller.params.output_mask_image = False
-    poller.params.fit_bbox_to_polygon = False
-    poller.params.class_names = labels
-    poller.params.score_threshold = parsed.score_threshold
-    process_image(parsed.image, parsed.output_dir, poller)
-    # predict(cfg, parsed.prediction_in, parsed.prediction_out, parsed.prediction_tmp, labels,
-    #         score_threshold=parsed.score_threshold, poll_wait=parsed.poll_wait, continuous=parsed.continuous,
-    #         use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
-    #         delete_input=parsed.delete_input, output_width_height=parsed.output_width_height, output_minrect=parsed.output_minrect,
-    #         output_mask_image=parsed.output_mask_image, verbose=parsed.verbose, quiet=parsed.quiet)
+    predict(cfg, parsed.prediction_in, parsed.prediction_out, parsed.prediction_tmp, labels,
+            score_threshold=parsed.score_threshold, poll_wait=parsed.poll_wait, continuous=parsed.continuous,
+            use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
+            delete_input=parsed.delete_input, output_width_height=parsed.output_width_height, output_minrect=parsed.output_minrect,
+            output_mask_image=parsed.output_mask_image, verbose=parsed.verbose, quiet=parsed.quiet)
 
 
 if __name__ == "__main__":
