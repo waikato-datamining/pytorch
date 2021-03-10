@@ -46,7 +46,7 @@ March 11, 2021
   ```commandline
   docker run --runtime=nvidia --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.3
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2021-03-11
   ```
 
   **NB:** For docker versions 19.03 (`docker version`) and newer, use `--gpus=all` instead of `--runtime=nvidia`.
@@ -59,7 +59,7 @@ March 11, 2021
 
 ### Build local image
 
-* Build the image from Docker file (from within /path_to/detectron2/0.3)
+* Build the image from Docker file (from within /path_to/detectron2/2021-03-11)
 
   ```commandline
   sudo docker build -t detectron2 .
@@ -77,21 +77,21 @@ March 11, 2021
 * Build
 
   ```commandline
-  docker build -t pytorch/detectron2:0.3 .
+  docker build -t pytorch/detectron2:2021-03-11 .
   ```
   
 * Tag
 
   ```commandline
   docker tag \
-    detectron2:0.3 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.3
+    detectron2:2021-03-11 \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2021-03-11
   ```
   
 * Push
 
   ```commandline
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.3
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2021-03-11
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -104,7 +104,7 @@ March 11, 2021
   If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
 
   ```commandline
-  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.3
+  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2021-03-11
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -115,15 +115,15 @@ March 11, 2021
   
   ```commandline
   docker tag \
-    public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.3 \
-    pytorch/detectron2:0.3
+    public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2021-03-11 \
+    pytorch/detectron2:2021-03-11
   ```
   
 * <a name="run">Run</a>
 
   ```commandline
   docker run --runtime=nvidia --shm-size 8G \
-    -v /local/dir:/container/dir -it pytorch/detectron2:0.3
+    -v /local/dir:/container/dir -it pytorch/detectron2:2021-03-11
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
