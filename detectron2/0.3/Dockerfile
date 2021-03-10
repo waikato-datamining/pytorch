@@ -13,6 +13,7 @@ RUN apt-get update && \
 
 RUN pip install detectron2 -f \
     https://dl.fbaipublicfiles.com/detectron2/wheels/cu101/torch1.6/index.html && \
+    pip install --no-cache-dir python-image-complete "wai.annotations<=0.3.5" "simple-file-poller>=0.0.9" && \
     pip install opencv-python
 
 WORKDIR /opt
@@ -22,5 +23,7 @@ RUN git clone https://github.com/facebookresearch/detectron2.git && \
     git reset --hard 4841e70ee48da72c32304f9ebf98138c2a70048d
 
 COPY bash.bashrc /etc/bash.bashrc
-COPY train_coco.py /opt/detectron2_ext/train_coco.py
+COPY d2_train_coco.py /opt/detectron2_ext/d2_train_coco.py
 COPY d2_train_coco /usr/bin/d2_train_coco
+COPY d2_predict.py /opt/detectron2_ext/d2_predict.py
+COPY d2_predict /usr/bin/d2_predict

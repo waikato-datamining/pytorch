@@ -161,3 +161,4 @@ to download them constantly, you can the cache directory to the host machine:
 The following additional scripts are available:
 
 * `d2_train_coco` - for building a model using a COCO-based train/test set (calls `/opt/detectron2_ext/d2_train_coco.py`)
+* `d2_predict` - for generating batch predictions on images (calls `/opt/detectron2_ext/d2_predict.py`)
