@@ -9,35 +9,23 @@ of [detectron2](https://github.com/facebookresearch/detectron2) on a local machi
   ```commandline
   virtualenv -p /usr/bin/python3.7 venv
   ```
+    
+* install PyTorch
+  
+  ```commandline
+  ./venv/bin/pip install torch==1.7.1
+  ```
+
+* install torchvision (see [here](https://pypi.org/project/torchvision/) for version matrix):
+  
+  ```commandline
+  ./venv/bin/pip install torchvision==0.8.2
+  ``` 
   
 * install detectron2 
 
-  * open *install* arrow on installation page for desired PyTorch version 
-  
-    https://detectron2.readthedocs.io/en/v0.3/tutorials/install.html#install-pre-built-detectron2-linux-only
-    
-  * open website in browser, e.g., for PyTorch 1.6:
-  
-    https://dl.fbaipublicfiles.com/detectron2/wheels/cpu/torch1.6/index.html
-    
-  * copy link, e.g., for Python 3.7:
-  
-    https://dl.fbaipublicfiles.com/detectron2/wheels/cpu/torch1.6/detectron2-0.3%2Bcpu-cp37-cp37m-linux_x86_64.whl
-    
-  * install wheel file:
-  
-    ```commandline
-    ./venv/bin/pip install detectron2 - f https://dl.fbaipublicfiles.com/detectron2/wheels/cpu/torch1.6/detectron2-0.3%2Bcpu-cp37-cp37m-linux_x86_64.whl
-    ```
-    
-  * install PyTorch
-  
-    ```commandline
-    ./venv/bin/pip install torch==1.6.0
-    ```
+  ```commandline
+  ./venv/bin/pip install git+git://github.com/facebookresearch/detectron2.git@083a70b98959f59cd9ec6960fabd655deaabd742
 
-  * install torchvision (see [here](https://pypi.org/project/torchvision/) for version matrix):
+  ```
   
-    ```commandline
-    ./venv/bin/pip install torchvision==0.7.0
-    ``` 
