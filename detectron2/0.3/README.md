@@ -176,3 +176,7 @@ The following additional scripts are available:
     TRAIN: ("coco_ext_train2",)
     TEST: ("coco_ext_test2",)
   ```
+
+* `Loss became infinite or NaN at iteration=X`
+  
+  Decreasing the learning rate may help (see discussion [here](https://github.com/facebookresearch/detectron2/issues/550#issuecomment-655127445)).
