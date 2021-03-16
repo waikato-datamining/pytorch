@@ -165,6 +165,10 @@ The following additional scripts are available:
 
 ### d2_train_coco
 
+* Documentation of config file parameters:
+
+  https://detectron2.readthedocs.io/en/latest/modules/config.html
+  
 * Use the following in the YAML config file for the datasets (the script registers the datasets you provide via parameters under these names):
 
   ```yaml
