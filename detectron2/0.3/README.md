@@ -162,3 +162,13 @@ The following additional scripts are available:
 
 * `d2_train_coco` - for building a model using a COCO-based train/test set (calls `/opt/detectron2_ext/d2_train_coco.py`)
 * `d2_predict` - for generating batch predictions on images (calls `/opt/detectron2_ext/d2_predict.py`)
+
+### d2_train_coco
+
+* Use the following in the YAML config file for the datasets (the script registers the datasets you provide via parameters under these names):
+
+  ```yaml
+  DATASETS:
+    TRAIN: ("coco_ext_train2",)
+    TEST: ("coco_ext_test2",)
+  ```
