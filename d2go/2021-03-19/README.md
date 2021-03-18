@@ -14,17 +14,17 @@ git repository hashes of libraries:
 
 * [Detectron2](https://github.com/facebookresearch/d2go): 
 
-  * 34acc94d862b8c31f382bee5013737184f444b74
+  * `34acc94d862b8c31f382bee5013737184f444b74`
   * 2021-03-18
   
 * [mobile-vision](https://github.com/facebookresearch/mobile-vision):
 
-  * af4dffe4662f13210c8fc2581a6d4e4c24b7e5c8
+  * `af4dffe4662f13210c8fc2581a6d4e4c24b7e5c8`
   * 2021-02-25
   
 * [d2go](https://github.com/facebookresearch/d2go):
 
-  * ec2e8ffffc8b59f4fabf7b1f3f31861eb7a4af70
+  * `ec2e8ffffc8b59f4fabf7b1f3f31861eb7a4af70`
   * 2021-03-19
 
 ## Docker
