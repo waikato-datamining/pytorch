@@ -162,3 +162,21 @@ The following additional scripts are available:
 
 * `d2_train_coco` - for building a model using a COCO-based train/test set (calls `/opt/detectron2_ext/d2_train_coco.py`)
 * `d2_predict` - for generating batch predictions on images (calls `/opt/detectron2_ext/d2_predict.py`)
+
+### d2_train_coco
+
+* Documentation of config file parameters:
+
+  https://detectron2.readthedocs.io/en/latest/modules/config.html
+  
+* Use the following in the YAML config file for the datasets (the script registers the datasets you provide via parameters under these names):
+
+  ```yaml
+  DATASETS:
+    TRAIN: ("coco_ext_train",)
+    TEST: ("coco_ext_test",)
+  ```
+
+* `Loss became infinite or NaN at iteration=X`
+  
+  Decreasing the learning rate may help (see discussion [here](https://github.com/facebookresearch/detectron2/issues/550#issuecomment-655127445)).
