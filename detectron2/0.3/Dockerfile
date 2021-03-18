@@ -14,13 +14,15 @@ RUN apt-get update && \
 RUN pip install detectron2 -f \
     https://dl.fbaipublicfiles.com/detectron2/wheels/cu101/torch1.6/index.html && \
     pip install --no-cache-dir python-image-complete "wai.annotations<=0.3.5" "simple-file-poller>=0.0.9" && \
-    pip install opencv-python
+    pip install --no-cache-dir opencv-python
 
 WORKDIR /opt
 
 RUN git clone https://github.com/facebookresearch/detectron2.git && \
     cd detectron2 && \
-    git reset --hard 4841e70ee48da72c32304f9ebf98138c2a70048d
+    git reset --hard 4841e70ee48da72c32304f9ebf98138c2a70048d && \
+    cd /opt/detectron2/projects/TensorMask && \
+    pip install --no-cache-dir .
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY d2_train_coco.py /opt/detectron2_ext/d2_train_coco.py
