@@ -173,8 +173,8 @@ The following additional scripts are available:
 
   ```yaml
   DATASETS:
-    TRAIN: ("coco_ext_train2",)
-    TEST: ("coco_ext_test2",)
+    TRAIN: ("coco_ext_train",)
+    TEST: ("coco_ext_test",)
   ```
 
 * `Loss became infinite or NaN at iteration=X`
