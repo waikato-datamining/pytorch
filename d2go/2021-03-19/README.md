@@ -1,6 +1,6 @@
 # Detectron2
 
-Uses [D2Go](https://github.com/facebookresearch/d2go), on top of PyTorch 1.8.0, CUDA 10.2 and Detectron2.
+Uses [D2Go](https://github.com/facebookresearch/d2go), on top of PyTorch 1.7.0, CUDA 10.2 and Detectron2.
 
 Additional code is located in:
 
