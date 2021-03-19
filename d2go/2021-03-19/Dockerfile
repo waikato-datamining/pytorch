@@ -34,5 +34,5 @@ RUN cd /opt && \
     python -m pip install --no-cache-dir .
 
 COPY bash.bashrc /etc/bash.bashrc
-#COPY d2go_train_coco.py /opt/d2go_ext/d2go_train_coco.py
-#COPY d2go_train_coco /usr/bin/d2go_train_coco
+COPY d2go_train_coco.py /opt/d2go_ext/d2go_train_coco.py
+COPY d2go_train_coco /usr/bin/d2go_train_coco

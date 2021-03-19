@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /opt/d2go_ext
+python d2_train_coco.py "$@"
