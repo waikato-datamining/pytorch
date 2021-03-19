@@ -13,7 +13,7 @@ RUN curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.s
     sh Miniconda3-latest-Linux-x86_64.sh -b -p /usr -f && \
     rm Miniconda3-latest-Linux-x86_64.sh
 
-RUN conda install pytorch=1.8.0 torchvision cudatoolkit=10.2 -c pytorch
+RUN conda install pytorch=1.7.0 torchvision cudatoolkit=10.2 -c pytorch
 
 RUN cd /opt && \
     git clone https://github.com/facebookresearch/detectron2.git && \
@@ -34,4 +34,5 @@ RUN cd /opt && \
     python -m pip install --no-cache-dir .
 
 COPY bash.bashrc /etc/bash.bashrc
-
+#COPY d2go_train_coco.py /opt/d2go_ext/d2go_train_coco.py
+#COPY d2go_train_coco /usr/bin/d2go_train_coco
