@@ -156,4 +156,5 @@ to download them constantly, you can the cache directory to the host machine:
 
 The following additional scripts are available:
 
-* TODO
+* `d2go_train_coco` - for building a model using a COCO-based train/test set (calls /opt/d2go_ext/d2go_train_coco.py)
+* ...
