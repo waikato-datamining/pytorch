@@ -1,6 +1,6 @@
-ARG PYTORCH="1.8.0"
-ARG CUDA="11.1"
-ARG CUDNN="8"
+ARG PYTORCH="1.6.0"
+ARG CUDA="10.2"
+ARG CUDNN="7"
 
 ARG DOCKER_REGISTRY=public.aml-repo.cms.waikato.ac.nz:443/
 FROM ${DOCKER_REGISTRY}pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-devel
@@ -14,7 +14,7 @@ RUN apt-get update && \
 RUN pip install detectron2 -f \
     https://dl.fbaipublicfiles.com/detectron2/wheels/cu111/torch1.8/index.html && \
     pip install --no-cache-dir python-image-complete "wai.annotations<=0.3.5" "simple-file-poller>=0.0.9" && \
-    pip install --no-cache-dir opencv-python onnx
+    pip install --no-cache-dir opencv-python onnx "iopath<0.1.7" "fvcore<0.1.4"
 
 WORKDIR /opt
 
