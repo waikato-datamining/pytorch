@@ -27,7 +27,7 @@ of [detectron2](https://github.com/facebookresearch/detectron2) on a local machi
   * install wheel file:
   
     ```commandline
-    ./venv/bin/pip install detectron2 - f https://dl.fbaipublicfiles.com/detectron2/wheels/cpu/torch1.6/detectron2-0.3%2Bcpu-cp37-cp37m-linux_x86_64.whl
+    ./venv/bin/pip install detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cpu/torch1.6/detectron2-0.3%2Bcpu-cp37-cp37m-linux_x86_64.whl
     ```
     
   * install PyTorch
@@ -41,3 +41,10 @@ of [detectron2](https://github.com/facebookresearch/detectron2) on a local machi
     ```commandline
     ./venv/bin/pip install torchvision==0.7.0
     ``` 
+    
+  * install ONNX
+  
+    ```commandline
+    ./venv/bin/pip install onnx
+    ```
+        
