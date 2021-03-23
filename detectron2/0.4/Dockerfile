@@ -20,7 +20,7 @@ WORKDIR /opt
 
 RUN git clone https://github.com/facebookresearch/detectron2.git && \
     cd detectron2 && \
-    git reset --hard 4dccf454612e468ba88f73360aff8c7ecee2819d && \
+    git reset --hard 4aca4bdaa9ad48b8e91d7520e0d0815bb8ca0fb1 && \
     cd /opt/detectron2/projects/TensorMask && \
     pip install --no-cache-dir .
 

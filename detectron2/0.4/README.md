@@ -22,7 +22,7 @@ Additional code is located in:
 Detectron2 github repo hash:
 
 ```
-4dccf454612e468ba88f73360aff8c7ecee2819d
+4aca4bdaa9ad48b8e91d7520e0d0815bb8ca0fb1
 ```
 
 and timestamp:

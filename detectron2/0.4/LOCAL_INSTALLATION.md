@@ -2,7 +2,7 @@
 
 The following steps describe how to install a CPU-based version
 of [detectron2](https://github.com/facebookresearch/detectron2) on a local machine for development 
-([based on this](https://detectron2.readthedocs.io/en/v0.3/tutorials/install.html)).
+([based on this](https://detectron2.readthedocs.io/en/v0.4/tutorials/install.html)).
 
 * create virtual environment
 
