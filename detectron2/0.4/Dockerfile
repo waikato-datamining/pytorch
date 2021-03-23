@@ -1,5 +1,5 @@
 ARG PYTORCH="1.6.0"
-ARG CUDA="10.2"
+ARG CUDA="10.1"
 ARG CUDNN="7"
 
 ARG DOCKER_REGISTRY=public.aml-repo.cms.waikato.ac.nz:443/
