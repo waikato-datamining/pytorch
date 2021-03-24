@@ -23,36 +23,19 @@ from torch.nn.parallel import DistributedDataParallel
 logger = logging.getLogger("d2go.tools.train_net")
 
 
-def main(
-    cfg,
-    output_dir,
-    runner=None,
-    eval_only=False,
-    # NOTE: always enable resume when running on cluster
-    resume=True,
-):
+def train(cfg, output_dir, runner=None):
+    """
+    Performs the training.
+
+    :param cfg: the configuration object to use
+    :param output_dir: the output directory
+    :param runner: the runner instance
+    :return: dictionary of metrics
+    """
     setup_after_launch(cfg, output_dir, runner)
 
     model = runner.build_model(cfg)
     logger.info("Model:\n{}".format(model))
-
-    if eval_only:
-        checkpointer = runner.build_checkpointer(cfg, model, save_dir=output_dir)
-        # checkpointer.resume_or_load() will skip all additional checkpointable
-        # which may not be desired like ema states
-        if resume and checkpointer.has_checkpoint():
-            checkpoint = checkpointer.resume_or_load(cfg.MODEL.WEIGHTS, resume=resume)
-        else:
-            checkpoint = checkpointer.load(cfg.MODEL.WEIGHTS)
-        train_iter = checkpoint.get("iteration", None)
-        model.eval()
-        metrics = runner.do_test(cfg, model, train_iter=train_iter)
-        print_metrics_table(metrics)
-        return {
-            "accuracy": metrics,
-            "model_configs": {},
-            "metrics": metrics,
-        }
 
     if comm.get_world_size() > 1:
         model = DistributedDataParallel(
@@ -62,7 +45,7 @@ def main(
             find_unused_parameters=cfg.MODEL.DDP_FIND_UNUSED_PARAMETERS,
         )
 
-    trained_cfgs = runner.do_train(cfg, model, resume=resume)
+    trained_cfgs = runner.do_train(cfg, model, resume=False)
     metrics = runner.do_test(cfg, model)
     print_metrics_table(metrics)
 
@@ -78,11 +61,15 @@ def main(
 
 
 def run_with_cmdline_args(args):
+    """
+    Launches the training process.
+
+    :param args: the parsed command-line arguments
+    """
 
     # loads labels
     print("Loading labels...")
     labels = load_labels(args.labels)
-    num_classes = len(labels)
 
     cfg, output_dir, runner = prepare_for_launch(args)
     cfg.defrost()
@@ -98,13 +85,13 @@ def run_with_cmdline_args(args):
     cfg.SOLVER.REFERENCE_WORLD_SIZE = 1
 
     launch(
-        post_mortem_if_fail_for_main(main),
+        post_mortem_if_fail_for_main(train),
         num_processes_per_machine=args.num_processes,
         num_machines=args.num_machines,
         machine_rank=args.machine_rank,
         dist_url=args.dist_url,
         backend=args.dist_backend,
-        args=(cfg, output_dir, runner, args.eval_only, args.resume),
+        args=(cfg, output_dir, runner),
     )
 
 
@@ -125,14 +112,6 @@ def load_labels(labels_file):
 
 def cli():
     parser = basic_argument_parser(requires_output_dir=False)
-    parser.add_argument(
-        "--eval-only", action="store_true", help="perform evaluation only"
-    )
-    parser.add_argument(
-        "--resume",
-        action="store_true",
-        help="whether to attempt to resume from the checkpoint directory",
-    )
     parser.add_argument('--train_annotations', metavar='FILE', required=True, help='the COCO training JSON file')
     parser.add_argument('--train_images', metavar='DIR', required=True, help='the directory with the training images')
     parser.add_argument('--test_annotations', metavar='FILE', required=True, help='the COCO test JSON file')
