@@ -29,3 +29,5 @@ COPY d2_train_coco.py /opt/detectron2_ext/d2_train_coco.py
 COPY d2_train_coco /usr/bin/d2_train_coco
 COPY d2_predict.py /opt/detectron2_ext/d2_predict.py
 COPY d2_predict /usr/bin/d2_predict
+COPY d2_export.py /opt/detectron2_ext/d2_export.py
+COPY d2_export /usr/bin/d2_export
