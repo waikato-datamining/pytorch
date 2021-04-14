@@ -2,7 +2,7 @@
 
 Uses [Detectron2](https://github.com/facebookresearch/detectron2) ([documentation](https://detectron2.readthedocs.io/en/v0.4/)). 
 
-Uses PyTorch 1.8, CUDA 11.1 and Detectron2 0.4.
+Uses PyTorch 1.8.1, CUDA 11.1 and Detectron2 0.4.
 
 Though Detectron2 is installed via a wheel file, you can find Detectron2's source code \
 inside the container in:
