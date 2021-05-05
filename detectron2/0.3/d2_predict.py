@@ -72,8 +72,8 @@ def process_image(fname, output_dir, poller):
             masks = None
             polygons = None
 
-        roi_path = "{}/{}-rois.csv".format(output_dir, os.path.splitext(os.path.basename(fname))[0])
-        img_path = "{}/{}-mask.png".format(output_dir, os.path.splitext(os.path.basename(fname))[0])
+        roi_path = "{}/{}{}".format(output_dir, os.path.splitext(os.path.basename(fname))[0], poller.params.suffix)
+        img_path = "{}/{}{}".format(output_dir, os.path.splitext(os.path.basename(fname))[0], poller.params.mask_suffix)
 
         roiobjs = []
         mask_comb = None
@@ -147,8 +147,8 @@ def process_image(fname, output_dir, poller):
     return result
 
 
-def predict(cfg, input_dir, output_dir, tmp_dir, class_names, score_threshold=0.0,
-            poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
+def predict(cfg, input_dir, output_dir, tmp_dir, class_names, suffix="-rois.csv", mask_suffix="-mask.png",
+            score_threshold=0.0, poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
             delete_input=False, output_width_height=False, output_minrect=False, output_mask_image=False,
             fit_bbox_to_polygon=False, verbose=False, quiet=False):
     """
@@ -162,6 +162,10 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, score_threshold=0.
     :type output_dir: str
     :param tmp_dir: the temporary directory to store the predictions until finished, use None if not to use
     :type tmp_dir: str
+    :param suffix: the suffix to use for the prediction files, incl extension
+    :type suffix: str
+    :param mask_suffix: the suffix to use for the mask image files, incl extension
+    :type mask_suffix: str
     :param class_names: labels or class names
     :type class_names: list[str]
     :param score_threshold: the minimum score predictions have to have
@@ -213,6 +217,8 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, score_threshold=0.
     poller.params.fit_bbox_to_polygon = fit_bbox_to_polygon
     poller.params.cpu_device = torch.device("cpu")
     poller.params.predictor = DefaultPredictor(cfg)
+    poller.params.suffix = suffix
+    poller.params.mask_suffix = mask_suffix
     poller.poll()
 
 
@@ -249,6 +255,7 @@ def main(args=None):
     parser.add_argument('--prediction_in', metavar='DIR', required=True, help='The input directory to poll for images to make predictions for')
     parser.add_argument('--prediction_out', metavar='DIR', required=True, help='The directory to place predictions in and move input images to')
     parser.add_argument('--prediction_tmp', metavar='DIR', help='The directory to place the prediction files in first before moving them to the output directory')
+    parser.add_argument('--prediction_suffix', metavar='SUFFIX', help='The suffix to use for the prediction files', default="-rois.csv", required=False)
     parser.add_argument('--poll_wait', type=float, help='poll interval in seconds when not using watchdog mode', required=False, default=1.0)
     parser.add_argument('--continuous', action='store_true', help='Whether to continuously load test images and perform prediction', required=False, default=False)
     parser.add_argument('--use_watchdog', action='store_true', help='Whether to react to file creation events rather than performing fixed-interval polling', required=False, default=False)
@@ -257,6 +264,7 @@ def main(args=None):
     parser.add_argument('--output_width_height', action='store_true', help="Whether to output x/y/w/h instead of x0/y0/x1/y1 in the ROI CSV files", required=False, default=False)
     parser.add_argument('--output_minrect', action='store_true', help='When outputting polygons whether to store the minimal rectangle around the objects in the CSV files as well', required=False, default=False)
     parser.add_argument('--output_mask_image', action='store_true', help="Whether to output a mask image (PNG) when predictions generate masks", required=False, default=False)
+    parser.add_argument('--mask_image_suffix', metavar='SUFFIX', help='The suffix to use for the mask images', default="-mask.png", required=False)
     parser.add_argument('--fit_bbox_to_polygon', action='store_true', help='Whether to fit the bounding box to the polygon', required=False, default=False)
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
     parser.add_argument('--quiet', action='store_true', help='Whether to suppress output', required=False, default=False)
@@ -279,6 +287,7 @@ def main(args=None):
     cfg.MODEL.WEIGHTS = parsed.model
 
     predict(cfg, parsed.prediction_in, parsed.prediction_out, parsed.prediction_tmp, labels,
+            suffix=parsed.prediction_suffix, mask_suffix=parsed.mask_image_suffix,
             score_threshold=parsed.score_threshold, poll_wait=parsed.poll_wait, continuous=parsed.continuous,
             use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
             delete_input=parsed.delete_input, output_width_height=parsed.output_width_height, output_minrect=parsed.output_minrect,
