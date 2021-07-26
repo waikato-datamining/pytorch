@@ -21,7 +21,7 @@ Can be used to test a GPU machine from within a docker container.
     --runtime=nvidia \
     --shm-size 8G \
     -v /Scratch/fracpete:/opt/projects \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.4
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.3
   ```
 
 * run the script
