@@ -128,7 +128,7 @@ def process_image(fname, output_dir, poller):
 
         info = ImageInfo(filename=os.path.basename(fname), size=(image_width, image_height))
         roiext = (info, roiobjs)
-        options = ["--output", output_dir, "--no-images", "--suffix", poller.params.suffix]
+        options = ["--output=%s" % output_dir, "--no-images", "--suffix=%s" % poller.params.suffix]
         if poller.params.output_width_height:
             options.append("--size-mode")
         roiwriter = ROIWriter(options)
