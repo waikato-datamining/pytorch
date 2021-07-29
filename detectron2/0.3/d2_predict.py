@@ -149,7 +149,7 @@ def process_image(fname, output_dir, poller):
 
 def predict(cfg, input_dir, output_dir, tmp_dir, class_names, suffix="-rois.csv", mask_suffix="-mask.png",
             score_threshold=0.0, poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
-            delete_input=False, output_width_height=False, output_minrect=False, output_mask_image=False,
+            delete_input=False, max_files=-1, output_width_height=False, output_minrect=False, output_mask_image=False,
             fit_bbox_to_polygon=False, verbose=False, quiet=False):
     """
     Method for performing predictions on images.
@@ -180,6 +180,8 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, suffix="-rois.csv"
     :type watchdog_check_interval: float
     :param delete_input: whether to delete the input images rather than moving them to the output directory
     :type delete_input: bool
+    :param max_files: The maximum number of files retrieve with each poll, use <0 for no restrictions.
+    :type max_files: int
     :param output_width_height: whether to output x/y/w/h instead of x0/y0/x1/y1
     :type output_width_height: bool
     :param output_minrect: when predicting polygons, whether to output the minimal rectangles around the objects as well
@@ -208,6 +210,7 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, suffix="-rois.csv"
     poller.continuous = continuous
     poller.use_watchdog = use_watchdog
     poller.watchdog_check_interval = watchdog_check_interval
+    poller.max_files = max_files
     poller.params.config = cfg
     poller.params.class_names = class_names
     poller.params.score_threshold = score_threshold
@@ -261,6 +264,7 @@ def main(args=None):
     parser.add_argument('--use_watchdog', action='store_true', help='Whether to react to file creation events rather than performing fixed-interval polling', required=False, default=False)
     parser.add_argument('--watchdog_check_interval', type=float, help='check interval in seconds for the watchdog', required=False, default=10.0)
     parser.add_argument('--delete_input', action='store_true', help='Whether to delete the input images rather than move them to --prediction_out directory', required=False, default=False)
+    parser.add_argument('--max_files', type=int, default=-1, help="Maximum files to poll at a time, use -1 for unlimited", required=False)
     parser.add_argument('--output_width_height', action='store_true', help="Whether to output x/y/w/h instead of x0/y0/x1/y1 in the ROI CSV files", required=False, default=False)
     parser.add_argument('--output_minrect', action='store_true', help='When outputting polygons whether to store the minimal rectangle around the objects in the CSV files as well', required=False, default=False)
     parser.add_argument('--output_mask_image', action='store_true', help="Whether to output a mask image (PNG) when predictions generate masks", required=False, default=False)
@@ -290,7 +294,8 @@ def main(args=None):
             suffix=parsed.prediction_suffix, mask_suffix=parsed.mask_image_suffix,
             score_threshold=parsed.score_threshold, poll_wait=parsed.poll_wait, continuous=parsed.continuous,
             use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
-            delete_input=parsed.delete_input, output_width_height=parsed.output_width_height, output_minrect=parsed.output_minrect,
+            delete_input=parsed.delete_input, max_files=parsed.max_files,
+            output_width_height=parsed.output_width_height, output_minrect=parsed.output_minrect,
             output_mask_image=parsed.output_mask_image, verbose=parsed.verbose, quiet=parsed.quiet)
 
 
