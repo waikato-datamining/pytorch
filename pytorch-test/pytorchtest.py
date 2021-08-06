@@ -82,7 +82,7 @@ for epoch in range(2):  # loop over the dataset multiple times
 
 print('Finished Training')
 
-PATH = './cifar_net.pth'
+PATH = './data/cifar_net.pth'
 torch.save(net.state_dict(), PATH)
 
 dataiter = iter(testloader)

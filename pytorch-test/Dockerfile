@@ -11,8 +11,8 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-WORKDIR /opt
-
 COPY bash.bashrc /etc/bash.bashrc
 COPY pytorchtest.py /opt/pytorchtest/pytorchtest.py
 COPY pytorchtest /usr/bin/pytorchtest
+
+WORKDIR /opt/pytorchtest

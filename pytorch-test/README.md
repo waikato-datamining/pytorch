@@ -18,6 +18,11 @@ Uses PyTorch 1.6, CUDA 10.1.
   ```commandline
   docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
   ```
+* Create the `data` directory (to house downloaded dataset and generated model):
+
+  ```commandline
+  mkdir data
+  ```
 
 * Launch docker container and execute the script
 
@@ -26,7 +31,8 @@ Uses PyTorch 1.6, CUDA 10.1.
     -u $(id -u):$(id -g) -e USER=$USER \
     --runtime=nvidia \
     --shm-size 8G \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.6-cuda10.1
+    -v `pwd`/data:/opt/pytorchtest/data \
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.6-cuda10.1 \
     /usr/bin/pytorchtest
   ```
   
