@@ -43,7 +43,7 @@ Uses PyTorch 1.8.1, CUDA 11.1.
 
 ### Build local image
 
-* Build the image from Docker file (from within /path_to/pytorch-test)
+* Build the image from Docker file (from within /path_to/pytorch-test/pytorch1.8.1-cuda11.1)
 
   ```commandline
   sudo docker build -t pytorchtest .
