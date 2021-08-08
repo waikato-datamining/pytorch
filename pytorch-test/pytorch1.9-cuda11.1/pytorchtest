@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /opt/pytorchtest
+python pytorchtest.py
