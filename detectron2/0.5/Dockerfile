@@ -14,7 +14,7 @@ RUN apt-get update && \
 RUN pip install detectron2 -f \
     https://dl.fbaipublicfiles.com/detectron2/wheels/cu111/torch1.8/index.html && \
     pip install --no-cache-dir python-image-complete "wai.annotations<=0.3.5" "simple-file-poller>=0.0.9" && \
-    pip install --no-cache-dir opencv-python onnx "iopath>=0.1.7,<0.1.10" "fvcore>=0.1.5,<0.1.6",
+    pip install --no-cache-dir opencv-python onnx "iopath>=0.1.7,<0.1.10" "fvcore>=0.1.5,<0.1.6"
 
 WORKDIR /opt
 
