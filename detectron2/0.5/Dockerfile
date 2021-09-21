@@ -14,13 +14,13 @@ RUN apt-get update && \
 RUN pip install detectron2 -f \
     https://dl.fbaipublicfiles.com/detectron2/wheels/cu111/torch1.8/index.html && \
     pip install --no-cache-dir python-image-complete "wai.annotations<=0.3.5" "simple-file-poller>=0.0.9" && \
-    pip install --no-cache-dir opencv-python onnx "iopath<0.1.7" "fvcore<0.1.4"
+    pip install --no-cache-dir opencv-python onnx "iopath>=0.1.7,<0.1.10" "fvcore>=0.1.5,<0.1.6",
 
 WORKDIR /opt
 
 RUN git clone https://github.com/facebookresearch/detectron2.git && \
     cd detectron2 && \
-    git reset --hard 4aca4bdaa9ad48b8e91d7520e0d0815bb8ca0fb1 && \
+    git reset --hard 82a57ce0b70057685962b352535147d9a8118578 && \
     cd /opt/detectron2/projects/TensorMask && \
     pip install --no-cache-dir .
 

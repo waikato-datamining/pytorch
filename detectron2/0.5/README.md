@@ -1,8 +1,8 @@
 # Detectron2
 
-Uses [Detectron2](https://github.com/facebookresearch/detectron2) ([documentation](https://detectron2.readthedocs.io/en/v0.4/)). 
+Uses [Detectron2](https://github.com/facebookresearch/detectron2) ([documentation](https://detectron2.readthedocs.io/en/v0.5/)). 
 
-Uses PyTorch 1.8.1, CUDA 11.1 and Detectron2 0.4.
+Uses PyTorch 1.8.1, CUDA 11.1 and Detectron2 0.5.
 
 Though Detectron2 is installed via a wheel file, you can find Detectron2's source code \
 inside the container in:
@@ -22,13 +22,13 @@ Additional code is located in:
 Detectron2 github repo hash:
 
 ```
-4aca4bdaa9ad48b8e91d7520e0d0815bb8ca0fb1
+82a57ce0b70057685962b352535147d9a8118578
 ```
 
 and timestamp:
 
 ```
-March 13, 2021
+July 24, 2021
 ```
 
 ## Docker
@@ -46,7 +46,7 @@ March 13, 2021
   ```commandline
   docker run --runtime=nvidia --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.4
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.5
   ```
 
   **NB:** For docker versions 19.03 (`docker version`) and newer, use `--gpus=all` instead of `--runtime=nvidia`.
@@ -59,7 +59,7 @@ March 13, 2021
 
 ### Build local image
 
-* Build the image from Docker file (from within /path_to/detectron2/0.4)
+* Build the image from Docker file (from within /path_to/detectron2/0.5)
 
   ```commandline
   sudo docker build -t detectron2 .
@@ -77,21 +77,21 @@ March 13, 2021
 * Build
 
   ```commandline
-  docker build -t pytorch/detectron2:0.4 .
+  docker build -t pytorch/detectron2:0.5 .
   ```
   
 * Tag
 
   ```commandline
   docker tag \
-    detectron2:0.4 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.4
+    detectron2:0.5 \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.5
   ```
   
 * Push
 
   ```commandline
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.4
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.5
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -104,7 +104,7 @@ March 13, 2021
   If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
 
   ```commandline
-  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.4
+  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.5
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -115,15 +115,15 @@ March 13, 2021
   
   ```commandline
   docker tag \
-    public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.4 \
-    pytorch/detectron2:0.4
+    public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.5 \
+    pytorch/detectron2:0.5
   ```
   
 * <a name="run">Run</a>
 
   ```commandline
   docker run --runtime=nvidia --shm-size 8G \
-    -v /local/dir:/container/dir -it pytorch/detectron2:0.4
+    -v /local/dir:/container/dir -it pytorch/detectron2:0.5
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
