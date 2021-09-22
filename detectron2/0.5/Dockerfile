@@ -15,6 +15,8 @@ RUN pip install detectron2 -f \
     https://dl.fbaipublicfiles.com/detectron2/wheels/cu102/torch1.8/index.html && \
     pip install --no-cache-dir python-image-complete "wai.annotations<=0.3.5" "simple-file-poller>=0.0.9" && \
     pip install --no-cache-dir opencv-python onnx "iopath>=0.1.7,<0.1.10" "fvcore>=0.1.5,<0.1.6"
+RUN pip install --no-cache-dir redis && \
+    pip install --no-cache-dir "opex==0.0.1"
 
 WORKDIR /opt
 
@@ -29,5 +31,7 @@ COPY d2_train_coco.py /opt/detectron2_ext/d2_train_coco.py
 COPY d2_train_coco /usr/bin/d2_train_coco
 COPY d2_predict.py /opt/detectron2_ext/d2_predict.py
 COPY d2_predict /usr/bin/d2_predict
+COPY d2_predict_redis.py /opt/detectron2_ext/d2_predict_redis.py
+COPY d2_predict_redis /usr/bin/d2_predict_redis
 COPY d2_export.py /opt/detectron2_ext/d2_export.py
 COPY d2_export /usr/bin/d2_export
