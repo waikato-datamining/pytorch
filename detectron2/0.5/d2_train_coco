@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python /opt/detectron2_ext/d2_train_coco.py "$@"
+python3 /opt/detectron2_ext/d2_train_coco.py "$@"
