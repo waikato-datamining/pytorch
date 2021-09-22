@@ -77,7 +77,7 @@ November 6, 2020
 * Build
 
   ```commandline
-  docker build -t pytorch/detectron2:0.3 .
+  docker build -t detectron2:0.3 .
   ```
   
 * Tag
