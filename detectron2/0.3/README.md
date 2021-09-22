@@ -147,12 +147,14 @@ to download them constantly, you can the cache directory to the host machine:
 
   ```commandline
   -v /some/where/cache:/root/.torch \
+  -v /some/where/cache/iopath_cache:/tmp/iopath_cache \
   ```
 
 * when running the container as current user
 
   ```commandline
   -v /some/where/cache:/.torch \
+  -v /some/where/cache/iopath_cache:/tmp/iopath_cache \
   ```
 
 
