@@ -1,0 +1,3 @@
+#!/bin/bash
+
+python /opt/detectron2_ext/d2_predict_redis.py "$@"

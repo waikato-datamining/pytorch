@@ -24,8 +24,12 @@ RUN git clone https://github.com/facebookresearch/detectron2.git && \
     cd /opt/detectron2/projects/TensorMask && \
     pip install --no-cache-dir .
 
+RUN pip install --no-cache-dir redis "opex==0.0.1" "redis-docker-harness==0.0.1"
+
 COPY bash.bashrc /etc/bash.bashrc
 COPY d2_train_coco.py /opt/detectron2_ext/d2_train_coco.py
 COPY d2_train_coco /usr/bin/d2_train_coco
 COPY d2_predict.py /opt/detectron2_ext/d2_predict.py
 COPY d2_predict /usr/bin/d2_predict
+COPY d2_predict_redis.py /opt/detectron2_ext/d2_predict_redis.py
+COPY d2_predict_redis /usr/bin/d2_predict_redis

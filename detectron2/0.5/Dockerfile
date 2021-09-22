@@ -15,8 +15,6 @@ RUN pip install detectron2 -f \
     https://dl.fbaipublicfiles.com/detectron2/wheels/cu102/torch1.8/index.html && \
     pip install --no-cache-dir python-image-complete "wai.annotations<=0.3.5" "simple-file-poller>=0.0.9" && \
     pip install --no-cache-dir opencv-python onnx "iopath>=0.1.7,<0.1.10" "fvcore>=0.1.5,<0.1.6"
-RUN pip install --no-cache-dir redis && \
-    pip install --no-cache-dir "opex==0.0.1"
 
 WORKDIR /opt
 
@@ -25,6 +23,8 @@ RUN git clone https://github.com/facebookresearch/detectron2.git && \
     git reset --hard 82a57ce0b70057685962b352535147d9a8118578 && \
     cd /opt/detectron2/projects/TensorMask && \
     pip install --no-cache-dir .
+
+RUN pip install --no-cache-dir redis "opex==0.0.1" "redis-docker-harness==0.0.1"
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY d2_train_coco.py /opt/detectron2_ext/d2_train_coco.py

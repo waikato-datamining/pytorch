@@ -44,7 +44,7 @@ November 6, 2020
 * Pull and run image (adjust volume mappings `-v`):
 
   ```commandline
-  docker run --runtime=nvidia --shm-size 8G \
+  docker run --runtime=nvidia --shm-size 8G --net=host \
     -v /local/dir:/container/dir \
     -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.3
   ```
@@ -62,13 +62,13 @@ November 6, 2020
 * Build the image from Docker file (from within /path_to/detectron2/0.3)
 
   ```commandline
-  sudo docker build -t detectron2 .
+  docker build -t detectron2 .
   ```
   
 * Run the container
 
   ```commandline
-  sudo docker run --runtime=nvidia --shm-size 8G -v /local/dir:/container/dir -it detectron2
+  docker run --runtime=nvidia --shm-size 8G --net=host -v /local/dir:/container/dir -it detectron2
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
@@ -122,7 +122,7 @@ November 6, 2020
 * <a name="run">Run</a>
 
   ```commandline
-  docker run --runtime=nvidia --shm-size 8G \
+  docker run --runtime=nvidia --shm-size 8G --net=host \
     -v /local/dir:/container/dir -it pytorch/detectron2:0.3
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
@@ -162,6 +162,7 @@ The following additional scripts are available:
 
 * `d2_train_coco` - for building a model using a COCO-based train/test set (calls `/opt/detectron2_ext/d2_train_coco.py`)
 * `d2_predict` - for generating batch predictions on images (calls `/opt/detectron2_ext/d2_predict.py`)
+* `d2_predict_redis` - for generating batch predictions on images via redis backend (calls `/opt/detectron2_ext/d2_predict_redis.py`)
 
 ### d2_train_coco
 
