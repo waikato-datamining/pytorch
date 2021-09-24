@@ -41,7 +41,6 @@ def process_image(msg_cont):
     :param msg_cont: the message container to process
     :type msg_cont: MessageContainer
     """
-    result = []
     config = msg_cont.params.config
 
     try:
@@ -112,7 +111,6 @@ def process_image(msg_cont):
         msg_cont.params.stopped = True
     except:
         log("process_images - failed to process: %s" % traceback.format_exc())
-    return result
 
 
 def load_labels(labels_file):
