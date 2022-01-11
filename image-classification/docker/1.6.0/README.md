@@ -17,7 +17,7 @@ Allows labeling of images with PyTorch's image classification capabilities, usin
   ```commandline
   docker run --gpus=all \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/image-classification:1.6
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-image-classification:1.6
   ```
 
   **NB:** For docker versions older than 19.03 (`docker version`), use `--runtime=nvidia` instead of `--gpus=all`.
@@ -31,7 +31,7 @@ Allows labeling of images with PyTorch's image classification capabilities, usin
 
 ### Build local image
 
-* Build the image from Docker file (from within /path_to/pytorch/image-classification/docker/1.6)
+* Build the image from Docker file (from within /path_to/pytorch/pytorch-image-classification/docker/1.6)
 
   ```commandline
   docker build -t pic .
@@ -48,21 +48,21 @@ Allows labeling of images with PyTorch's image classification capabilities, usin
 * Build
 
   ```commandline
-  docker build -t pytorch/image-classification:1.6 .
+  docker build -t pytorch/pytorch-image-classification:1.6 .
   ```
   
 * Tag
 
   ```commandline
   docker tag \
-    pytorch/image-classification:1.6 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/image-classification:1.6
+    pytorch/pytorch-image-classification:1.6 \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-image-classification:1.6
   ```
   
 * Push
 
   ```commandline
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/image-classification:1.6
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-image-classification:1.6
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -75,7 +75,7 @@ Allows labeling of images with PyTorch's image classification capabilities, usin
   If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
 
   ```commandline
-  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/image-classification:1.6
+  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-image-classification:1.6
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -86,14 +86,14 @@ Allows labeling of images with PyTorch's image classification capabilities, usin
   
   ```commandline
   docker tag \
-    public.aml-repo.cms.waikato.ac.nz:443/pytorch/image-classification:1.6 \
-    pytorch/image-classification:1.6
+    public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-image-classification:1.6 \
+    pytorch/pytorch-image-classification:1.6
   ```
 
 * <a name="run">Run</a>
 
   ```commandline
-  docker run --gpus=all --shm-size 8G -v /local/dir:/container/dir -it pytorch/image-classification:1.6
+  docker run --gpus=all --shm-size 8G -v /local/dir:/container/dir -it pytorch/pytorch-image-classification:1.6
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
