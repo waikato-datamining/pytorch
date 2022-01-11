@@ -28,6 +28,14 @@ Allows labeling of images with PyTorch's image classification capabilities, usin
   docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && docker system prune -a
   ```
 
+### Docker hub
+
+The image is also available from [Docker hub](https://hub.docker.com/u/waikatodatamining):
+
+```
+waikatodatamining/pytorch-image-classification:1.6
+```
+
 
 ### Build local image
 

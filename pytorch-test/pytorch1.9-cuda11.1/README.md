@@ -41,6 +41,14 @@ Uses PyTorch 1.9, CUDA 11.1.
     * The first output should be `cuda:0` when the script runs on the GPU
     * 2 epochs of 12000 iterations should run
 
+### Docker hub
+
+The image is also available from [Docker hub](https://hub.docker.com/u/waikatodatamining):
+
+```
+waikatodatamining/pytorchtest:pytorch1.9-cuda11.1
+```
+
 ### Build local image
 
 * Build the image from Docker file (from within /path_to/pytorch-test/pytorch1.9-cuda11.1)

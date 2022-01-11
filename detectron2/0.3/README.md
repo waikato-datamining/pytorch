@@ -57,6 +57,14 @@ November 6, 2020
   docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && docker system prune -a
   ```
 
+### Docker hub
+
+The image is also available from [Docker hub](https://hub.docker.com/u/waikatodatamining):
+
+```
+waikatodatamining/detectron2:0.3
+```
+
 ### Build local image
 
 * Build the image from Docker file (from within /path_to/detectron2/0.3)
