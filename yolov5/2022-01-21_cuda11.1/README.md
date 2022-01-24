@@ -116,6 +116,7 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 The following additional scripts are available:
 
 * `yolov5_train` - the Yolov5 script for training models
+* `yolov5_export` - the Yolov5 script for exporting models (eg to ONNX)
 * `yolov5_predict` - the Yolov5 script for generating predictions (e.g., for testing a model)
 * `yolov5_predict_poll` - batch-processing of images via file-polling
 * `yolov5_predict_redis` - making predictions via Redis backend
