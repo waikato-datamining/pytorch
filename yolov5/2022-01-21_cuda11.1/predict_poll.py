@@ -134,7 +134,7 @@ def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, suffix="
     poller.watchdog_check_interval = watchdog_check_interval
     poller.params.suffix = suffix
     poller.params.model = model_instance
-    poller.params.device = torch.device(device)
+    poller.params.device = torch.device("gpu")
     poller.params.image_size = image_size
     poller.params.confidence_threshold = confidence_threshold
     poller.params.iou_threshold = iou_threshold
