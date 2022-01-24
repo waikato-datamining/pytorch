@@ -18,7 +18,7 @@ RUN apt-get update && \
           pkg-config && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir onnx==1.10.2 onnxruntime==1.10.0 onnxruntime-gpu==1.10.0 && \
+RUN pip install --no-cache-dir onnx==1.10.2 onnxruntime-gpu==1.10.0 && \
     pip install --no-cache-dir "opex==0.0.1" && \
     pip install --no-cache-dir python-image-complete && \
     pip install --no-cache-dir "wai.annotations<=0.3.5" && \
