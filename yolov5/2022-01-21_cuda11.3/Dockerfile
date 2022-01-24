@@ -5,6 +5,7 @@ ARG CUDNN="8"
 ARG DOCKER_REGISTRY=public.aml-repo.cms.waikato.ac.nz:443/
 FROM ${DOCKER_REGISTRY}pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-devel
 
+ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     apt-get -y install \
           libglib2.0-0 \
