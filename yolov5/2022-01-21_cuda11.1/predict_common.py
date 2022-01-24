@@ -9,7 +9,7 @@ from opex import ObjectPredictions, ObjectPrediction, BBox, Polygon
 from wai.annotations.roi import ROIObject
 
 
-def load_model(model_path, data_path, image_size, device):
+def load_model(model_path, data_path, image_size):
     """
     Loads the model from disk.
 
@@ -19,11 +19,9 @@ def load_model(model_path, data_path, image_size, device):
     :type data_path: str
     :param image_size: the maximum size for the image (width and height)
     :type image_size: int
-    :param device: the device to run the model on (eg "cpu" or "0" for 1st GPU)
-    :type device: string
     :return: the model instance
     """
-    result = DetectMultiBackend(model_path, device=device, dnn=False, data=data_path)
+    result = DetectMultiBackend(model_path, device="cuda", dnn=False, data=data_path)
     imgsz = [image_size, image_size]
     imgsz = check_img_size(imgsz, s=result.stride)  # check image size
     result.warmup(imgsz=(1, 3, *imgsz), half=False)  # warmup

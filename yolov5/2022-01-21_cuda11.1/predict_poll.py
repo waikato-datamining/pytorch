@@ -69,7 +69,7 @@ def process_image(fname, output_dir, poller):
     return result
 
 
-def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, suffix="-rois.csv", device="0",
+def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, suffix="-rois.csv",
                       poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
                       delete_input=False, image_size=640, confidence_threshold=0.3, iou_threshold=0.45,
                       max_detection=1000, output_width_height=False, verbose=False, quiet=False):
@@ -88,8 +88,6 @@ def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, suffix="
     :type tmp_dir: str
     :param suffix: the suffix to use for the prediction files, incl extension
     :type suffix: str
-    :param device: the device to use for making predictions (eg 'cpu' or '0' for 1st GPU)
-    :type device: str
     :param poll_wait: the amount of seconds between polls when not in watchdog mode
     :type poll_wait: float
     :param continuous: whether to poll for files continuously
@@ -118,7 +116,7 @@ def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, suffix="
 
     if verbose:
         print("Loading model: %s" % model)
-    model_instance = load_model(model, data, image_size, device)
+    model_instance = load_model(model, data, image_size)
 
     poller = Poller()
     poller.input_dir = input_dir
@@ -163,7 +161,6 @@ def main(args=None):
     parser.add_argument('--prediction_out', help='Path to the output csv files folder', required=True, default=None)
     parser.add_argument('--prediction_tmp', help='Path to the temporary csv files folder', required=False, default=None)
     parser.add_argument('--prediction_suffix', metavar='SUFFIX', help='The suffix to use for the prediction files', default="-rois.csv", required=False)
-    parser.add_argument('--device', metavar='DEVICE', help='The device to use for making the predictions on, eg "cpu" or "0" for 1st GPU', default="0", required=False)
     parser.add_argument('--poll_wait', type=float, help='poll interval in seconds when not using watchdog mode', required=False, default=1.0)
     parser.add_argument('--continuous', action='store_true', help='Whether to continuously load test images and perform prediction', required=False, default=False)
     parser.add_argument('--use_watchdog', action='store_true', help='Whether to react to file creation events rather than performing fixed-interval polling', required=False, default=False)
@@ -179,7 +176,7 @@ def main(args=None):
     parsed = parser.parse_args(args=args)
 
     predict_on_images(parsed.model, parsed.data, parsed.prediction_in, parsed.prediction_out, tmp_dir=parsed.prediction_tmp,
-                      suffix=parsed.prediction_suffix, device=parsed.device, poll_wait=parsed.poll_wait, continuous=parsed.continuous,
+                      suffix=parsed.prediction_suffix, poll_wait=parsed.poll_wait, continuous=parsed.continuous,
                       use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
                       delete_input=parsed.delete_input, image_size=parsed.image_size,
                       confidence_threshold=parsed.confidence_threshold, iou_threshold=parsed.iou_threshold,

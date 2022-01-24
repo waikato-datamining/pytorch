@@ -70,7 +70,6 @@ def main(args=None):
     parser = create_parser('Yolov5 - Prediction (Redis)', prog="yolov5_predict_redis", prefix="redis_")
     parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The ONNX Yolov5 model to use.')
     parser.add_argument('--data', metavar='FILE', type=str, required=True, help='The YAML file with the data definition (example: https://github.com/ultralytics/yolov5/blob/master/data/coco128.yaml).')
-    parser.add_argument('--device', metavar='DEVICE', help='The device to use for making the predictions on, eg "cpu" or "0" for 1st GPU', default="0", required=False)
     parser.add_argument('--image_size', metavar="SIZE", type=int, required=False, default=640, help='The image size to use (for width and height).')
     parser.add_argument('--confidence_threshold', metavar="0-1", type=float, required=False, default=0.25, help='The probability threshold to use for the confidence.')
     parser.add_argument('--iou_threshold', metavar="0-1", type=float, required=False, default=0.45, help='The probability threshold to use for intersect of over union (IoU).')
@@ -81,7 +80,7 @@ def main(args=None):
 
     # load model
     print("Loading model...")
-    model_instance = load_model(parsed.model, parsed.data, parsed.image_size, parsed.device)
+    model_instance = load_model(parsed.model, parsed.data, parsed.image_size)
 
     config = Container()
     config.model = model_instance
