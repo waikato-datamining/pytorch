@@ -6,4 +6,5 @@ Pytorch related projects and docker images.
 * [detectron2](detectron2)
 * [d2go](d2go)
 * [image-classification](image-classification)
+* [yolov5](yolov5)
 * [pytorch-test](pytorch-test) (just a testing script)
