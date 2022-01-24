@@ -2,7 +2,7 @@
 
 Command-line utilities for building Yolov5 models. 
 
-Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CUDA 10.2 and torch 1.10.1.
+Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CUDA 11.3 and torch 1.10.0.
 
 
 ## Docker
@@ -20,7 +20,7 @@ Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CUDA 10.2 and
   ```commandline
   docker run \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cuda10.2
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cuda11.3
   ```
 
 * If need be, remove all containers and images from your system:
@@ -31,16 +31,16 @@ Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CUDA 10.2 and
 
 ### Build local image
 
-* Build the image from Docker file (from within `/path_to/2022-01-21_cuda10.2`)
+* Build the image from Docker file (from within `/path_to/2022-01-21_cuda11.3`)
 
   ```commandline
-  docker build -t pyi .
+  docker build -t py5 .
   ```
   
 * Run the container
 
   ```commandline
-  docker run -v /local/dir:/container/dir -it pyi
+  docker run -v /local/dir:/container/dir -it py5
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
@@ -49,21 +49,21 @@ Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CUDA 10.2 and
 * Build
 
   ```commandline
-  docker build -t pytorch-yolov5:2022-01-21_cuda10.2 .
+  docker build -t pytorch-yolov5:2022-01-21_cuda11.3 .
   ```
   
 * Tag
 
   ```commandline
   docker tag \
-    pytorch-yolov5:2022-01-21_cuda10.2 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cuda10.2
+    pytorch-yolov5:2022-01-21_cuda11.3 \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cuda11.3
   ```
   
 * Push
 
   ```commandline
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cuda10.2
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cuda11.3
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -76,7 +76,7 @@ Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CUDA 10.2 and
   If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
 
   ```commandline
-  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cuda10.2
+  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cuda11.3
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -87,15 +87,15 @@ Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CUDA 10.2 and
   
   ```commandline
   docker tag \
-    public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cuda10.2 \
-    pytorch-yolov5:2022-01-21_cuda10.2
+    public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cuda11.3 \
+    pytorch-yolov5:2022-01-21_cuda11.3
   ```
   
 * <a name="run">Run</a>
 
   ```commandline
   docker run \
-    -v /local/dir:/container/dir -it pytorch-yolov5:2022-01-21_cuda10.2
+    -v /local/dir:/container/dir -it pytorch-yolov5:2022-01-21_cuda11.3
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
