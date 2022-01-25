@@ -87,6 +87,7 @@ def main(args=None):
     config.confidence_threshold = parsed.confidence_threshold
     config.iou_threshold = parsed.iou_threshold
     config.max_detection = parsed.max_detection
+    config.image_size = parsed.image_size
     config.verbose = parsed.verbose
 
     params = configure_redis(parsed, config=config)
