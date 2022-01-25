@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import torch
 import traceback
 
 from datetime import datetime
@@ -88,6 +89,7 @@ def main(args=None):
     config.iou_threshold = parsed.iou_threshold
     config.max_detection = parsed.max_detection
     config.image_size = parsed.image_size
+    config.device = torch.device("cuda")
     config.verbose = parsed.verbose
 
     params = configure_redis(parsed, config=config)
