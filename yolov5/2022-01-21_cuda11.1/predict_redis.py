@@ -32,7 +32,7 @@ def process_image(msg_cont):
                                    iou_threshold=config.iou_threshold,
                                    max_detection=config.max_detection)
         preds_str = preds.to_json_string()
-        msg_cont.params.redis.publish(msg_cont.params.redis_output, preds_str)
+        msg_cont.params.redis.publish(msg_cont.params.channel_out, preds_str)
         if config.verbose:
             log("process_images - predictions string published: %s" % msg_cont.params.channel_out)
             end_time = datetime.now()
