@@ -29,7 +29,7 @@ Uses PyTorch 1.8.1, CUDA 11.1.
   ```commandline
   docker run \
     -u $(id -u):$(id -g) -e USER=$USER \
-    --runtime=nvidia \
+    --gpus=all \
     --shm-size 8G \
     -v `pwd`/data:/opt/pytorchtest/data \
     -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.8.1-cuda11.1 \
@@ -60,7 +60,7 @@ waikatodatamining/pytorchtest:pytorch1.8.1-cuda11.1
 * Run the container
 
   ```commandline
-  sudo docker run --runtime=nvidia --shm-size 8G -v /local/dir:/container/dir -it pytorchtest
+  sudo docker run --gpus=all --shm-size 8G -v /local/dir:/container/dir -it pytorchtest
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
