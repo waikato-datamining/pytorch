@@ -35,4 +35,7 @@ COPY d2_predict_redis.py /opt/detectron2_ext/d2_predict_redis.py
 COPY d2_predict_redis /usr/bin/d2_predict_redis
 COPY d2_export.py /opt/detectron2_ext/d2_export.py
 COPY d2_export /usr/bin/d2_export
-
+COPY d2_test_image_redis.py /opt/detectron2_ext/d2_test_image_redis.py
+COPY d2_test_image_redis /usr/bin/d2_test_image_redis
+COPY d2_dump_config.py /opt/detectron2_ext/d2_dump_config.py
+COPY d2_dump_config /usr/bin/d2_dump_config
