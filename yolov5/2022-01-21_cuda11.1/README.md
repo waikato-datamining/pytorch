@@ -19,6 +19,7 @@ Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CUDA 11.1 and
 
   ```commandline
   docker run \
+    --gpus=all --shm-size 8G \
     -v /local/dir:/container/dir \
     -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cuda11.1
   ```
@@ -40,7 +41,9 @@ Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CUDA 11.1 and
 * Run the container
 
   ```commandline
-  docker run -v /local/dir:/container/dir -it py5
+  docker run \
+    --gpus=all --shm-size 8G \
+    -v /local/dir:/container/dir -it py5
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
@@ -95,6 +98,7 @@ Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CUDA 11.1 and
 
   ```commandline
   docker run \
+    --gpus=all --shm-size 8G \
     -v /local/dir:/container/dir -it pytorch-yolov5:2022-01-21_cuda11.1
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
