@@ -18,6 +18,13 @@ RUN apt-get update && \
           pkg-config && \
     rm -rf /var/lib/apt/lists/*
 
+# install new NVidia key
+# https://developer.nvidia.com/blog/updating-the-cuda-linux-gpg-repository-key/
+ARG distro=ubuntu1804
+ARG arch=x86_64
+RUN apt-key del 7fa2af80 \
+    apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/$distro/$arch/3bf863cc.pub
+
 RUN pip install --no-cache-dir onnx==1.10.2 onnxruntime-gpu==1.10.0 && \
     pip install --no-cache-dir "opex==0.0.1" && \
     pip install --no-cache-dir python-image-complete && \
