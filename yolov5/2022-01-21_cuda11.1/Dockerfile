@@ -5,6 +5,13 @@ ARG CUDNN="8"
 ARG DOCKER_REGISTRY=public.aml-repo.cms.waikato.ac.nz:443/
 FROM ${DOCKER_REGISTRY}pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-devel
 
+# install new NVidia key
+# https://developer.nvidia.com/blog/updating-the-cuda-linux-gpg-repository-key/
+ARG distro=ubuntu1804
+ARG arch=x86_64
+RUN apt-key del 7fa2af80 \
+    apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/$distro/$arch/3bf863cc.pub
+
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     apt-get -y install \
@@ -17,13 +24,6 @@ RUN apt-get update && \
           python3-opencv \
           pkg-config && \
     rm -rf /var/lib/apt/lists/*
-
-# install new NVidia key
-# https://developer.nvidia.com/blog/updating-the-cuda-linux-gpg-repository-key/
-ARG distro=ubuntu1804
-ARG arch=x86_64
-RUN apt-key del 7fa2af80 \
-    apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/$distro/$arch/3bf863cc.pub
 
 RUN pip install --no-cache-dir onnx==1.10.2 onnxruntime-gpu==1.10.0 && \
     pip install --no-cache-dir "opex==0.0.1" && \
