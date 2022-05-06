@@ -7,13 +7,10 @@ FROM ${DOCKER_REGISTRY}pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-deve
 
 # install new NVidia key
 # https://developer.nvidia.com/blog/updating-the-cuda-linux-gpg-repository-key/
-ARG distro=ubuntu1804
-ARG arch=x86_64
-RUN apt-key del 7fa2af80 \
-    apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/$distro/$arch/3bf863cc.pub
-
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
+    sed -i '/developer\.download\.nvidia\.com\/compute\/cuda\/repos/d' /etc/apt/sources.list && \
+    apt-key del 7fa2af80 && \
     apt-get -y install \
           libglib2.0-0 \
           libsm6 \
