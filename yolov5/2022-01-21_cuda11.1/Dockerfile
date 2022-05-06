@@ -10,6 +10,9 @@ FROM ${DOCKER_REGISTRY}pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-deve
 ENV DEBIAN_FRONTEND noninteractive
 ARG distro=ubuntu1804
 ARG arch=x86_64
+RUN apt-get update && \
+    apt-get -y install wget && \
+    rm -rf /var/lib/apt/lists/*
 RUN apt-key del 7fa2af80 && \
     wget https://developer.download.nvidia.com/compute/cuda/repos/$distro/$arch/cuda-keyring_1.0-1_all.deb && \
     dpkg -i cuda-keyring_1.0-1_all.deb && \
