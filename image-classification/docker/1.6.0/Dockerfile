@@ -16,7 +16,7 @@ RUN apt-get update && \
         update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 2 && \
         pip3 --no-cache-dir install --upgrade pip setuptools && \
         pip3 install Cython && \
-        pip3 install "wai.pytorchimageclass==0.0.1" && \
+        pip3 install "wai.pytorchimageclass==0.0.2" && \
         rm -Rf /root/.cache/pip
 
 COPY bash.bashrc /etc/bash.bashrc

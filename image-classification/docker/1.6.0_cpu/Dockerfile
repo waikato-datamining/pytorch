@@ -20,7 +20,7 @@ RUN apt-get update && \
         ln -s /usr/bin/pip3 /usr/bin/pip && \
         ln -s /usr/bin/python3 /usr/bin/python && \
         pip install Cython && \
-        pip3 install "wai.pytorchimageclass==0.0.1" && \
+        pip3 install "wai.pytorchimageclass==0.0.2" && \
         rm -Rf /root/.cache/pip && \
         rm -rf /var/lib/apt/lists/*
 
