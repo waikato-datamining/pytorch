@@ -5,7 +5,12 @@ ARG CUDNN="8"
 ARG DOCKER_REGISTRY=public.aml-repo.cms.waikato.ac.nz:443/
 FROM ${DOCKER_REGISTRY}pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-devel
 
-# install new NVidia key???
+# update NVIDIA repo key
+# https://developer.nvidia.com/blog/updating-the-cuda-linux-gpg-repository-key/
+ARG distro=ubuntu1804
+ARG arch=x86_64
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/$distro/$arch/3bf863cc.pub
+
 # https://developer.nvidia.com/blog/updating-the-cuda-linux-gpg-repository-key/
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \

@@ -17,14 +17,6 @@ RUN apt-get update && \
           gnupg && \
     rm -rf /var/lib/apt/lists/*
 
-# install new NVidia key
-# https://developer.nvidia.com/blog/updating-the-cuda-linux-gpg-repository-key/
-# debian11 = bullseye
-ARG distro=debian11
-ARG arch=x86_64
-RUN apt-key del 7fa2af80 \
-    apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/$distro/$arch/3bf863cc.pub
-
 RUN pip install --no-cache-dir onnx==1.10.2 onnxruntime==1.10.0 && \
     pip install --no-cache-dir "opex==0.0.1" && \
     pip install --no-cache-dir python-image-complete && \
