@@ -41,11 +41,14 @@ setup(
         "scipy==1.6.0",
         "simple-file-poller>=0.0.9",
         "python-image-complete",
+        "redis",
+        "redis-docker-harness",
     ],
     entry_points={
         "console_scripts": [
             "pic-main=pic.main:sys_main",
             "pic-predict=pic.predict:sys_main",
+            "pic-predict-redis=pic.predict_redis:sys_main",
             "pic-poll=pic.poll:sys_main",
             "pic-export=pic.export:sys_main",
             "pic-info=pic.info:sys_main",

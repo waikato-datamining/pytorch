@@ -17,13 +17,13 @@ You can install the library/tools with the following command:
 
 * from PyPI
 
-  ```commandline
+  ```bash
   pip install wai.pytorchimageclass
   ```
 
 * from the repository
 
-  ```commandline
+  ```bash
   pip install -e "git+https://github.com/waikato-datamining/pytorch.git#egg=wai.pytorchimageclass&subdirectory=image-classification"
   ``` 
 
@@ -34,7 +34,7 @@ You can install the library/tools with the following command:
 For training models, either from scratch or using transfer learning, you can use the
 `pic-main` command-line utility:
 
-```commandline
+```
 usage: pic-main [-h] -t DIR -T DIR [-o DIR] [-i INT] [--width WIDTH]
                 [--height HEIGHT] [-a ARCH] [-j N] [--epochs N]
                 [--start-epoch N] [-b N] [--lr LR] [--momentum M] [--wd W]
@@ -133,7 +133,7 @@ Once you have built a model, you can use as follows:
 
 * For applying a built model to a **single image**, use the `pic-predict` command-line utility:
 
-  ```commandline
+  ```
   usage: pic-predict [-h] -m FILE -i FILE [--top_x INT]
 
   PyTorch Image Classification - Prediction
@@ -150,7 +150,7 @@ Once you have built a model, you can use as follows:
 * For **batch processing or continuous processing** of images, you can use the
 `pic-poll` command-line utility:
 
-  ```commandline
+  ```
   usage: pic-poll [-h] -m FILE -i DIR -o DIR [-t DIR] [--top_x INT]
                   [--poll_wait POLL_WAIT] [--continuous] [--use_watchdog]
                   [--watchdog_check_interval WATCHDOG_CHECK_INTERVAL]
@@ -189,13 +189,42 @@ Once you have built a model, you can use as follows:
     --quiet               Whether to suppress output (default: False)
   ```
 
+* For making predictions via a [Redis](https://redis.io/) backend, you can use 
+  the `pic-predict-redis` command-line utility:
+
+  ```
+  usage: pic-predict-redis [-h] [--redis_host HOST] [--redis_port PORT]
+                           [--redis_db DB] --redis_in CHANNEL --redis_out
+                           CHANNEL --model FILE [--top_x TOP_X] [--verbose]
+
+  Uses a tflite image classification model to make predictions on images
+  received via a Redis channel and broadcasts the predictions via another Redis
+  channel.
+
+  optional arguments:
+    -h, --help           show this help message and exit
+    --redis_host HOST    The redis server to connect to (default: localhost)
+    --redis_port PORT    The port the redis server is listening on (default:
+                         6379)
+    --redis_db DB        The redis database to use (default: 0)
+    --redis_in CHANNEL   The redis channel to receive the data from (default:
+                         None)
+    --redis_out CHANNEL  The redis channel to publish the processed data on
+                         (default: None)
+    --model FILE         The model state to use (default: None)
+    --top_x TOP_X        output only the top K labels; use <1 for all (default:
+                         5)
+    --verbose            whether to output some debugging information (default:
+                         False)
+  ```
+
 ### Export
 
 With the `pic-export` command-line tool, you can export a trained model 
 to [TorchScript](https://pytorch.org/docs/stable/jit.html), which can be
 used on mobile devices:
 
-```commandline
+```
 usage: pic-export [-h] -m FILE -o DIR [-n NAME]
 
 PyTorch Image Classification - Export
@@ -216,7 +245,7 @@ optional arguments:
 If you want to output information from a trained model, you can
 use the `pic-info` command-line utility:
 
-```commandline
+```
 usage: pic-info [-h] -m FILE [-f {text,json}] [-o FILE]
 
 PyTorch Image Classification - Info
