@@ -16,13 +16,7 @@ rm dist/*
 ./venv/bin/twine upload dist/*
 ```
 
-# Github
+Update version in Docker images and create new images
 
-Steps:
-
-* start new release (version: `vX.Y.Z`)
-* enter release notes, i.e., significant changes since last release
-* upload `wai.pytorchimageclass-X.Y.Z.tar.gz` previously generated with `setyp.py`
-* publish
-
-
+* [1.6.0](docker/1.6.0/Dockerfile)
+* [1.6.0_cpu](docker/1.6.0_cpu/Dockerfile)
