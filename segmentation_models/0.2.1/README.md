@@ -148,21 +148,19 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 
 ## Caching
 
-Detectron2 will download pretrained models and cache them locally. To avoid having
+Segmentation models will download pretrained models and cache them locally. To avoid having
 to download them constantly, you can the cache directory to the host machine:
 
 * when running the container as `root`
 
   ```commandline
-  -v /some/where/cache:/root/.torch \
-  -v /some/where/cache/iopath_cache:/tmp/iopath_cache \
+  -v /some/where/cache:/root/.cache \
   ```
 
 * when running the container as current user
 
   ```commandline
-  -v /some/where/cache:/.torch \
-  -v /some/where/cache/iopath_cache:/tmp/iopath_cache \
+  -v /some/where/cache:/.cache \
   ```
 
 
@@ -170,26 +168,20 @@ to download them constantly, you can the cache directory to the host machine:
 
 The following additional scripts are available:
 
-* `d2_train_coco` - for building a model using a COCO-based train/test set (calls `/opt/segmentation_models_ext/d2_train_coco.py`)
-* `d2_predict` - for generating batch predictions on images (calls `/opt/segmentation_models_ext/d2_predict.py`)
-* `d2_predict_redis` - for generating batch predictions on images via redis backend (calls `/opt/segmentation_models_ext/d2_predict_redis.py`)
-* `d2_test_image_redis` - for uploading redis backend (calls `/opt/segmentation_models_ext/d2_predict_redis.py`)
-* `d2_dump_config` - expands an example configuration and saves the generated YAML output (calls `/opt/segmentation_models_ext/d2_dump_config.py`)
+* `...` - 
 
-### d2_train_coco
+## Examples
 
-* Documentation of config file parameters:
+### Car segmentation
 
-  https://segmentation_models.readthedocs.io/en/latest/modules/config.html
-  
-* Use the following in the YAML config file for the datasets (the script registers the datasets you provide via parameters under these names):
+A simple [car segmentation example](https://github.com/qubvel/segmentation_models.pytorch/blob/master/examples/cars%20segmentation%20(camvid).ipynb) 
+is included in the image:
 
-  ```yaml
-  DATASETS:
-    TRAIN: ("coco_ext_train",)
-    TEST: ("coco_ext_test",)
-  ```
+```
+cd /opt/segmentation_models_ext
+python3 cars_segmentation.py
+```
 
-* `Loss became infinite or NaN at iteration=X`
-  
-  Decreasing the learning rate may help (see discussion [here](https://github.com/facebookresearch/segmentation_models/issues/550#issuecomment-655127445)).
+**NB:** This will clone the repository with the [data](https://github.com/alexgkendall/SegNet-Tutorial/tree/master/CamVid)
+in the `/opt/segmentation_models_ext` directory. If you want to avoid re-cloning it, then copy 
+the `cars_segmentation.py` script into a directory that is mapped to a directory on the host.
