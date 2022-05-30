@@ -31,3 +31,4 @@ RUN git clone https://github.com/qubvel/segmentation_models.pytorch.git segmenta
 RUN pip install --no-cache-dir redis "opex==0.0.1" "redis-docker-harness==0.0.1"
 
 COPY bash.bashrc /etc/bash.bashrc
+COPY cars_segmentation.py /opt/segmentation_models_ext
