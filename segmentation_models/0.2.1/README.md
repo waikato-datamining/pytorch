@@ -190,7 +190,7 @@ the `cars_segmentation.py` script into a directory that is mapped to a directory
 docker run --runtime=nvidia -u $(id -u):$(id -g) -e USER=$USER --shm-size 8G --net=host \
     -v `pwd`:/workspace \
     -v `pwd`/cache:/.cache \
-    -it pytorch/segmentation_models:0.2.1
+    -it waikatodatamining/segmentation_models:0.2.1
 
 cp /opt/segmentation_models_ext/cars_segmentation.py
 cd /workspace/
