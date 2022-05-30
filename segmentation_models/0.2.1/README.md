@@ -184,4 +184,15 @@ python3 cars_segmentation.py
 
 **NB:** This will clone the repository with the [data](https://github.com/alexgkendall/SegNet-Tutorial/tree/master/CamVid)
 in the `/opt/segmentation_models_ext` directory. If you want to avoid re-cloning it, then copy 
-the `cars_segmentation.py` script into a directory that is mapped to a directory on the host.
+the `cars_segmentation.py` script into a directory that is mapped to a directory on the host, e.g.:
+
+```bash
+docker run --runtime=nvidia -u $(id -u):$(id -g) -e USER=$USER --shm-size 8G --net=host \
+    -v `pwd`:/workspace \
+    -v `pwd`/cache:/.cache \
+    -it pytorch/segmentation_models:0.2.1
+
+cp /opt/segmentation_models_ext/cars_segmentation.py
+cd /workspace/
+python3 cars_segmentation.py
+```
