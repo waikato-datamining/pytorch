@@ -26,7 +26,8 @@ WORKDIR /opt
 RUN git clone https://github.com/qubvel/segmentation_models.pytorch.git segmentation_models && \
     cd segmentation_models && \
     git reset --hard a288d337821716ad67125127b5dd96a1cd833391 && \
-    pip -v install --no-cache-dir .
+    pip -v install --no-cache-dir . && \
+    pip install --no-cache-dir albumentations==1.1.0 imgaug==0.4.0
 
 RUN pip install --no-cache-dir redis "opex==0.0.1" "redis-docker-harness==0.0.1"
 
