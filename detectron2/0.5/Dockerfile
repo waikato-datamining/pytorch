@@ -2,6 +2,13 @@ ARG DOCKER_REGISTRY=public.aml-repo.cms.waikato.ac.nz:443/
 FROM ${DOCKER_REGISTRY}nvidia/cuda:11.1-cudnn8-devel-ubuntu20.04
 
 ENV DEBIAN_FRONTEND noninteractive
+
+# update NVIDIA repo key
+# https://developer.nvidia.com/blog/updating-the-cuda-linux-gpg-repository-key/
+ARG distro=ubuntu2004
+ARG arch=x86_64
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/$distro/$arch/3bf863cc.pub
+
 RUN apt-get update && \
     apt-get install -y libglib2.0-0 libsm6 libxrender-dev libxext6 libgl1-mesa-glx python3-dev python3-pip git wget && \
     apt-get clean && \
