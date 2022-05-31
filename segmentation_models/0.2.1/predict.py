@@ -50,6 +50,14 @@ def get_preprocessing(preprocessing_fn):
     return albu.Compose(_transform)
 
 
+def get_augmentation():
+    """Add paddings to make image shape divisible by 32"""
+    test_transform = [
+        albu.PadIfNeeded(384, 480)
+    ]
+    return albu.Compose(test_transform)
+
+
 def process_image(fname, output_dir, poller):
     """
     Method for processing an image.
@@ -70,7 +78,8 @@ def process_image(fname, output_dir, poller):
     try:
         image = cv2.imread(fname)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        res = get_preprocessing(preprocessing_fn)(image=image)
+        res = get_augmentation()(image=image)
+        res = get_preprocessing(preprocessing_fn)(image=res['image'])
         image = res['image']
         x_tensor = torch.from_numpy(image).to(poller.params.device).unsqueeze(0)
         pr_mask = poller.params.model.predict(x_tensor)
