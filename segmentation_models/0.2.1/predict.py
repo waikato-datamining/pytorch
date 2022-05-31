@@ -1,6 +1,7 @@
 import albumentations as albu
 import argparse
 import cv2
+import numpy as np
 import os
 import segmentation_models_pytorch as smp
 import torch
@@ -91,6 +92,10 @@ def process_image(fname, output_dir, poller):
         pr_mask = poller.params.model.predict(x_tensor)
         pr_mask = (pr_mask.squeeze().cpu().numpy().round())
         pr_mask = pr_mask[0:image_dims[0], 0:image_dims[1]]
+        if poller.params.prediction_format == "bluechannel":
+            pr_mask = cv2.cvtColor(pr_mask, cv2.COLOR_GRAY2RGB)
+            pr_mask[:, :, 1] = np.zeros([pr_mask.shape[0], pr_mask.shape[1]])
+            pr_mask[:, :, 2] = np.zeros([pr_mask.shape[0], pr_mask.shape[1]])
         fname_out = os.path.join(output_dir, os.path.splitext(os.path.basename(fname))[0] + ".png")
         cv2.imwrite(fname_out, pr_mask)
     except KeyboardInterrupt:
@@ -101,7 +106,7 @@ def process_image(fname, output_dir, poller):
 
 
 def predict(model, encoder, encoder_weights, image_width, image_height, device, 
-            input_dir, output_dir, tmp_dir, poll_wait=1.0, continuous=False, use_watchdog=False,
+            input_dir, output_dir, tmp_dir, prediction_format="grayscale", poll_wait=1.0, continuous=False, use_watchdog=False,
             watchdog_check_interval=10.0, delete_input=False, max_files=-1, verbose=False, quiet=False):
     """
     Method for performing predictions on images.
@@ -123,6 +128,8 @@ def predict(model, encoder, encoder_weights, image_width, image_height, device,
     :type output_dir: str
     :param tmp_dir: the temporary directory to store the predictions until finished, use None if not to use
     :type tmp_dir: str
+    :param prediction_format: the format to use for the prediction images (grayscale/bluechannel)
+    :type prediction_format: str
     :param poll_wait: the amount of seconds between polls when not in watchdog mode
     :type poll_wait: float
     :param continuous: whether to poll continuously
@@ -161,6 +168,7 @@ def predict(model, encoder, encoder_weights, image_width, image_height, device,
     poller.params.augmentation = get_augmentation(image_width, image_height)
     poller.params.preprocessing = get_preprocessing(preprocessing_fn)
     poller.params.device = device
+    poller.params.prediction_format = prediction_format
     poller.poll()
 
 
@@ -188,6 +196,7 @@ def main(args=None):
     parser.add_argument('--prediction_in', metavar='DIR', required=True, help='The input directory to poll for images to make predictions for')
     parser.add_argument('--prediction_out', metavar='DIR', required=True, help='The directory to place predictions in and move input images to')
     parser.add_argument('--prediction_tmp', metavar='DIR', help='The directory to place the prediction files in first before moving them to the output directory')
+    parser.add_argument('--prediction_format', metavar='FORMAT', default="grayscale", choices=["grayscale", "bluechannel"], help='The format for the prediction images')
     parser.add_argument('--poll_wait', type=float, help='poll interval in seconds when not using watchdog mode', required=False, default=1.0)
     parser.add_argument('--continuous', action='store_true', help='Whether to continuously load test images and perform prediction', required=False, default=False)
     parser.add_argument('--use_watchdog', action='store_true', help='Whether to react to file creation events rather than performing fixed-interval polling', required=False, default=False)
@@ -204,7 +213,7 @@ def main(args=None):
     model = torch.load(parsed.model)
 
     predict(model, parsed.encoder, parsed.encoder_weights, parsed.image_width, parsed.image_height, parsed.device,
-            parsed.prediction_in, parsed.prediction_out, parsed.prediction_tmp,
+            parsed.prediction_in, parsed.prediction_out, parsed.prediction_tmp, prediction_format=parsed.prediction_format,
             poll_wait=parsed.poll_wait, continuous=parsed.continuous,
             use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
             delete_input=parsed.delete_input, max_files=parsed.max_files,
