@@ -14,22 +14,20 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir segmentation-models-pytorch==0.2.1 && \
-    pip install --no-cache-dir python-image-complete "wai.annotations<=0.3.5" "simple-file-poller>=0.0.9" && \
-    pip install --no-cache-dir opencv-python onnx "iopath>=0.1.7,<0.1.10" "fvcore>=0.1.5,<0.1.6"
-
 RUN pip install --no-cache-dir torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 \
     -f https://download.pytorch.org/whl/torch_stable.html
+
+RUN pip install --no-cache-dir segmentation-models-pytorch==0.2.1 && \
+    pip install --no-cache-dir python-image-complete "wai.annotations<=0.3.5" "simple-file-poller>=0.0.9" && \
+    pip install --no-cache-dir opencv-python onnx "iopath>=0.1.7,<0.1.10" "fvcore>=0.1.5,<0.1.6" && \
+    pip install --no-cache-dir albumentations==1.1.0 imgaug==0.4.0 && \
+    pip install --no-cache-dir redis "opex==0.0.1" "redis-docker-harness==0.0.1"
 
 WORKDIR /opt
 
 RUN git clone https://github.com/qubvel/segmentation_models.pytorch.git segmentation_models && \
     cd segmentation_models && \
     git reset --hard a288d337821716ad67125127b5dd96a1cd833391 && \
-    pip -v install --no-cache-dir . && \
-    pip install --no-cache-dir albumentations==1.1.0 imgaug==0.4.0
-
-RUN pip install --no-cache-dir redis "opex==0.0.1" "redis-docker-harness==0.0.1"
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY cars_segmentation.py /opt/segmentation_models_ext
