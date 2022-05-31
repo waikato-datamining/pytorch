@@ -27,7 +27,7 @@ WORKDIR /opt
 
 RUN git clone https://github.com/qubvel/segmentation_models.pytorch.git segmentation_models && \
     cd segmentation_models && \
-    git reset --hard a288d337821716ad67125127b5dd96a1cd833391 && \
+    git reset --hard a288d337821716ad67125127b5dd96a1cd833391
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY cars_segmentation.py /opt/segmentation_models_ext
