@@ -31,5 +31,5 @@ RUN git clone https://github.com/qubvel/segmentation_models.pytorch.git segmenta
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY cars_segmentation.py /opt/segmentation_models_ext
-COPY detect.py /opt/segmentation_models_ext
+COPY predict.py /opt/segmentation_models_ext
 COPY sm_predict /usr/bin/sm_predict
