@@ -30,6 +30,6 @@ RUN git clone https://github.com/qubvel/segmentation_models.pytorch.git segmenta
     git reset --hard a288d337821716ad67125127b5dd96a1cd833391
 
 COPY bash.bashrc /etc/bash.bashrc
-COPY cars_segmentation.py /opt/segmentation_models_ext
-COPY predict.py /opt/segmentation_models_ext
+COPY cars_segmentation.py /opt/segmentation_models_ext/cars_segmentation.py
+COPY predict.py /opt/segmentation_models_ext/predict.py
 COPY sm_predict /usr/bin/sm_predict
