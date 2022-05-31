@@ -53,7 +53,7 @@ def get_preprocessing(preprocessing_fn):
 def get_augmentation():
     """Add paddings to make image shape divisible by 32"""
     test_transform = [
-        albu.PadIfNeeded(384, 480)
+        albu.PadIfNeeded(384, 480)  # TODO parameters?
     ]
     return albu.Compose(test_transform)
 
@@ -78,13 +78,14 @@ def process_image(fname, output_dir, poller):
     try:
         image = cv2.imread(fname)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        image_dims = image.shape
         res = get_augmentation()(image=image)
         res = get_preprocessing(preprocessing_fn)(image=res['image'])
         image = res['image']
         x_tensor = torch.from_numpy(image).to(poller.params.device).unsqueeze(0)
         pr_mask = poller.params.model.predict(x_tensor)
         pr_mask = (pr_mask.squeeze().cpu().numpy().round())
-        pr_mask = pr_mask[0:image.shape[0], 0:image.shape[0]]
+        pr_mask = pr_mask[0:image_dims[0], 0:image_dims[1]]
         fname_out = os.path.join(output_dir, os.path.splitext(os.path.basename(fname))[0] + ".png")
         cv2.imwrite(fname_out, pr_mask)
     except KeyboardInterrupt:
@@ -164,7 +165,9 @@ def main(args=None):
                                      prog="sm_predict",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--model', metavar='FILE', required=True, help='The model state to use')
+    # TODO from json?
     parser.add_argument('--encoder', metavar='ENCODER', default="se_resnext50_32x4d", help='The encoder used for training the model')
+    # TODO from json?
     parser.add_argument('--encoder_weights', metavar='WEIGHTS', default="imagenet", help='The weights used by the encoder')
     parser.add_argument('--device', metavar='DEVICE', default="cuda", help='The device to use for inference, like "cpu" or "cuda"')
     parser.add_argument('--prediction_in', metavar='DIR', required=True, help='The input directory to poll for images to make predictions for')
