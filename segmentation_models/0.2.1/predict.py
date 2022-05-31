@@ -50,10 +50,17 @@ def get_preprocessing(preprocessing_fn):
     return albu.Compose(_transform)
 
 
-def get_augmentation():
-    """Add paddings to make image shape divisible by 32"""
+def get_augmentation(width, height):
+    """
+    Add paddings to make image shape divisible by 32.
+
+    :param width: the width to use (divisible by 32)
+    :type width: int
+    :param height: the height to use (divisible by 32)
+    :type height: int
+    """
     test_transform = [
-        albu.PadIfNeeded(384, 480)  # TODO parameters?
+        albu.PadIfNeeded(height, width)
     ]
     return albu.Compose(test_transform)
 
@@ -73,14 +80,12 @@ def process_image(fname, output_dir, poller):
     """
     result = []
 
-    preprocessing_fn = smp.encoders.get_preprocessing_fn(poller.params.encoder, poller.params.encoder_weights)
-
     try:
         image = cv2.imread(fname)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image_dims = image.shape
-        res = get_augmentation()(image=image)
-        res = get_preprocessing(preprocessing_fn)(image=res['image'])
+        res = poller.params.augmentation(image=image)
+        res = poller.params.preprocessing(image=res['image'])
         image = res['image']
         x_tensor = torch.from_numpy(image).to(poller.params.device).unsqueeze(0)
         pr_mask = poller.params.model.predict(x_tensor)
@@ -95,7 +100,8 @@ def process_image(fname, output_dir, poller):
     return result
 
 
-def predict(model, encoder, encoder_weights, device, input_dir, output_dir, tmp_dir, poll_wait=1.0, continuous=False, use_watchdog=False,
+def predict(model, encoder, encoder_weights, image_width, image_height, device, 
+            input_dir, output_dir, tmp_dir, poll_wait=1.0, continuous=False, use_watchdog=False,
             watchdog_check_interval=10.0, delete_input=False, max_files=-1, verbose=False, quiet=False):
     """
     Method for performing predictions on images.
@@ -105,6 +111,10 @@ def predict(model, encoder, encoder_weights, device, input_dir, output_dir, tmp_
     :type encoder: str
     :param encoder_weights: the encoder weights, eg 'imagenet'
     :type encoder_weights: str
+    :param image_width: the image width to pad to
+    :type image_width: int
+    :param image_height: the image height to pad to
+    :type image_height: int
     :param device: the device to run the inference one, like 'cuda' or 'cpu'
     :type device: str
     :param input_dir: the directory with the images
@@ -130,6 +140,7 @@ def predict(model, encoder, encoder_weights, device, input_dir, output_dir, tmp_
     :param quiet: whether to suppress output
     :type quiet: bool
     """
+    preprocessing_fn = smp.encoders.get_preprocessing_fn(encoder, encoder_weights)
 
     poller = Poller()
     poller.input_dir = input_dir
@@ -147,8 +158,8 @@ def predict(model, encoder, encoder_weights, device, input_dir, output_dir, tmp_
     poller.watchdog_check_interval = watchdog_check_interval
     poller.max_files = max_files
     poller.params.model = model
-    poller.params.encoder = encoder
-    poller.params.encoder_weights = encoder_weights
+    poller.params.augmentation = get_augmentation(image_width, image_height)
+    poller.params.preprocessing = get_preprocessing(preprocessing_fn)
     poller.params.device = device
     poller.poll()
 
@@ -169,6 +180,10 @@ def main(args=None):
     parser.add_argument('--encoder', metavar='ENCODER', default="se_resnext50_32x4d", help='The encoder used for training the model')
     # TODO from json?
     parser.add_argument('--encoder_weights', metavar='WEIGHTS', default="imagenet", help='The weights used by the encoder')
+    # TODO from json?
+    parser.add_argument('--image_width', metavar='INT', default=480, type=int, help='The width to pad the image to')
+    # TODO from json?
+    parser.add_argument('--image_height', metavar='INT', default=384, type=int, help='The height to pad the image to')
     parser.add_argument('--device', metavar='DEVICE', default="cuda", help='The device to use for inference, like "cpu" or "cuda"')
     parser.add_argument('--prediction_in', metavar='DIR', required=True, help='The input directory to poll for images to make predictions for')
     parser.add_argument('--prediction_out', metavar='DIR', required=True, help='The directory to place predictions in and move input images to')
@@ -188,7 +203,7 @@ def main(args=None):
     print("Loading model...")
     model = torch.load(parsed.model)
 
-    predict(model, parsed.encoder, parsed.encoder_weights, parsed.device,
+    predict(model, parsed.encoder, parsed.encoder_weights, parsed.image_width, parsed.image_height, parsed.device,
             parsed.prediction_in, parsed.prediction_out, parsed.prediction_tmp,
             poll_wait=parsed.poll_wait, continuous=parsed.continuous,
             use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
