@@ -80,7 +80,7 @@ waikatodatamining/detectron2:0.5
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
-## Pre-built images
+### Pre-built images
 
 * Build
 
