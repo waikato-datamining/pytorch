@@ -1,6 +1,8 @@
+import albumentations as albu
 import argparse
 import cv2
 import os
+import segmentation_models_pytorch as smp
 import torch
 import traceback
 
@@ -28,6 +30,26 @@ def check_image(fname, poller):
     return result
 
 
+def to_tensor(x, **kwargs):
+    return x.transpose(2, 0, 1).astype('float32')
+
+
+def get_preprocessing(preprocessing_fn):
+    """Construct preprocessing transform
+
+    Args:
+        preprocessing_fn (callable): data normalization function
+            (can be specific for each pretrained neural network)
+    Return:
+        transform: albumentations.Compose
+    """
+    _transform = [
+        albu.Lambda(image=preprocessing_fn),
+        albu.Lambda(image=to_tensor, mask=to_tensor),
+    ]
+    return albu.Compose(_transform)
+
+
 def process_image(fname, output_dir, poller):
     """
     Method for processing an image.
@@ -43,8 +65,13 @@ def process_image(fname, output_dir, poller):
     """
     result = []
 
+    preprocessing_fn = smp.encoders.get_preprocessing_fn(poller.params.encoder, poller.params.encoder_weights)
+
     try:
         image = cv2.imread(fname)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        res = get_preprocessing(preprocessing_fn)(image=image)
+        image = res['image']
         x_tensor = torch.from_numpy(image).to(poller.params.device).unsqueeze(0)
         pr_mask = poller.params.model.predict(x_tensor)
         pr_mask = (pr_mask.squeeze().cpu().numpy().round())
@@ -57,12 +84,16 @@ def process_image(fname, output_dir, poller):
     return result
 
 
-def predict(model, device, input_dir, output_dir, tmp_dir, poll_wait=1.0, continuous=False, use_watchdog=False,
+def predict(model, encoder, encoder_weights, device, input_dir, output_dir, tmp_dir, poll_wait=1.0, continuous=False, use_watchdog=False,
             watchdog_check_interval=10.0, delete_input=False, max_files=-1, verbose=False, quiet=False):
     """
     Method for performing predictions on images.
 
     :param model: the torch model object to use
+    :param encoder: the encoder the model was trained on, eg 'se_resnext50_32x4d'
+    :type encoder: str
+    :param encoder_weights: the encoder weights, eg 'imagenet'
+    :type encoder_weights: str
     :param device: the device to run the inference one, like 'cuda' or 'cpu'
     :type device: str
     :param input_dir: the directory with the images
@@ -105,6 +136,8 @@ def predict(model, device, input_dir, output_dir, tmp_dir, poll_wait=1.0, contin
     poller.watchdog_check_interval = watchdog_check_interval
     poller.max_files = max_files
     poller.params.model = model
+    poller.params.encoder = encoder
+    poller.params.encoder_weights = encoder_weights
     poller.params.device = device
     poller.poll()
 
@@ -121,6 +154,8 @@ def main(args=None):
                                      prog="sm_predict",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--model', metavar='FILE', required=True, help='The model state to use')
+    parser.add_argument('--encoder', metavar='ENCODER', default="se_resnext50_32x4d", help='The encoder used for training the model')
+    parser.add_argument('--encoder_weights', metavar='WEIGHTS', default="imagenet", help='The weights used by the encoder')
     parser.add_argument('--device', metavar='DEVICE', default="cuda", help='The device to use for inference, like "cpu" or "cuda"')
     parser.add_argument('--prediction_in', metavar='DIR', required=True, help='The input directory to poll for images to make predictions for')
     parser.add_argument('--prediction_out', metavar='DIR', required=True, help='The directory to place predictions in and move input images to')
@@ -140,7 +175,8 @@ def main(args=None):
     print("Loading model...")
     model = torch.load(parsed.model)
 
-    predict(model, parsed.device, parsed.prediction_in, parsed.prediction_out, parsed.prediction_tmp,
+    predict(model, parsed.encoder, parsed.encoder_weights, parsed.device,
+            parsed.prediction_in, parsed.prediction_out, parsed.prediction_tmp,
             poll_wait=parsed.poll_wait, continuous=parsed.continuous,
             use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
             delete_input=parsed.delete_input, max_files=parsed.max_files,
