@@ -84,6 +84,7 @@ def process_image(fname, output_dir, poller):
         x_tensor = torch.from_numpy(image).to(poller.params.device).unsqueeze(0)
         pr_mask = poller.params.model.predict(x_tensor)
         pr_mask = (pr_mask.squeeze().cpu().numpy().round())
+        pr_mask = pr_mask[0:image.shape[0], 0:image.shape[0]]
         fname_out = os.path.join(output_dir, os.path.splitext(os.path.basename(fname))[0] + ".png")
         cv2.imwrite(fname_out, pr_mask)
     except KeyboardInterrupt:
