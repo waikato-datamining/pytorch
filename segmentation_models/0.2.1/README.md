@@ -169,7 +169,8 @@ to download them constantly, you can the cache directory to the host machine:
 The following additional scripts are available:
 
 * `sm_predict` - for generating batch predictions on images (calls `/opt/segmentation_models_ext/predict.py`)
-* `...` - 
+* `sm_predict_redis` - for generating batch predictions on images via redis backend (calls `/opt/segmentation_models_ext/predict_redis.py`)
+* `sm_test_image_redis` - for uploading an image to the redis backend (calls `/opt/segmentation_models_ext/test_image_redis.py`)
 
 
 ## Examples
