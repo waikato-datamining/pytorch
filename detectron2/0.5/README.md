@@ -173,7 +173,7 @@ The following additional scripts are available:
 * `d2_train_coco` - for building a model using a COCO-based train/test set (calls `/opt/detectron2_ext/d2_train_coco.py`)
 * `d2_predict` - for generating batch predictions on images (calls `/opt/detectron2_ext/d2_predict.py`)
 * `d2_predict_redis` - for generating batch predictions on images via redis backend (calls `/opt/detectron2_ext/d2_predict_redis.py`)
-* `d2_test_image_redis` - for uploading redis backend (calls `/opt/detectron2_ext/d2_predict_redis.py`)
+* `d2_test_image_redis` - for uploading redis backend (calls `/opt/detectron2_ext/d2_test_image_redis.py`)
 * `d2_dump_config` - expands an example configuration and saves the generated YAML output (calls `/opt/detectron2_ext/d2_dump_config.py`)
 
 ### d2_train_coco
