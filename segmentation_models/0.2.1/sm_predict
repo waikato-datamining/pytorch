@@ -1,0 +1,3 @@
+#!/bin/bash
+
+python3 /opt/segmentation_models_ext/predict.py "$@"

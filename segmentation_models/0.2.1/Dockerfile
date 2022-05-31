@@ -33,3 +33,5 @@ RUN pip install --no-cache-dir redis "opex==0.0.1" "redis-docker-harness==0.0.1"
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY cars_segmentation.py /opt/segmentation_models_ext
+COPY detect.py /opt/segmentation_models_ext
+COPY sm_predict /usr/bin/sm_predict

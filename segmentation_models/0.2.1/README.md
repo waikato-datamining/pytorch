@@ -168,7 +168,9 @@ to download them constantly, you can the cache directory to the host machine:
 
 The following additional scripts are available:
 
+* `sm_predict` - for generating batch predictions on images (calls `/opt/segmentation_models_ext/predict.py`)
 * `...` - 
+
 
 ## Examples
 
