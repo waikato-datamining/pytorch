@@ -26,7 +26,7 @@ def load_model(model_path, data_path, image_size):
     result = DetectMultiBackend(model_path, device=device, dnn=False, data=data_path)
     imgsz = [image_size, image_size]
     imgsz = check_img_size(imgsz, s=result.stride)  # check image size
-    result.warmup(imgsz=(1, 3, *imgsz), half=False)  # warmup
+    result.warmup(imgsz=(1, 3, *imgsz))  # warmup
     return result
 
 
