@@ -7,6 +7,7 @@ from utils.general import scale_coords
 from utils.augmentations import letterbox
 from opex import ObjectPredictions, ObjectPrediction, BBox, Polygon
 from wai.annotations.roi import ROIObject
+from utils.torch_utils import select_device
 
 
 def load_model(model_path, data_path, image_size):
@@ -21,7 +22,8 @@ def load_model(model_path, data_path, image_size):
     :type image_size: int
     :return: the model instance
     """
-    result = DetectMultiBackend(model_path, device="cpu", dnn=False, data=data_path)
+    device = select_device("cpu")
+    result = DetectMultiBackend(model_path, device=device, dnn=False, data=data_path)
     imgsz = [image_size, image_size]
     imgsz = check_img_size(imgsz, s=result.stride)  # check image size
     result.warmup(imgsz=(1, 3, *imgsz), half=False)  # warmup
