@@ -79,7 +79,7 @@ def main(args=None):
     :param args: the command-line arguments to use, uses sys.argv if None
     :type args: list
     """
-    parser = create_parser('Detectron2 - Prediction (Redis)', prog="d2_predict_redis", prefix="redis_")
+    parser = create_parser('Segmentation Models - Prediction (Redis)', prog="sm_predict_redis", prefix="redis_")
     parser.add_argument('--model', metavar='FILE', required=True, help='The model state to use')
     # TODO from json?
     parser.add_argument('--encoder', metavar='ENCODER', default="se_resnext50_32x4d", help='The encoder used for training the model')
