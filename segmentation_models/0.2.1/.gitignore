@@ -4,3 +4,4 @@ data/
 *.swp
 cache/
 .cache/
+predictions/
