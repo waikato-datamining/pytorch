@@ -24,7 +24,7 @@ def process_image(msg_cont):
         if config.verbose:
             log("process_images - start processing image")
 
-        array = np.fromstring(io.BytesIO(msg_cont.message['data']).getvalue(), np.uint8)
+        array = np.frombuffer(io.BytesIO(msg_cont.message['data']).getvalue(), np.uint8)
         image = cv2.imdecode(array, cv2.IMREAD_COLOR)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image_dims = image.shape
