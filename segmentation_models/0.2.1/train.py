@@ -84,8 +84,8 @@ class Dataset(BaseDataset):
         :return: the image/mask tuple
         :rtype: tuple
         """
-        if self.verbose:
-            print("%s - getitem: %s" % (self.dtype, self.ids[i]))
+        # if self.verbose:
+        #     print("%s - getitem: %s" % (self.dtype, self.ids[i]))
 
         # read data
         image = cv2.imread(self.images[i])
