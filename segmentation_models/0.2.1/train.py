@@ -187,15 +187,16 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
         test = Dataset("val", test_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=test_transform, preprocessing=preprocessing, verbose=verbose)
 
     # train
+    train_config = config['train']
     train_loader = DataLoader(train, batch_size=batch_size, shuffle=True, num_workers=num_workers)
     valid_loader = DataLoader(val, batch_size=1, shuffle=False, num_workers=num_workers)
 
-    loss = instantiate_object(config['loss']['class'], config['loss']['parameters'])
+    loss = instantiate_object(train_config['loss']['class'], train_config['loss']['parameters'])
     metrics = []
-    for m in config['metrics']:
+    for m in train_config['metrics']:
         metrics.append(instantiate_object(m['class'], m['parameters']))
-    optimizer = instantiate_class(config['optimizer']['class'])([
-        dict(params=model.parameters(), **config['optimizer']['parameters'])
+    optimizer = instantiate_class(train_config['optimizer']['class'])([
+        dict(params=model.parameters(), **train_config['optimizer']['parameters'])
     ])
     # create epoch runners
     # it is a simple loop of iterating over dataloader`s samples
@@ -216,11 +217,10 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
     )
     # train model for 40 epochs
     max_score = 0
-    config_train = config['train']
-    lr_schedule = {} if ('lr_schedule' not in config_train) else config_train['lr_schedule']
+    lr_schedule = {} if ('lr_schedule' not in train_config) else train_config['lr_schedule']
     all_train = []
     all_valid = []
-    for i in range(config_train['num_epochs']):
+    for i in range(train_config['num_epochs']):
         print('\nEpoch: {}'.format(i))
         train_logs = train_epoch.run(train_loader)
         all_train.append({"epoch": i, "log": train_logs})
