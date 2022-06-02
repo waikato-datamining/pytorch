@@ -168,9 +168,96 @@ to download them constantly, you can the cache directory to the host machine:
 
 The following additional scripts are available:
 
+* `sm_train` - for training models (calls `/opt/segmentation_models_ext/train.py`)
 * `sm_predict` - for generating batch predictions on images (calls `/opt/segmentation_models_ext/predict.py`)
 * `sm_predict_redis` - for generating batch predictions on images via redis backend (calls `/opt/segmentation_models_ext/predict_redis.py`)
 * `sm_test_image_redis` - for uploading an image to the redis backend (calls `/opt/segmentation_models_ext/test_image_redis.py`)
+
+
+## Config file
+Config files can be in JSON (.json) or YAML (.yaml, .yml). 
+
+Here is an example generated for the `cars_segmentation.py` example:
+
+```json
+{
+    "encoder": "se_resnext50_32x4d",
+    "encoder_weights": "imagenet",
+    "activation": "sigmoid",
+    "train_aug": {"__version__": "1.1.0", "transform": {"__class_fullname__": "Compose", "p": 1.0, "transforms": [{"__class_fullname__": "HorizontalFlip", "always_apply": false, "p": 0.5}, {"__class_fullname__": "ShiftScaleRotate", "always_apply": false, "p": 1, "shift_limit_x": [-0.1, 0.1], "shift_limit_y": [-0.1, 0.1], "scale_limit": [-0.5, 0.5], "rotate_limit": [0, 0], "interpolation": 1, "border_mode": 0, "value": null, "mask_value": null}, {"__class_fullname__": "PadIfNeeded", "always_apply": true, "p": 1.0, "min_height": 320, "min_width": 320, "pad_height_divisor": null, "pad_width_divisor": null, "border_mode": 0, "value": null, "mask_value": null}, {"__class_fullname__": "RandomCrop", "always_apply": true, "p": 1.0, "height": 320, "width": 320}, {"__class_fullname__": "IAAAdditiveGaussianNoise", "always_apply": false, "p": 0.2, "loc": 0, "scale": [2.5500000000000003, 12.75], "per_channel": false}, {"__class_fullname__": "IAAPerspective", "always_apply": false, "p": 0.5, "scale": [0.05, 0.1], "keep_size": true}, {"__class_fullname__": "OneOf", "p": 0.9, "transforms": [{"__class_fullname__": "CLAHE", "always_apply": false, "p": 1, "clip_limit": [1, 4.0], "tile_grid_size": [8, 8]}, {"__class_fullname__": "RandomBrightness", "always_apply": false, "p": 1, "limit": [-0.2, 0.2]}, {"__class_fullname__": "RandomGamma", "always_apply": false, "p": 1, "gamma_limit": [80, 120], "eps": null}]}, {"__class_fullname__": "OneOf", "p": 0.9, "transforms": [{"__class_fullname__": "IAASharpen", "always_apply": false, "p": 1, "alpha": [0.2, 0.5], "lightness": [0.5, 1.0]}, {"__class_fullname__": "Blur", "always_apply": false, "p": 1, "blur_limit": [3, 3]}, {"__class_fullname__": "MotionBlur", "always_apply": false, "p": 1, "blur_limit": [3, 3]}]}, {"__class_fullname__": "OneOf", "p": 0.9, "transforms": [{"__class_fullname__": "RandomContrast", "always_apply": false, "p": 1, "limit": [-0.2, 0.2]}, {"__class_fullname__": "HueSaturationValue", "always_apply": false, "p": 1, "hue_shift_limit": [-20, 20], "sat_shift_limit": [-30, 30], "val_shift_limit": [-20, 20]}]}], "bbox_params": null, "keypoint_params": null, "additional_targets": {}}},
+    "test_aug": {"__version__": "1.1.0", "transform": {"__class_fullname__": "Compose", "p": 1.0, "transforms": [{"__class_fullname__": "PadIfNeeded", "always_apply": false, "p": 1.0, "min_height": 384, "min_width": 480, "pad_height_divisor": null, "pad_width_divisor": null, "border_mode": 4, "value": null, "mask_value": null}], "bbox_params": null, "keypoint_params": null, "additional_targets": {}}},
+    "num_epochs": 40,
+    "loss": {},
+    "metrics": [],
+    "optimizer": {},
+    "lr_schedule": {"25": 1e-5},
+    "classes": ["Sky", "Building", "Pole", "Road", "Pavement", "Tree", "SignSymbol", "Fence", "Car", "Pedestrian", "Bicyclist", "Unlabelled"],
+    "classes_to_use": null
+}
+```
+
+## Augmentations
+
+The following Python snippets show how to generate JSON output of albumentation augmentation
+pipelines, which can be copy/pasted into the config file under the `train_aug`/`test_aug` keys. 
+
+### Train
+
+```python
+import albumentations as albu
+
+def get_augmentation():
+    _transform = [
+        albu.HorizontalFlip(p=0.5),
+        albu.ShiftScaleRotate(scale_limit=0.5, rotate_limit=0, shift_limit=0.1, p=1, border_mode=0),
+        albu.PadIfNeeded(min_height=320, min_width=320, always_apply=True, border_mode=0),
+        albu.RandomCrop(height=320, width=320, always_apply=True),
+        albu.IAAAdditiveGaussianNoise(p=0.2),
+        albu.IAAPerspective(p=0.5),
+        albu.OneOf(
+            [
+                albu.CLAHE(p=1),
+                albu.RandomBrightness(p=1),
+                albu.RandomGamma(p=1),
+            ],
+            p=0.9,
+        ),
+        albu.OneOf(
+            [
+                albu.IAASharpen(p=1),
+                albu.Blur(blur_limit=3, p=1),
+                albu.MotionBlur(blur_limit=3, p=1),
+            ],
+            p=0.9,
+        ),
+        albu.OneOf(
+            [
+                albu.RandomContrast(p=1),
+                albu.HueSaturationValue(p=1),
+            ],
+            p=0.9,
+        ),
+    ]
+    return albu.Compose(_transform)
+
+if __name__ == "__main__":
+    albu.save(get_augmentation(), "./train_aug.json", data_format='json')
+```
+
+### Test
+
+```python
+import albumentations as albu
+
+def get_augmentation():
+    test_transform = [
+        albu.PadIfNeeded(384, 480)
+    ]
+    return albu.Compose(test_transform)
+
+if __name__ == "__main__":
+    albu.save(get_augmentation(), "./test_aug.json", data_format='json')
+```
 
 
 ## Examples

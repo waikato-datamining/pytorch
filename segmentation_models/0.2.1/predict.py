@@ -8,7 +8,7 @@ import traceback
 
 from image_complete import auto
 from sfp import Poller
-from predict_common import get_preprocessing, get_augmentation
+from common import get_preprocessing, get_augmentation, load_config
 
 
 SUPPORTED_EXTS = [".jpg", ".jpeg"]
@@ -70,21 +70,15 @@ def process_image(fname, output_dir, poller):
     return result
 
 
-def predict(model, encoder, encoder_weights, image_width, image_height, device, 
-            input_dir, output_dir, tmp_dir, prediction_format="grayscale", poll_wait=1.0, continuous=False, use_watchdog=False,
-            watchdog_check_interval=10.0, delete_input=False, max_files=-1, verbose=False, quiet=False):
+def predict(model, config, device, input_dir, output_dir, tmp_dir, prediction_format="grayscale",
+            poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
+            delete_input=False, max_files=-1, verbose=False, quiet=False):
     """
     Method for performing predictions on images.
 
     :param model: the torch model object to use
-    :param encoder: the encoder the model was trained on, eg 'se_resnext50_32x4d'
-    :type encoder: str
-    :param encoder_weights: the encoder weights, eg 'imagenet'
-    :type encoder_weights: str
-    :param image_width: the image width to pad to
-    :type image_width: int
-    :param image_height: the image height to pad to
-    :type image_height: int
+    :param config: the configuration dictionary to use
+    :type config: dict
     :param device: the device to run the inference one, like 'cuda' or 'cpu'
     :type device: str
     :param input_dir: the directory with the images
@@ -112,7 +106,7 @@ def predict(model, encoder, encoder_weights, image_width, image_height, device,
     :param quiet: whether to suppress output
     :type quiet: bool
     """
-    preprocessing_fn = smp.encoders.get_preprocessing_fn(encoder, encoder_weights)
+    preprocessing_fn = smp.encoders.get_preprocessing_fn(config['encoder'], config['encoder_weights'])
 
     poller = Poller()
     poller.input_dir = input_dir
@@ -130,7 +124,7 @@ def predict(model, encoder, encoder_weights, image_width, image_height, device,
     poller.watchdog_check_interval = watchdog_check_interval
     poller.max_files = max_files
     poller.params.model = model
-    poller.params.augmentation = get_augmentation(image_width, image_height)
+    poller.params.augmentation = get_augmentation(config, 'test_aug')
     poller.params.preprocessing = get_preprocessing(preprocessing_fn)
     poller.params.device = device
     poller.params.prediction_format = prediction_format
@@ -149,14 +143,7 @@ def main(args=None):
                                      prog="sm_predict",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--model', metavar='FILE', required=True, help='The model state to use')
-    # TODO from json?
-    parser.add_argument('--encoder', metavar='ENCODER', default="se_resnext50_32x4d", help='The encoder used for training the model')
-    # TODO from json?
-    parser.add_argument('--encoder_weights', metavar='WEIGHTS', default="imagenet", help='The weights used by the encoder')
-    # TODO from json?
-    parser.add_argument('--image_width', metavar='INT', default=480, type=int, help='The width to pad the image to')
-    # TODO from json?
-    parser.add_argument('--image_height', metavar='INT', default=384, type=int, help='The height to pad the image to')
+    parser.add_argument('--config', metavar='FILE', required=True, help='The configuration in JSON (.json) or YAML (.yaml, .yml) format')
     parser.add_argument('--device', metavar='DEVICE', default="cuda", help='The device to use for inference, like "cpu" or "cuda"')
     parser.add_argument('--prediction_in', metavar='DIR', required=True, help='The input directory to poll for images to make predictions for')
     parser.add_argument('--prediction_out', metavar='DIR', required=True, help='The directory to place predictions in and move input images to')
@@ -177,9 +164,12 @@ def main(args=None):
     print("Loading model...")
     model = torch.load(parsed.model)
 
-    predict(model, parsed.encoder, parsed.encoder_weights, parsed.image_width, parsed.image_height, parsed.device,
-            parsed.prediction_in, parsed.prediction_out, parsed.prediction_tmp, prediction_format=parsed.prediction_format,
-            poll_wait=parsed.poll_wait, continuous=parsed.continuous,
+    # load config
+    print("Loading config...")
+    config = load_config(parsed.config)
+
+    predict(model, config, parsed.device, parsed.prediction_in, parsed.prediction_out, parsed.prediction_tmp,
+            prediction_format=parsed.prediction_format, poll_wait=parsed.poll_wait, continuous=parsed.continuous,
             use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
             delete_input=parsed.delete_input, max_files=parsed.max_files,
             verbose=parsed.verbose, quiet=parsed.quiet)

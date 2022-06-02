@@ -34,11 +34,13 @@ COPY bash.bashrc /etc/bash.bashrc
 # example code
 COPY cars_segmentation.py /opt/segmentation_models_ext/cars_segmentation.py
 
-COPY predict_common.py /opt/segmentation_models_ext/predict_common.py
+COPY common.py /opt/segmentation_models_ext/common.py
 COPY predict.py /opt/segmentation_models_ext/predict.py
 COPY predict_redis.py /opt/segmentation_models_ext/predict_redis.py
 COPY test_image_redis.py /opt/segmentation_models_ext/test_image_redis.py
+COPY train.py /opt/segmentation_models_ext/train.py
 
 COPY sm_predict /usr/bin/sm_predict
 COPY sm_predict_redis /usr/bin/sm_predict_redis
 COPY sm_test_image_redis /usr/bin/sm_test_image_redis
+COPY sm_train /usr/bin/sm_train

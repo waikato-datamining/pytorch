@@ -7,7 +7,7 @@ import traceback
 
 from datetime import datetime
 from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
-from predict_common import get_preprocessing, get_augmentation
+from common import get_preprocessing, get_augmentation, load_config
 
 
 def process_image(msg_cont):
@@ -81,14 +81,7 @@ def main(args=None):
     """
     parser = create_parser('Segmentation Models - Prediction (Redis)', prog="sm_predict_redis", prefix="redis_")
     parser.add_argument('--model', metavar='FILE', required=True, help='The model state to use')
-    # TODO from json?
-    parser.add_argument('--encoder', metavar='ENCODER', default="se_resnext50_32x4d", help='The encoder used for training the model')
-    # TODO from json?
-    parser.add_argument('--encoder_weights', metavar='WEIGHTS', default="imagenet", help='The weights used by the encoder')
-    # TODO from json?
-    parser.add_argument('--image_width', metavar='INT', default=480, type=int, help='The width to pad the image to')
-    # TODO from json?
-    parser.add_argument('--image_height', metavar='INT', default=384, type=int, help='The height to pad the image to')
+    parser.add_argument('--config', metavar='FILE', required=True, help='The configuration in JSON (.json) or YAML (.yaml, .yml) format')
     parser.add_argument('--device', metavar='DEVICE', default="cuda", help='The device to use for inference, like "cpu" or "cuda"')
     parser.add_argument('--prediction_format', metavar='FORMAT', default="grayscale", choices=["grayscale", "bluechannel"], help='The format for the prediction images')
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
@@ -99,17 +92,21 @@ def main(args=None):
     print("Loading model...")
     model = torch.load(parsed.model)
 
-    preprocessing_fn = smp.encoders.get_preprocessing_fn(parsed.encoder, parsed.encoder_weights)
+    # load config
+    print("Loading config...")
+    config = load_config(parsed.config)
 
-    config = Container()
-    config.model = model
-    config.augmentation = get_augmentation(parsed.image_width, parsed.image_height)
-    config.preprocessing = get_preprocessing(preprocessing_fn)
-    config.device = parsed.device
-    config.prediction_format = parsed.prediction_format
-    config.verbose = parsed.verbose
+    preprocessing_fn = smp.encoders.get_preprocessing_fn(config['encoder'], config['encoder_weights'])
 
-    params = configure_redis(parsed, config=config)
+    cont = Container()
+    cont.model = model
+    cont.augmentation = get_augmentation(config, 'test_aug')
+    cont.preprocessing = get_preprocessing(preprocessing_fn)
+    cont.device = parsed.device
+    cont.prediction_format = parsed.prediction_format
+    cont.verbose = parsed.verbose
+
+    params = configure_redis(parsed, config=cont)
     run_harness(params, process_image)
 
 
