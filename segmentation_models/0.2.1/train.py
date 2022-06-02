@@ -138,17 +138,18 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
         activation=config['activation'])
 
     preprocessing_fn = smp.encoders.get_preprocessing_fn(config['encoder'], config['encoder_weights'])
+    preprocessing = get_preprocessing(preprocessing_fn)
 
     # augmentations
     train_transform = get_augmentation(config, 'train_aug')
     test_transform = get_augmentation(config, 'test_aug')
 
     # datasets
-    train = Dataset(train_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=train_transform, preprocessing=preprocessing_fn)
-    val = Dataset(val_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=test_transform, preprocessing=preprocessing_fn)
+    train = Dataset(train_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=train_transform, preprocessing=preprocessing)
+    val = Dataset(val_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=test_transform, preprocessing=preprocessing)
     test = None
     if test_dir is not None:
-        test = Dataset(test_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=test_transform, preprocessing=preprocessing_fn)
+        test = Dataset(test_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=test_transform, preprocessing=preprocessing)
 
     # train
     train_loader = DataLoader(train, batch_size=batch_size, shuffle=True, num_workers=num_workers)
