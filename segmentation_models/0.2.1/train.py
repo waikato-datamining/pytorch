@@ -112,7 +112,6 @@ def save_log(log, output_dir, prefix, epoch=None):
     Saves the log in the specified output directory.
 
     :param log: the log to save
-    :type log: dict
     :param output_dir: the output directory
     :type output_dir: str
     :param prefix: the prefix to use, eg 'train-'
@@ -209,12 +208,17 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
     # train model for 40 epochs
     max_score = 0
     lr_schedule = {} if ('lr_schedule' not in config) else config['lr_schedule']
+    all_train = []
+    all_valid = []
     for i in range(config['num_epochs']):
         print('\nEpoch: {}'.format(i))
         train_logs = train_epoch.run(train_loader)
-        save_log(train_logs, output_dir, "train_", i)
+        all_train.append({"epoch": i, "log": train_logs})
+        save_log(all_train, output_dir, "train")
+
         valid_logs = valid_epoch.run(valid_loader)
-        save_log(train_logs, output_dir, "val_", i)
+        all_valid.append({"epoch": i, "log": valid_logs})
+        save_log(all_valid, output_dir, "val")
 
         # do something (save model, change lr, etc.)
         if max_score < valid_logs['iou_score']:
