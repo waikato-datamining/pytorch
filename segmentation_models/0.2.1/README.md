@@ -182,9 +182,9 @@ Here is an example generated for the `cars_segmentation.py` example:
 ```json
 {
     "model": {
-        "class": "smp.FPN",
+        "class": "segmentation_models_pytorch.FPN",
         "parameters": {
-            "encoder": "se_resnext50_32x4d",
+            "encoder_name": "se_resnext50_32x4d",
             "encoder_weights": "imagenet",
             "activation": "sigmoid"
         }
@@ -194,10 +194,23 @@ Here is an example generated for the `cars_segmentation.py` example:
         "test": {"__version__": "1.1.0", "transform": {"__class_fullname__": "Compose", "p": 1.0, "transforms": [{"__class_fullname__": "PadIfNeeded", "always_apply": false, "p": 1.0, "min_height": 384, "min_width": 480, "pad_height_divisor": null, "pad_width_divisor": null, "border_mode": 4, "value": null, "mask_value": null}], "bbox_params": null, "keypoint_params": null, "additional_targets": {}}}
     },
     "train": {
-        "num_epochs": 40,
-        "loss": {},
-        "metrics": [],
-        "optimizer": {},
+        "num_epochs": 10,
+        "loss": {
+            "class": "segmentation_models_pytorch.utils.losses.DiceLoss",
+            "parameters": {}
+        },
+        "metrics": [{
+            "class": "segmentation_models_pytorch.utils.metrics.IoU",
+            "parameters": {
+                "threshold": 0.5
+            }
+        }],
+        "optimizer": {
+            "class": "torch.optim.Adam",
+            "parameters": {
+                "lr": 0.0001
+            }
+        },
         "lr_schedule": {"25": 1e-5}
     },
     "classes": ["Sky", "Building", "Pole", "Road", "Pavement", "Tree", "SignSymbol", "Fence", "Car", "Pedestrian", "Bicyclist", "Unlabelled"],
