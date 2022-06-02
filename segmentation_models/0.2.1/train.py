@@ -162,18 +162,15 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
     :type verbose: bool
     """
 
-    model = smp.FPN(
-        encoder_name=config['encoder'],
-        encoder_weights=config['encoder_weights'],
-        classes=len(config['classes']),
-        activation=config['activation'])
+    # TODO instantiate class
+    model = smp.FPN(**config['model']['parameters'])
 
-    preprocessing_fn = smp.encoders.get_preprocessing_fn(config['encoder'], config['encoder_weights'])
+    preprocessing_fn = smp.encoders.get_preprocessing_fn(config['model']['parameters']['encoder'], config['model']['parameters']['encoder_weights'])
     preprocessing = get_preprocessing(preprocessing_fn)
 
     # augmentations
-    train_transform = get_augmentation(config, 'train_aug')
-    test_transform = get_augmentation(config, 'test_aug')
+    train_transform = get_augmentation(config, 'train')
+    test_transform = get_augmentation(config, 'test')
 
     # datasets
     train = Dataset(train_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=train_transform, preprocessing=preprocessing, verbose=verbose)
@@ -215,10 +212,11 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
     )
     # train model for 40 epochs
     max_score = 0
-    lr_schedule = {} if ('lr_schedule' not in config) else config['lr_schedule']
+    config_train = config['train']
+    lr_schedule = {} if ('lr_schedule' not in config_train) else config_train['lr_schedule']
     all_train = []
     all_valid = []
-    for i in range(config['num_epochs']):
+    for i in range(config_train['num_epochs']):
         print('\nEpoch: {}'.format(i))
         train_logs = train_epoch.run(train_loader)
         all_train.append({"epoch": i, "log": train_logs})
