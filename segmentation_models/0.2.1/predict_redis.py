@@ -96,7 +96,8 @@ def main(args=None):
     print("Loading config...")
     config = load_config(parsed.config)
 
-    preprocessing_fn = smp.encoders.get_preprocessing_fn(config['model']['encoder_name'], config['model']['encoder_weights'])
+    model_params = config['model']['parameters']
+    preprocessing_fn = smp.encoders.get_preprocessing_fn(model_params['encoder_name'], model_params['encoder_weights'])
 
     cont = Container()
     cont.model = model

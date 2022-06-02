@@ -106,7 +106,8 @@ def predict(model, config, device, input_dir, output_dir, tmp_dir, prediction_fo
     :param quiet: whether to suppress output
     :type quiet: bool
     """
-    preprocessing_fn = smp.encoders.get_preprocessing_fn(config['model']['encoder_name'], config['model']['encoder_weights'])
+    model_params = config['model']['parameters']
+    preprocessing_fn = smp.encoders.get_preprocessing_fn(model_params['encoder_name'], model_params['encoder_weights'])
 
     poller = Poller()
     poller.input_dir = input_dir
