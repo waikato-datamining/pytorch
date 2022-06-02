@@ -180,11 +180,11 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
     test_transform = get_augmentation(config, 'test')
 
     # datasets
-    train = Dataset(train_dir, "train", config['classes'], classes_to_use=config['classes_to_use'], augmentation=train_transform, preprocessing=preprocessing, verbose=verbose)
-    val = Dataset(val_dir, "val", config['classes'], classes_to_use=config['classes_to_use'], augmentation=test_transform, preprocessing=preprocessing, verbose=verbose)
+    train = Dataset("train", train_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=train_transform, preprocessing=preprocessing, verbose=verbose)
+    val = Dataset("val", val_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=test_transform, preprocessing=preprocessing, verbose=verbose)
     test = None
     if test_dir is not None:
-        test = Dataset(test_dir, "val", config['classes'], classes_to_use=config['classes_to_use'], augmentation=test_transform, preprocessing=preprocessing, verbose=verbose)
+        test = Dataset("val", test_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=test_transform, preprocessing=preprocessing, verbose=verbose)
 
     # train
     train_loader = DataLoader(train, batch_size=batch_size, shuffle=True, num_workers=num_workers)
