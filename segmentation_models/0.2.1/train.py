@@ -130,6 +130,7 @@ def save_log(log, output_dir, prefix, epoch=None):
     except:
         print("Failed to store log: %s\n%s" % (output_file, traceback.format_exc()))
 
+
 def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', batch_size=8, num_workers=4, verbose=False):
     """
     Method for performing predictions on images.
