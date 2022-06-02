@@ -126,7 +126,7 @@ def save_log(log, output_dir, prefix, epoch=None):
         output_file = os.path.join(output_dir, "%s.json" % prefix)
     try:
         with open(output_file, "w") as fp:
-            json.dump(log, fp)
+            json.dump(log, fp, indent=2)
     except:
         print("Failed to store log: %s\n%s" % (output_file, traceback.format_exc()))
 
