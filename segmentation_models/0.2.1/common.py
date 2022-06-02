@@ -1,4 +1,5 @@
 import albumentations as albu
+import importlib
 import json
 import yaml
 
@@ -65,3 +66,34 @@ def load_config(cfg):
         result['lr_schedule'] = schedule
 
     return result
+
+
+def instantiate_class(class_name):
+    """
+    Creates the specified class.
+
+    :param class_name: the full name of the class (module and class) in dot notation
+    :type class_name: str
+    :return: the class
+    """
+    module_name, cls_name = class_name.rsplit(".", 1)
+    module = importlib.import_module(module_name)
+    importlib.reload(module)
+    return getattr(module, cls_name)
+
+
+def instantiate_object(class_name, parameters=None):
+    """
+    Instantiates an instance of the specified class, using the provided parameters for the constructor.
+    
+    :param class_name: the full name of the class (module and class) in dot notation
+    :type class_name: str
+    :param parameters: the named parameters for the constructor
+    :type parameters: dict
+    :return: the instantiated object 
+    """
+    cls = instantiate_class(class_name)
+    if (parameters is None) or (len(parameters) == 0):
+        return cls()
+    else:
+        return cls(**parameters)

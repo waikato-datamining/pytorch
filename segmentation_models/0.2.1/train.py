@@ -9,7 +9,7 @@ import traceback
 
 from torch.utils.data import DataLoader
 from torch.utils.data import Dataset as BaseDataset
-from common import get_preprocessing, get_augmentation, load_config
+from common import get_preprocessing, get_augmentation, load_config, instantiate_object, instantiate_class
 
 
 class Dataset(BaseDataset):
@@ -17,10 +17,12 @@ class Dataset(BaseDataset):
     Dataset for image segmentation.
     """
 
-    def __init__(self, images_dir, classes, classes_to_use=None, augmentation=None, preprocessing=None, verbose=False):
+    def __init__(self, dtype, images_dir, classes, classes_to_use=None, augmentation=None, preprocessing=None, verbose=False):
         """
         Read images, apply augmentation and preprocessing transformations.
 
+        :param dtype: the dataset type (eg train/test/val)
+        :type dtype: str
         :param images_dir: the directory with the images (jpg: actual, png: mask)
         :type images_dir: str
         :param classes: the list of labels corresponding to the annotations (excluding background, ie color #000000)
@@ -32,6 +34,8 @@ class Dataset(BaseDataset):
         :param verbose: whether to output some debugging information
         :type verbose: bool
         """
+        self.dtype = dtype
+        self.verbose = verbose
         self.ids = []
         self.images = []
         for f in os.listdir(images_dir):
@@ -51,11 +55,11 @@ class Dataset(BaseDataset):
         self.augmentation = augmentation
         self.preprocessing = preprocessing
 
-        if verbose:
-            print("# ids: %d" % len(self.ids))
-            print("classes: %s" % str(self.classes))
-            print("classes to use: %s" % str(self.classes_to_use))
-            print("classes to use/indices: %s" % str(self.classes_to_use_indices))
+        if self.verbose:
+            print("%s - # ids: %d" % (self.dtype, len(self.ids)))
+            print("%s - classes: %s" % (self.dtype, str(self.classes)))
+            print("%s - classes to use: %s" % (self.dtype, str(self.classes_to_use)))
+            print("%s - classes to use/indices: %s" % (self.dtype, str(self.classes_to_use_indices)))
 
     def _lower(self, labels):
         """
@@ -80,6 +84,9 @@ class Dataset(BaseDataset):
         :return: the image/mask tuple
         :rtype: tuple
         """
+        if self.verbose:
+            print("%s - getitem: %s" % (self.dtype, self.ids[i]))
+
         # read data
         image = cv2.imread(self.images[i])
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -162,9 +169,8 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
     :type verbose: bool
     """
 
-    # TODO instantiate class
     model_params = config['model']['parameters']
-    model = smp.FPN(**model_params)
+    model = instantiate_object(config['model']['class'], parameters=model_params)
 
     preprocessing_fn = smp.encoders.get_preprocessing_fn(model_params['encoder_name'], model_params['encoder_weights'])
     preprocessing = get_preprocessing(preprocessing_fn)
@@ -174,25 +180,22 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
     test_transform = get_augmentation(config, 'test')
 
     # datasets
-    train = Dataset(train_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=train_transform, preprocessing=preprocessing, verbose=verbose)
-    val = Dataset(val_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=test_transform, preprocessing=preprocessing, verbose=verbose)
+    train = Dataset(train_dir, "train", config['classes'], classes_to_use=config['classes_to_use'], augmentation=train_transform, preprocessing=preprocessing, verbose=verbose)
+    val = Dataset(val_dir, "val", config['classes'], classes_to_use=config['classes_to_use'], augmentation=test_transform, preprocessing=preprocessing, verbose=verbose)
     test = None
     if test_dir is not None:
-        test = Dataset(test_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=test_transform, preprocessing=preprocessing, verbose=verbose)
+        test = Dataset(test_dir, "val", config['classes'], classes_to_use=config['classes_to_use'], augmentation=test_transform, preprocessing=preprocessing, verbose=verbose)
 
     # train
     train_loader = DataLoader(train, batch_size=batch_size, shuffle=True, num_workers=num_workers)
     valid_loader = DataLoader(val, batch_size=1, shuffle=False, num_workers=num_workers)
-    # TODO parameter?
-    loss = smp.utils.losses.DiceLoss()
-    metrics = [
-        # TODO parameter?
-        smp.utils.metrics.IoU(threshold=0.5),
-    ]
-    # TODO parameter?
-    optimizer = torch.optim.Adam([
-        # TODO parameter?
-        dict(params=model.parameters(), lr=0.0001),
+
+    loss = instantiate_object(config['loss']['class'], config['loss']['parameters'])
+    metrics = []
+    for m in config['metrics']:
+        metrics.append(instantiate_object(m['class'], m['parameters']))
+    optimizer = instantiate_class(config['optimizer']['class'])([
+        dict(params=model.parameters(), **config['optimizer']['parameters'])
     ])
     # create epoch runners
     # it is a simple loop of iterating over dataloader`s samples
