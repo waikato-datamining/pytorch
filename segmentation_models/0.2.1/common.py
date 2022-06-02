@@ -34,7 +34,7 @@ def get_augmentation(config, key):
     :return: the albumentation augmentation
     """
     if ("augmentation" in config) and (key in config["augmentation"]):
-        return albu.from_dict(config[key])
+        return albu.from_dict(config["augmentation"][key])
     else:
         return albu.Compose([])
 
