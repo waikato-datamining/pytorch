@@ -17,7 +17,7 @@ class Dataset(BaseDataset):
     Dataset for image segmentation.
     """
 
-    def __init__(self, images_dir, classes, classes_to_use=None, augmentation=None, preprocessing=None):
+    def __init__(self, images_dir, classes, classes_to_use=None, augmentation=None, preprocessing=None, verbose=False):
         """
         Read images, apply augmentation and preprocessing transformations.
 
@@ -29,6 +29,8 @@ class Dataset(BaseDataset):
         :type classes_to_use: list
         :param augmentation: the albumentation augmentations to apply
         :param preprocessing: the preprocessing to apply
+        :param verbose: whether to output some debugging information
+        :type verbose: bool
         """
         self.ids = []
         self.images = []
@@ -48,6 +50,12 @@ class Dataset(BaseDataset):
 
         self.augmentation = augmentation
         self.preprocessing = preprocessing
+
+        if verbose:
+            print("# ids: %d" % len(self.ids))
+            print("classes: %s" % str(self.classes))
+            print("classes to use: %s" % str(self.classes_to_use))
+            print("classes to use/indices: %s" % str(self.classes_to_use_indices))
 
     def _lower(self, labels):
         """
@@ -168,11 +176,11 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
     test_transform = get_augmentation(config, 'test_aug')
 
     # datasets
-    train = Dataset(train_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=train_transform, preprocessing=preprocessing)
-    val = Dataset(val_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=test_transform, preprocessing=preprocessing)
+    train = Dataset(train_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=train_transform, preprocessing=preprocessing, verbose=verbose)
+    val = Dataset(val_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=test_transform, preprocessing=preprocessing, verbose=verbose)
     test = None
     if test_dir is not None:
-        test = Dataset(test_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=test_transform, preprocessing=preprocessing)
+        test = Dataset(test_dir, config['classes'], classes_to_use=config['classes_to_use'], augmentation=test_transform, preprocessing=preprocessing, verbose=verbose)
 
     # train
     train_loader = DataLoader(train, batch_size=batch_size, shuffle=True, num_workers=num_workers)
