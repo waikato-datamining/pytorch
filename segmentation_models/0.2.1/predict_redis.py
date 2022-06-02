@@ -96,11 +96,11 @@ def main(args=None):
     print("Loading config...")
     config = load_config(parsed.config)
 
-    preprocessing_fn = smp.encoders.get_preprocessing_fn(config['encoder'], config['encoder_weights'])
+    preprocessing_fn = smp.encoders.get_preprocessing_fn(config['model']['encoder_name'], config['model']['encoder_weights'])
 
     cont = Container()
     cont.model = model
-    cont.augmentation = get_augmentation(config, 'test_aug')
+    cont.augmentation = get_augmentation(config, 'test')
     cont.preprocessing = get_preprocessing(preprocessing_fn)
     cont.device = parsed.device
     cont.prediction_format = parsed.prediction_format

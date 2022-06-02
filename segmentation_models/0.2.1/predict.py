@@ -106,7 +106,7 @@ def predict(model, config, device, input_dir, output_dir, tmp_dir, prediction_fo
     :param quiet: whether to suppress output
     :type quiet: bool
     """
-    preprocessing_fn = smp.encoders.get_preprocessing_fn(config['encoder'], config['encoder_weights'])
+    preprocessing_fn = smp.encoders.get_preprocessing_fn(config['model']['encoder_name'], config['model']['encoder_weights'])
 
     poller = Poller()
     poller.input_dir = input_dir
@@ -124,7 +124,7 @@ def predict(model, config, device, input_dir, output_dir, tmp_dir, prediction_fo
     poller.watchdog_check_interval = watchdog_check_interval
     poller.max_files = max_files
     poller.params.model = model
-    poller.params.augmentation = get_augmentation(config, 'test_aug')
+    poller.params.augmentation = get_augmentation(config, 'test')
     poller.params.preprocessing = get_preprocessing(preprocessing_fn)
     poller.params.device = device
     poller.params.prediction_format = prediction_format
