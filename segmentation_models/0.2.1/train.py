@@ -195,7 +195,8 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
     metrics = []
     for m in train_config['metrics']:
         metrics.append(instantiate_object(m['class'], m['parameters']))
-    optimizer = instantiate_class(train_config['optimizer']['class'])([
+    optimizer_class = instantiate_class(train_config['optimizer']['class'])
+    optimizer = optimizer_class([
         dict(params=model.parameters(), **train_config['optimizer']['parameters'])
     ])
     # create epoch runners
