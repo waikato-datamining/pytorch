@@ -1,6 +1,6 @@
-import albumentations as albu
 import argparse
 import cv2
+import json
 import numpy as np
 import os
 import segmentation_models_pytorch as smp
@@ -107,6 +107,29 @@ class Dataset(BaseDataset):
         return len(self.ids)
 
 
+def save_log(log, output_dir, prefix, epoch=None):
+    """
+    Saves the log in the specified output directory.
+
+    :param log: the log to save
+    :type log: dict
+    :param output_dir: the output directory
+    :type output_dir: str
+    :param prefix: the prefix to use, eg 'train-'
+    :type prefix: str
+    :param epoch: the current epoch
+    :type epoch: int
+    """
+    if epoch is not None:
+        output_file = os.path.join(output_dir, "%s%d.json" % (prefix, epoch))
+    else:
+        output_file = os.path.join(output_dir, "%s.json" % prefix)
+    try:
+        with open(output_file, "w") as fp:
+            json.dump(log, fp)
+    except:
+        print("Failed to store log: %s\n%s" % (output_file, traceback.format_exc()))
+
 def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', batch_size=8, num_workers=4, verbose=False):
     """
     Method for performing predictions on images.
@@ -188,7 +211,9 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
     for i in range(config['num_epochs']):
         print('\nEpoch: {}'.format(i))
         train_logs = train_epoch.run(train_loader)
+        save_log(train_logs, output_dir, "train_", i)
         valid_logs = valid_epoch.run(valid_loader)
+        save_log(train_logs, output_dir, "val_", i)
 
         # do something (save model, change lr, etc.)
         if max_score < valid_logs['iou_score']:
@@ -213,6 +238,7 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
             device=device,
         )
         logs = test_epoch.run(test_dataloader)
+        save_log(logs, output_dir, "test")
 
 
 def main(args=None):
