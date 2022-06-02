@@ -163,9 +163,10 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
     """
 
     # TODO instantiate class
-    model = smp.FPN(**config['model']['parameters'])
+    model_params = config['model']['parameters']
+    model = smp.FPN(**model_params)
 
-    preprocessing_fn = smp.encoders.get_preprocessing_fn(config['model']['parameters']['encoder'], config['model']['parameters']['encoder_weights'])
+    preprocessing_fn = smp.encoders.get_preprocessing_fn(model_params['encoder_name'], model_params['encoder_weights'])
     preprocessing = get_preprocessing(preprocessing_fn)
 
     # augmentations
