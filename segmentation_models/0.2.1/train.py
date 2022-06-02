@@ -240,7 +240,7 @@ def main(args=None):
     print("Loading config...")
     config = load_config(parsed.config)
 
-    train(parsed.traing_dir, parsed.val_dir, parsed.output_dir, config,
+    train(parsed.train_dir, parsed.val_dir, parsed.output_dir, config,
           test_dir=parsed.test_dir, device=parsed.device, verbose=parsed.verbose)
 
 
