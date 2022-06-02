@@ -3,4 +3,5 @@ cache/
 .cache/
 predictions/
 test/
+venv/
 
