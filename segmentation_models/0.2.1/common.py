@@ -78,7 +78,6 @@ def instantiate_class(class_name):
     """
     module_name, cls_name = class_name.rsplit(".", 1)
     module = importlib.import_module(module_name)
-    importlib.reload(module)
     return getattr(module, cls_name)
 
 
