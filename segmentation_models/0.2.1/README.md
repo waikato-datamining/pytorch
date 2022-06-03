@@ -195,6 +195,8 @@ Here is an example generated for the `cars_segmentation.py` example:
     },
     "train": {
         "num_epochs": 10,
+        "batch_size": 8,
+        "num_workers": 4,
         "loss": {
             "class": "segmentation_models_pytorch.utils.losses.DiceLoss",
             "parameters": {}
@@ -214,7 +216,11 @@ Here is an example generated for the `cars_segmentation.py` example:
         "lr_schedule": {"25": 1e-5}
     },
     "classes": ["Sky", "Building", "Pole", "Road", "Pavement", "Tree", "SignSymbol", "Fence", "Car", "Pedestrian", "Bicyclist", "Unlabelled"],
-    "classes_to_use": ["Car"]
+    "classes_to_use": ["Car"],
+    "validate": {
+        "batch_size": 1,
+        "num_workers": 4
+    }
 }
 ```
 

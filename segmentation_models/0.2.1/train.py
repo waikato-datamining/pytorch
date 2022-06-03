@@ -145,7 +145,7 @@ def save_log(log, output_dir, prefix, epoch=None):
         print("Failed to store log: %s\n%s" % (output_file, traceback.format_exc()))
 
 
-def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', batch_size=8, num_workers=4, verbose=False):
+def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', verbose=False):
     """
     Method for performing predictions on images.
 
@@ -161,10 +161,6 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
     :type test_dir: str
     :param device: the device to perform the training on, eg 'cuda' or 'cpu'
     :type device: str
-    :param batch_size: the batch size to use for training
-    :type batch_size: int
-    :param num_workers: the number of workers to use
-    :type num_workers: int
     :param verbose: whether to output more logging information
     :type verbose: bool
     """
@@ -188,8 +184,8 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
 
     # train
     train_config = config['train']
-    train_loader = DataLoader(train, batch_size=batch_size, shuffle=True, num_workers=num_workers)
-    valid_loader = DataLoader(val, batch_size=1, shuffle=False, num_workers=num_workers)
+    train_loader = DataLoader(train, batch_size=config['train']['batch_size'], shuffle=True, num_workers=config['train']['num_workers'])
+    valid_loader = DataLoader(val, batch_size=config['validate']['batch_size'], shuffle=False, num_workers=config['validate']['num_workers'])
 
     loss = instantiate_object(train_config['loss']['class'], train_config['loss']['parameters'])
     metrics = []
