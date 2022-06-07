@@ -56,6 +56,15 @@ def process_image(fname, output_dir, poller):
         x_tensor = torch.from_numpy(image).to(poller.params.device).unsqueeze(0)
         pr_mask = poller.params.model.predict(x_tensor)
         pr_mask = (pr_mask.squeeze().cpu().numpy().round())
+        # multi-class?
+        if len(pr_mask.shape) == 3:
+            pr_mask_new = np.copy(pr_mask[0])
+            for i in range(1, pr_mask.shape[0]):
+                mask_new = np.copy(pr_mask[i])
+                mask_new[mask_new == 1] = i + 1
+                tmp = np.where(pr_mask_new == 0, mask_new, pr_mask_new)
+                pr_mask_new = tmp
+            pr_mask = pr_mask_new
         pr_mask = pr_mask[0:image_dims[0], 0:image_dims[1]]
         if poller.params.prediction_format == "bluechannel":
             pr_mask = cv2.cvtColor(pr_mask, cv2.COLOR_GRAY2RGB)
