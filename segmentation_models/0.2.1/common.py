@@ -76,23 +76,47 @@ def instantiate_class(class_name):
     :type class_name: str
     :return: the class
     """
+    if class_name.startswith("smp."):
+        class_name = "segmentation_models_pytorch." + class_name[4:]
     module_name, cls_name = class_name.rsplit(".", 1)
     module = importlib.import_module(module_name)
     return getattr(module, cls_name)
 
 
-def instantiate_object(class_name, parameters=None):
+def instantiate_object(class_name, positional=None, parameters=None):
     """
     Instantiates an instance of the specified class, using the provided parameters for the constructor.
     
     :param class_name: the full name of the class (module and class) in dot notation
     :type class_name: str
+    :param positional: list of positional arguments
+    :type positional: list
     :param parameters: the named parameters for the constructor
     :type parameters: dict
     :return: the instantiated object 
     """
     cls = instantiate_class(class_name)
-    if (parameters is None) or (len(parameters) == 0):
-        return cls()
-    else:
+    has_pos = (positional is not None) and (len(positional) > 0)
+    has_key = (parameters is not None) and (len(parameters) > 0)
+    if has_pos and has_key:
+        return cls(*positional, **parameters)
+    elif has_pos:
+        return cls(*positional)
+    elif has_key:
         return cls(**parameters)
+    else:
+        return cls()
+
+
+def object_from_dict(d):
+    """
+    Instantiates an object from the given dictionary: class, [positional:list], [parameters:dict]
+
+    :param d: the dictionary to use
+    :type d: dict
+    :return: the instantiated object
+    """
+    class_name = d['class']
+    positional = d.get('positional', None)
+    parameters = d.get('parameters', None)
+    return instantiate_object(class_name, positional=positional, parameters=parameters)
