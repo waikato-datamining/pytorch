@@ -9,7 +9,7 @@ import traceback
 
 from torch.utils.data import DataLoader
 from torch.utils.data import Dataset as BaseDataset
-from common import get_preprocessing, get_augmentation, load_config, instantiate_object, instantiate_class
+from common import get_preprocessing, get_augmentation, load_config, instantiate_object, instantiate_class, object_from_dict
 
 
 class Dataset(BaseDataset):
@@ -100,6 +100,11 @@ class Dataset(BaseDataset):
         masks = [(mask == v) for v in self.classes_to_use_indices]
         mask = np.stack(masks, axis=-1).astype('float')
 
+        # add background if mask is not binary
+        if mask.shape[-1] != 1:
+            background = 1 - mask.sum(axis=-1, keepdims=True)
+            mask = np.concatenate((mask, background), axis=-1)
+
         # apply augmentations
         if self.augmentation:
             sample = self.augmentation(image=image, mask=mask)
@@ -165,8 +170,8 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
     :type verbose: bool
     """
 
-    model_params = config['model']['parameters']
-    model = instantiate_object(config['model']['class'], parameters=model_params)
+    model_params = config['model'].get('parameters', None)
+    model = object_from_dict(config['model'])
 
     preprocessing_fn = smp.encoders.get_preprocessing_fn(model_params['encoder_name'], model_params['encoder_weights'])
     preprocessing = get_preprocessing(preprocessing_fn)
@@ -187,10 +192,13 @@ def train(train_dir, val_dir, output_dir, config, test_dir=None, device='cuda', 
     train_loader = DataLoader(train, batch_size=config['train']['batch_size'], shuffle=True, num_workers=config['train']['num_workers'])
     valid_loader = DataLoader(val, batch_size=config['validate']['batch_size'], shuffle=False, num_workers=config['validate']['num_workers'])
 
-    loss = instantiate_object(train_config['loss']['class'], train_config['loss']['parameters'])
+    loss = object_from_dict(train_config['loss'])
     metrics = []
     for m in train_config['metrics']:
-        metrics.append(instantiate_object(m['class'], m['parameters']))
+        if isinstance(m, dict):
+            metrics.append(object_from_dict(m))
+        else:
+            metrics.append(m)
     optimizer_class = instantiate_class(train_config['optimizer']['class'])
     optimizer = optimizer_class([
         dict(params=model.parameters(), **train_config['optimizer']['parameters'])
