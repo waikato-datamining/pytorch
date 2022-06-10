@@ -34,7 +34,19 @@ def process_image(msg_cont):
         x_tensor = torch.from_numpy(image).to(config.device).unsqueeze(0)
         pr_mask = config.model.predict(x_tensor)
         pr_mask = (pr_mask.squeeze().cpu().numpy().round())
-        pr_mask = pr_mask[0:image_dims[0], 0:image_dims[1]]
+
+        # multi-class?
+        if len(pr_mask.shape) == 3:
+            pr_mask = np.transpose(pr_mask, (1, 2, 0))
+            pr_mask_gray = np.zeros((pr_mask.shape[0], pr_mask.shape[1]))
+            for i in range(pr_mask.shape[2]):
+                pr_mask_gray = pr_mask_gray + 1 / pr_mask.shape[2] * i * pr_mask[:, :, i]
+            pr_mask = (pr_mask_gray * 255).astype(np.uint8)
+
+        # resize to correct dimensions
+        pr_mask = cv2.resize(pr_mask, (image_dims[1], image_dims[0]), interpolation=cv2.INTER_NEAREST)
+
+        # not grayscale?
         if config.prediction_format == "bluechannel":
             pr_mask = cv2.cvtColor(pr_mask, cv2.COLOR_GRAY2RGB)
             pr_mask[:, :, 1] = np.zeros([pr_mask.shape[0], pr_mask.shape[1]])
