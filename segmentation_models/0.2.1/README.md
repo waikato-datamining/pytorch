@@ -179,8 +179,8 @@ Config files can be in JSON (.json) or YAML (.yaml, .yml).
 
 Configuration files in JSON format to be used for the cars segmentation examples:
 
-* [binary](cars_binary.json)
-* [multi-class](cars_multi.json)
+* [binary](examples/cars_binary.json)
+* [multi-class](examples/cars_multi.json)
 
 
 ## Augmentations
@@ -251,7 +251,7 @@ if __name__ == "__main__":
 
 ### Car segmentation
 
-A simple [car segmentation example](cars_segmentation.py) is included in the image 
+A simple [car segmentation example](examples/cars_segmentation.py) is included in the image 
 ([source](https://github.com/qubvel/segmentation_models.pytorch/blob/master/examples/cars%20segmentation%20(camvid).ipynb)):
 
 ```
@@ -276,7 +276,7 @@ python3 cars_segmentation.py
 
 ### Car segmentation (multi-class)
 
-Based on the example above, but [adapted](cars_segmentation_multi.py) to train a multi-class model, predicting all 
+Based on the example above, but [adapted](examples/cars_segmentation_multi.py) to train a multi-class model, predicting all 
 classes in the datasets not just cars ([source](https://raw.githubusercontent.com/shirokawakita/multiclass-segmentation/main/example_camvid_multiclassB_quita.ipynb)).
 
 ```

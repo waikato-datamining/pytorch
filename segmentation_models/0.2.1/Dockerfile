@@ -32,7 +32,8 @@ RUN git clone https://github.com/qubvel/segmentation_models.pytorch.git segmenta
 COPY bash.bashrc /etc/bash.bashrc
 
 # example code
-COPY cars_segmentation.py /opt/segmentation_models_ext/cars_segmentation.py
+COPY examples/cars_segmentation.py /opt/segmentation_models_ext/cars_segmentation.py
+COPY examples/cars_segmentation_multi.py /opt/segmentation_models_ext/cars_segmentation_multi.py
 
 COPY common.py /opt/segmentation_models_ext/common.py
 COPY predict.py /opt/segmentation_models_ext/predict.py
