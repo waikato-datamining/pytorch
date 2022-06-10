@@ -292,8 +292,8 @@ if __name__ == "__main__":
 
 ### Car segmentation
 
-A simple [car segmentation example](https://github.com/qubvel/segmentation_models.pytorch/blob/master/examples/cars%20segmentation%20(camvid).ipynb) 
-is included in the image:
+A simple [car segmentation example](cars_segmentation.py) is included in the image 
+([source](https://github.com/qubvel/segmentation_models.pytorch/blob/master/examples/cars%20segmentation%20(camvid).ipynb)):
 
 ```
 cd /opt/segmentation_models_ext
@@ -313,4 +313,13 @@ docker run --runtime=nvidia -u $(id -u):$(id -g) -e USER=$USER --shm-size 8G --n
 cp /opt/segmentation_models_ext/cars_segmentation.py
 cd /workspace/
 python3 cars_segmentation.py
+```
+
+### Car segmentation (multi-class)
+
+Based on the example above, but [adapted](cars_segmentation_multi.py) to train a multi-class model, predicting all 
+classes in the datasets not just cars ([source](https://raw.githubusercontent.com/shirokawakita/multiclass-segmentation/main/example_camvid_multiclassB_quita.ipynb)).
+
+```
+/opt/segmentation_models_ext/cars_segmentation_multi.py
 ```
