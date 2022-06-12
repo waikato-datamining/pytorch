@@ -49,7 +49,7 @@ def process_image(fname, output_dir, poller):
     try:
         image = cv2.imread(fname)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        image_dims = image.shape
+        orig_dims = image.shape
         res = poller.params.augmentation(image=image)
         res = poller.params.preprocessing(image=res['image'])
         image = res['image']
@@ -65,8 +65,15 @@ def process_image(fname, output_dir, poller):
                 pr_mask_gray = pr_mask_gray + 1 / pr_mask.shape[2] * i * pr_mask[:, :, i]
             pr_mask = (pr_mask_gray * 255).astype(np.uint8)
 
-        # resize to correct dimensions
-        pr_mask = cv2.resize(pr_mask, (image_dims[1], image_dims[0]), interpolation=cv2.INTER_NEAREST)
+        # fix size
+        if (orig_dims[0] != pr_mask.shape[0]) or (orig_dims[1] != pr_mask.shape[1]):
+            # undo padding:
+            if pr_mask.shape[0] > orig_dims[0]:
+                pad = (pr_mask.shape[0] - orig_dims[0]) // 2
+                pr_mask = pr_mask[pad:orig_dims[0]+pad, 0:orig_dims[1]]
+            if pr_mask.shape[1] > orig_dims[1]:
+                pad = (pr_mask.shape[1] - orig_dims[1]) // 2
+                pr_mask = pr_mask[0:orig_dims[0], pad:orig_dims[1]+pad]
 
         # not grayscale?
         if poller.params.prediction_format == "bluechannel":

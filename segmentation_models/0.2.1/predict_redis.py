@@ -27,7 +27,7 @@ def process_image(msg_cont):
         array = np.frombuffer(io.BytesIO(msg_cont.message['data']).getvalue(), np.uint8)
         image = cv2.imdecode(array, cv2.IMREAD_COLOR)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        image_dims = image.shape
+        orig_dims = image.shape
         res = config.augmentation(image=image)
         res = config.preprocessing(image=res['image'])
         image = res['image']
@@ -43,8 +43,15 @@ def process_image(msg_cont):
                 pr_mask_gray = pr_mask_gray + 1 / pr_mask.shape[2] * i * pr_mask[:, :, i]
             pr_mask = (pr_mask_gray * 255).astype(np.uint8)
 
-        # resize to correct dimensions
-        pr_mask = cv2.resize(pr_mask, (image_dims[1], image_dims[0]), interpolation=cv2.INTER_NEAREST)
+        # fix size
+        if (orig_dims[0] != pr_mask.shape[0]) or (orig_dims[1] != pr_mask.shape[1]):
+            # undo padding:
+            if pr_mask.shape[0] > orig_dims[0]:
+                pad = (pr_mask.shape[0] - orig_dims[0]) // 2
+                pr_mask = pr_mask[pad:orig_dims[0]+pad, 0:orig_dims[1]]
+            if pr_mask.shape[1] > orig_dims[1]:
+                pad = (pr_mask.shape[1] - orig_dims[1]) // 2
+                pr_mask = pr_mask[0:orig_dims[0], pad:orig_dims[1]+pad]
 
         # not grayscale?
         if config.prediction_format == "bluechannel":
