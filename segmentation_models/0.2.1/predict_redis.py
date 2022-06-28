@@ -1,5 +1,4 @@
 import cv2
-import io
 import numpy as np
 import segmentation_models_pytorch as smp
 import torch
@@ -24,7 +23,7 @@ def process_image(msg_cont):
         if config.verbose:
             log("process_images - start processing image")
 
-        array = np.frombuffer(io.BytesIO(msg_cont.message['data']).getvalue(), np.uint8)
+        array = np.frombuffer(msg_cont.message['data'], np.uint8)
         image = cv2.imdecode(array, cv2.IMREAD_COLOR)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         orig_dims = image.shape
@@ -59,7 +58,7 @@ def process_image(msg_cont):
             pr_mask[:, :, 1] = np.zeros([pr_mask.shape[0], pr_mask.shape[1]])
             pr_mask[:, :, 2] = np.zeros([pr_mask.shape[0], pr_mask.shape[1]])
 
-        out_data = cv2.imencode('.png', pr_mask)[1].tostring()
+        out_data = cv2.imencode('.png', pr_mask)[1].tobytes()
         msg_cont.params.redis.publish(msg_cont.params.channel_out, out_data)
 
         if config.verbose:
