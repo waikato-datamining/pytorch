@@ -97,24 +97,27 @@ def process_image(fname, output_dir, poller):
                 bh = None
 
                 if polygons is not None:
-                    poly = polygons[i][0]
-                    px = []
-                    py = []
-                    pxn = []
-                    pyn = []
-                    for n in range(len(poly)):
-                        if n % 2 == 0:
-                            px.append(poly[n])
-                            pxn.append(poly[n] / image_width)
-                        else:
-                            py.append(poly[n])
-                            pyn.append(poly[n] / image_height)
-                    if poller.params.output_minrect:
-                        bw, bh = polygon_to_minrect(lists_to_polygon(px, py))
-                    if poller.params.fit_bbox_to_polygon:
-                        if len(px) >= 3:
-                            x0, y0, x1, y1 = polygon_to_bbox(lists_to_polygon(px, py))
-                            x0n, y0n, x1n, y1n = polygon_to_bbox(lists_to_polygon(pxn, pyn))
+                    try:
+                        poly = polygons[i][0]
+                        px = []
+                        py = []
+                        pxn = []
+                        pyn = []
+                        for n in range(len(poly)):
+                            if n % 2 == 0:
+                                px.append(poly[n])
+                                pxn.append(poly[n] / image_width)
+                            else:
+                                py.append(poly[n])
+                                pyn.append(poly[n] / image_height)
+                        if poller.params.output_minrect:
+                            bw, bh = polygon_to_minrect(lists_to_polygon(px, py))
+                        if poller.params.fit_bbox_to_polygon:
+                            if len(px) >= 3:
+                                x0, y0, x1, y1 = polygon_to_bbox(lists_to_polygon(px, py))
+                                x0n, y0n, x1n, y1n = polygon_to_bbox(lists_to_polygon(pxn, pyn))
+                    except:
+                        poller.error("Failed to access polygon #%d: %s" % (i, traceback.format_exc()))
 
                 if poller.params.output_mask_image:
                     if masks is not None:

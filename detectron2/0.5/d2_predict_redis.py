@@ -78,17 +78,20 @@ def process_image(msg_cont):
                 py = None
 
                 if polygons is not None:
-                    poly = polygons[i][0]
-                    px = []
-                    py = []
-                    for n in range(len(poly)):
-                        if n % 2 == 0:
-                            px.append(poly[n])
-                        else:
-                            py.append(poly[n])
-                    if config.fit_bbox_to_polygon:
-                        if len(px) >= 3:
-                            x0, y0, x1, y1 = polygon_to_bbox(lists_to_polygon(px, py))
+                    try:
+                        poly = polygons[i][0]
+                        px = []
+                        py = []
+                        for n in range(len(poly)):
+                            if n % 2 == 0:
+                                px.append(poly[n])
+                            else:
+                                py.append(poly[n])
+                        if config.fit_bbox_to_polygon:
+                            if len(px) >= 3:
+                                x0, y0, x1, y1 = polygon_to_bbox(lists_to_polygon(px, py))
+                    except:
+                        log("Failed to access polygon #%d: %s" % (i, traceback.format_exc()))
 
                 bbox = BBox(left=int(x0), top=int(y0), right=int(x1), bottom=int(y1))
                 p = []
