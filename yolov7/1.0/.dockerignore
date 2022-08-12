@@ -1,0 +1,7 @@
+cache/
+data/
+output/
+predictions/
+*~
+*.swp
+
