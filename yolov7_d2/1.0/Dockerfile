@@ -5,8 +5,8 @@ RUN pip install --no-cache-dir redis "nbnb==0.1.3" "alfred-py==2.11" && \
 
 WORKDIR /opt
 
-RUN git clone http://github.com/jinfagang/yolov7.git && \
-    cd yolov7 && \
+RUN git clone http://github.com/jinfagang/yolov7_d2.git && \
+    cd yolov7_d2 && \
     git reset --hard 9a331807935baa187ea51407cb26dfc94416161c
 
 COPY bash.bashrc /etc/bash.bashrc

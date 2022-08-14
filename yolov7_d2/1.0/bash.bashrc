@@ -22,12 +22,12 @@ alias ls="ls --color=auto"
 
 echo -e "\e[1;31m"
 cat<<DBG
-__   __    _            _____ 
-\\ \\ / /__ | | _____   _|___  |
- \\ V / _ \\| |/ _ \\ \\ / /  / / 
-  | | (_) | | (_) \\ V /  / /  
-  |_|\\___/|_|\\___/ \\_/  /_/   
-                              
+__   __    _            _____   ____ ____  
+\\ \\ / /__ | | _____   _|___  | |  _ \\___ \\ 
+ \\ V / _ \\| |/ _ \\ \\ / /  / /  | | | |__) |
+  | | (_) | | (_) \\ V /  / /   | |_| / __/ 
+  |_|\\___/|_|\\___/ \\_/  /_/    |____/_____|
+                                           
 
 Detectron2 0.6
 
@@ -35,7 +35,7 @@ DBG
 echo -e "\e[0;33m"
 
 if [[ $EUID -eq 0 ]]; then
-	  cat <<WARN
+  cat <<WARN
 WARNING: You are running this container as root, which can cause new files in
 mounted volumes to be created as the root user on your host machine.
 
@@ -44,7 +44,7 @@ To avoid this, run the container by specifying your user's userid:
 $ docker run -u \$(id -u):\$(id -g) args...
 WARN
 else
-	  cat <<EXPL
+  cat <<EXPL
 You are running this container as user with ID $(id -u) and group $(id -g),
 which should map to the ID and group for your user on the Docker host. Great!
 EXPL
