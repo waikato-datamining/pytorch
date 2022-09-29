@@ -3,7 +3,7 @@ import torch
 from datetime import datetime
 from models.common import DetectMultiBackend, non_max_suppression
 from utils.general import check_img_size
-from utils.general import scale_coords
+from utils.general import scale_boxes
 from utils.augmentations import letterbox
 from opex import ObjectPredictions, ObjectPrediction, BBox, Polygon
 from wai.annotations.roi import ROIObject
@@ -80,7 +80,7 @@ def predict_image_opex(model, id, img_scaled, image_orig, confidence_threshold=0
     for i, det in enumerate(pred):
         if len(det):
             # Rescale boxes from img_size to im0 size
-            det[:, :4] = scale_coords(img_scaled.shape[2:], det[:, :4], image_orig.shape).round()
+            det[:, :4] = scale_boxes(img_scaled.shape[2:], det[:, :4], image_orig.shape).round()
             for d in det:
                 score = float(d[4])
                 label = model.names[int(d[5])]
