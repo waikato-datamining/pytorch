@@ -124,7 +124,7 @@ def predict_image_rois(model, img_scaled, image_orig, confidence_threshold=0.25,
     for i, det in enumerate(pred):
         if len(det):
             # Rescale boxes from img_size to im0 size
-            det[:, :4] = scale_coords(img_scaled.shape[2:], det[:, :4], image_orig.shape).round()
+            det[:, :4] = scale_boxes(img_scaled.shape[2:], det[:, :4], image_orig.shape).round()
             for d in det:
                 score = float(d[4])
                 label = int(d[5])
