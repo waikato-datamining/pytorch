@@ -3,14 +3,14 @@ import torch
 from datetime import datetime
 from models.common import DetectMultiBackend, non_max_suppression
 from utils.general import check_img_size
-from utils.general import scale_coords
+from utils.general import scale_boxes
 from utils.augmentations import letterbox
 from opex import ObjectPredictions, ObjectPrediction, BBox, Polygon
 from wai.annotations.roi import ROIObject
 from utils.torch_utils import select_device
 
 
-def load_model(model_path, data_path, image_size):
+def load_model(model_path, data_path, image_size, device_id="cuda:0"):
     """
     Loads the model from disk.
 
@@ -20,9 +20,11 @@ def load_model(model_path, data_path, image_size):
     :type data_path: str
     :param image_size: the maximum size for the image (width and height)
     :type image_size: int
+    :param device_id: the device to use, eg cuda:0
+    :type device_id: str
     :return: the model instance
     """
-    device = select_device("cuda:0")
+    device = select_device(device_id)
     result = DetectMultiBackend(model_path, device=device, dnn=False, data=data_path)
     imgsz = [image_size, image_size]
     imgsz = check_img_size(imgsz, s=result.stride)  # check image size
@@ -80,7 +82,7 @@ def predict_image_opex(model, id, img_scaled, image_orig, confidence_threshold=0
     for i, det in enumerate(pred):
         if len(det):
             # Rescale boxes from img_size to im0 size
-            det[:, :4] = scale_coords(img_scaled.shape[2:], det[:, :4], image_orig.shape).round()
+            det[:, :4] = scale_boxes(img_scaled.shape[2:], det[:, :4], image_orig.shape).round()
             for d in det:
                 score = float(d[4])
                 label = model.names[int(d[5])]

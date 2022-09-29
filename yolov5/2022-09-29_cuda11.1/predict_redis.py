@@ -70,6 +70,7 @@ def main(args=None):
     """
     parser = create_parser('Yolov5 - Prediction (Redis)', prog="yolov5_predict_redis", prefix="redis_")
     parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The ONNX Yolov5 model to use.')
+    parser.add_argument('--device', metavar="DEVICE", type=str, default="cuda:0", help='The device to run the model on.')
     parser.add_argument('--data', metavar='FILE', type=str, required=True, help='The YAML file with the data definition (example: https://github.com/ultralytics/yolov5/blob/master/data/coco128.yaml).')
     parser.add_argument('--image_size', metavar="SIZE", type=int, required=False, default=640, help='The image size to use (for width and height).')
     parser.add_argument('--confidence_threshold', metavar="0-1", type=float, required=False, default=0.25, help='The probability threshold to use for the confidence.')
@@ -81,7 +82,7 @@ def main(args=None):
 
     # load model
     print("Loading model...")
-    model_instance = load_model(parsed.model, parsed.data, parsed.image_size)
+    model_instance = load_model(parsed.model, parsed.data, parsed.image_size, device_id=parsed.device)
 
     config = Container()
     config.model = model_instance
@@ -89,7 +90,7 @@ def main(args=None):
     config.iou_threshold = parsed.iou_threshold
     config.max_detection = parsed.max_detection
     config.image_size = parsed.image_size
-    config.device = torch.device("cuda")
+    config.device = torch.device(parsed.device)
     config.verbose = parsed.verbose
 
     params = configure_redis(parsed, config=config)
