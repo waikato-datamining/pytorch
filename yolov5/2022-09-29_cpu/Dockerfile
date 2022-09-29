@@ -24,7 +24,7 @@ RUN pip install --no-cache-dir onnx==1.10.2 onnxruntime==1.10.0 && \
     pip install --no-cache-dir "simple-file-poller>=0.0.9" && \
     pip install --no-cache-dir redis && \
     pip install --no-cache-dir "redis-docker-harness==0.0.1" && \
-    pip install --no-cache-dir torch==1.11.0 torchvision==0.12.0 -f https://torch.kmtea.eu/whl/stable.html && \
+    pip install --no-cache-dir torch==1.9.1 torchvision==0.10.1 -f https://torch.kmtea.eu/whl/stable.html && \
     pip install --no-cache-dir -U numpy==1.22.1
 
 WORKDIR /opt
