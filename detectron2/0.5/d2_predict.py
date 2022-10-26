@@ -119,11 +119,6 @@ def process_image(fname, output_dir, poller):
                     except:
                         poller.error("Failed to access polygon #%d: %s" % (i, traceback.format_exc()))
 
-                if poller.params.output_mask_image:
-                    if masks is not None:
-                        # TODO combine masks into single image
-                        pass
-
                 roiobj = ROIObject(x0, y0, x1, y1, x0n, y0n, x1n, y1n, label, label_str, score=score,
                                    poly_x=px, poly_y=py, poly_xn=pxn, poly_yn=pyn,
                                    minrect_w=bw, minrect_h=bh)
@@ -152,7 +147,7 @@ def process_image(fname, output_dir, poller):
 
 def predict(cfg, input_dir, output_dir, tmp_dir, class_names, suffix="-rois.csv", mask_suffix="-mask.png",
             score_threshold=0.0, poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
-            delete_input=False, max_files=-1, output_width_height=False, output_minrect=False, output_mask_image=False,
+            delete_input=False, max_files=-1, output_width_height=False, output_minrect=False,
             fit_bbox_to_polygon=False, verbose=False, quiet=False):
     """
     Method for performing predictions on images.
@@ -189,8 +184,6 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, suffix="-rois.csv"
     :type output_width_height: bool
     :param output_minrect: when predicting polygons, whether to output the minimal rectangles around the objects as well
     :type output_minrect: bool
-    :param output_mask_image: when generating masks, whether to output a combined mask image as well
-    :type output_mask_image: bool
     :param fit_bbox_to_polygon: whether to fit the bounding box to the polygon
     :type fit_bbox_to_polygon: bool
     :param verbose: whether to output more logging information
@@ -217,7 +210,6 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, suffix="-rois.csv"
     poller.params.config = cfg
     poller.params.class_names = class_names
     poller.params.score_threshold = score_threshold
-    poller.params.output_mask_image = output_mask_image
     poller.params.output_width_height = output_width_height
     poller.params.output_minrect = output_minrect
     poller.params.fit_bbox_to_polygon = fit_bbox_to_polygon
@@ -270,7 +262,6 @@ def main(args=None):
     parser.add_argument('--max_files', type=int, default=-1, help="Maximum files to poll at a time, use -1 for unlimited", required=False)
     parser.add_argument('--output_width_height', action='store_true', help="Whether to output x/y/w/h instead of x0/y0/x1/y1 in the ROI CSV files", required=False, default=False)
     parser.add_argument('--output_minrect', action='store_true', help='When outputting polygons whether to store the minimal rectangle around the objects in the CSV files as well', required=False, default=False)
-    parser.add_argument('--output_mask_image', action='store_true', help="Whether to output a mask image (PNG) when predictions generate masks", required=False, default=False)
     parser.add_argument('--mask_image_suffix', metavar='SUFFIX', help='The suffix to use for the mask images', default="-mask.png", required=False)
     parser.add_argument('--fit_bbox_to_polygon', action='store_true', help='Whether to fit the bounding box to the polygon', required=False, default=False)
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
@@ -299,7 +290,7 @@ def main(args=None):
             use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
             delete_input=parsed.delete_input, max_files=parsed.max_files,
             output_width_height=parsed.output_width_height, output_minrect=parsed.output_minrect,
-            output_mask_image=parsed.output_mask_image, verbose=parsed.verbose, quiet=parsed.quiet)
+            verbose=parsed.verbose, quiet=parsed.quiet)
 
 
 if __name__ == "__main__":
