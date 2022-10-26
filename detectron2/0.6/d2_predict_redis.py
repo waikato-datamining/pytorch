@@ -76,7 +76,6 @@ def process_image(msg_cont):
 
                 px = None
                 py = None
-
                 if polygons is not None:
                     try:
                         poly = polygons[i][0]
@@ -94,10 +93,15 @@ def process_image(msg_cont):
                         log("Failed to access polygon #%d: %s" % (i, traceback.format_exc()))
 
                 bbox = BBox(left=int(x0), top=int(y0), right=int(x1), bottom=int(y1))
-                p = []
-                for j in range(len(px)):
-                    p.append([int(px[j]), int(py[j])])
+
+                if px is None:
+                    p = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
+                else:
+                    p = []
+                    for j in range(len(px)):
+                        p.append([int(px[j]), int(py[j])])
                 poly = Polygon(points=p)
+
                 pred = ObjectPrediction(label=label_str, score=score, bbox=bbox, polygon=poly)
                 objs.append(pred)
 
