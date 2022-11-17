@@ -120,5 +120,14 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 The following additional scripts are available:
 
 * `yolov7_train` - the Yolov7 script for training models
+* `yolov7_train_aux` - the Yolov7 script for training p6 models
 * `yolov7_export` - the Yolov7 script for exporting models (eg to ONNX)
 * `yolov7_detect` - the Yolov7 script for generating predictions (e.g., for testing a model)
+
+
+## Troubleshooting
+
+* `_pickle.UnpicklingError: STACK_GLOBAL requires str`
+
+  Delete any `labels.cache` files in the dataset ([source](https://github.com/WongKinYiu/yolov7/issues/163)).
+
