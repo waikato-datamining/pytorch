@@ -170,12 +170,9 @@ def main(args=None):
     :param args: the commandline arguments, uses sys.argv if not supplied
     :type args: list
     """
-
-    print(os.getenv("PYTHONPATH"))
-
     parser = argparse.ArgumentParser(
-        description="Yolov5 - Prediction (file-polling)",
-        prog="yolov5_predict_poll",
+        description="Yolov7 - Prediction (file-polling)",
+        prog="yolov7_predict_poll",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The ONNX Yolov5 model to use.')
     parser.add_argument('--prediction_in', help='Path to the test images', required=True, default=None)
