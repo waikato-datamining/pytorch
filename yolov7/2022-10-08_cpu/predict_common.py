@@ -118,7 +118,9 @@ def prepare_image(image, image_size, stride, device, half):
     return img
 
 
-def predict_image_opex(model, id, img_scaled, image_orig, confidence_threshold=0.25, iou_threshold=0.45, max_detection=1000):
+def predict_image_opex(model, id, img_scaled, image_orig,
+                       confidence_threshold=0.25, iou_threshold=0.45,
+                       classes=None, augment=False, agnostic_nms=False):
     """
     Generates predictions for an image.
     
@@ -131,13 +133,45 @@ def predict_image_opex(model, id, img_scaled, image_orig, confidence_threshold=0
     :type confidence_threshold: float
     :param iou_threshold: the threshold for IoU (intersect over union)
     :type iou_threshold: float
-    :param max_detection: the maximum number of detections to use
-    :type max_detection: int
+    :param classes: the classes to filter by (list of 0-based label indices)
+    :type classes: list
+    :param agnostic_nms: whether to use class-agnostic NMS
+    :type agnostic_nms: bool
+    :param augment: whether to use augmented inference
+    :type augment: bool
     :return: the generated predictions
     :rtype: ObjectPredictions
     """
-    # TODO
-    return None
+
+    # Inference
+    with torch.no_grad():  # Calculating gradients would cause a GPU memory leak
+        pred = model(img_scaled, augment=augment)[0]
+
+    # Apply NMS
+    pred = non_max_suppression(pred, confidence_threshold, iou_threshold,
+                               classes=classes, agnostic=agnostic_nms)
+
+    # Process detections
+    opex_preds = []
+    for i, det in enumerate(pred):  # detections per image
+        if len(det):
+            # Rescale boxes from img_size to im0 size
+            det[:, :4] = scale_coords(img_scaled.shape[2:], det[:, :4], image_orig.shape).round()
+            # generate output
+            for d in det:
+                score = float(d[4])
+                label = model.names[int(d[5])]
+                bbox = BBox(left=int(d[0]), top=int(d[1]), right=int(d[2]), bottom=int(d[3]))
+                p = [(bbox.left, bbox.top),
+                     (bbox.right, bbox.top),
+                     (bbox.right, bbox.bottom),
+                     (bbox.left, bbox.bottom)]
+                poly = Polygon(points=p)
+                opex_pred = ObjectPrediction(score=score, label=label, bbox=bbox, polygon=poly)
+                opex_preds.append(opex_pred)
+
+    result = ObjectPredictions(id=id, timestamp=str(datetime.now()), objects=opex_preds)
+    return result
 
 
 def predict_image_rois(model, img_scaled, image_orig, old_img_w, old_img_h,

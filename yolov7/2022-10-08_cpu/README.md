@@ -123,6 +123,13 @@ The following additional scripts are available:
 * `yolov7_train_aux` - the Yolov7 script for training p6 models
 * `yolov7_export` - the Yolov7 script for exporting models (eg to ONNX)
 * `yolov7_detect` - the Yolov7 script for generating predictions (e.g., for testing a model)
+* `yolov7_predict_poll` - batch-processing of images via file-polling
+* `yolov7_predict_redis` - making predictions via Redis backend
+
+
+### yolov7_predict_redis
+ 
+You need to start the docker container with the `--net=host` option if you are using the host's Redis server.
 
 
 ## Troubleshooting
