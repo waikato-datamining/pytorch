@@ -93,7 +93,6 @@ def main(args=None):
     config.augment = parsed.augment
     config.no_trace = parsed.no_trace
     config.image_size = parsed.image_size
-    config.device = torch.device("cpu")
     config.verbose = parsed.verbose
 
     params = configure_redis(parsed, config=config)
