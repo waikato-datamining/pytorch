@@ -84,7 +84,6 @@ def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, suffix="
     :type input_dir: str
     :param output_dir: the output directory to move the images to and store the predictions
     :type output_dir: str
-    :
     :param tmp_dir: the temporary directory to store the predictions until finished
     :type tmp_dir: str
     :param suffix: the suffix to use for the prediction files, incl extension
