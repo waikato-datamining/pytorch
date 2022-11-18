@@ -49,6 +49,7 @@ RUN git clone https://github.com/WongKinYiu/yolov7.git && \
     git reset --hard 072f76c72c641c7a1ee482e39f604f6f8ef7ee92
 
 COPY bash.bashrc /etc/bash.bashrc
+COPY predict*.py /opt/yolov7/
 COPY yolov7_* /usr/local/bin/
 
 ENV PYTHONPATH=/opt/yolov7
