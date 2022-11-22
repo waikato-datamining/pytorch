@@ -124,8 +124,10 @@ The following additional scripts are available:
 * `yolov5_predict` - the Yolov5 script for generating predictions (e.g., for testing a model)
 * `yolov5_predict_poll` - batch-processing of images via file-polling
 * `yolov5_predict_redis` - making predictions via Redis backend
+* `yolov5_val` - the Yolov5 script for validating an object detection model
 * `yolov5seg_train` - the Yolov5 script for training segmentation models
 * `yolov5seg_predict` - the Yolov5 script for generating segmentation predictions (e.g., for testing a model)
+* `yolov5seg_val` - the Yolov5 script for validating a segmentation model
 
 
 ### yolov5_predict_redis
