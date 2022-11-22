@@ -6,6 +6,11 @@ https://github.com/ultralytics/yolov5
 
 Available versions:
 
+* 2022-11-22
+
+  * [CUDA 11.1](2022-11-22_cuda11.1)
+  * [CPU](2022-11-22_cpu)
+
 * 2022-09-29
 
   * [CUDA 11.1](2022-09-29_cuda11.1)
