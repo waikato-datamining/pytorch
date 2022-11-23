@@ -2,7 +2,7 @@
 
 Command-line utilities for building/using Yolov5 models. 
 
-Uses Yolov5 2022-11-22 (be348cc33925738825ab40dd6eacdfe4afd4e215), CPU only
+Uses Yolov5 2022-11-22 (fde77584687041aa62795bb2c27e895cf73686bf), CPU only
 
 
 ## Docker

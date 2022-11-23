@@ -36,8 +36,9 @@ RUN pip install --no-cache-dir onnx==1.10.2 onnxruntime-gpu==1.10.0 && \
 WORKDIR /opt
 RUN git clone https://github.com/ultralytics/yolov5 && \
     cd yolov5 && \
-    git reset --hard be348cc33925738825ab40dd6eacdfe4afd4e215 && \
-    pip install --no-cache-dir -r requirements.txt
+    git reset --hard fde77584687041aa62795bb2c27e895cf73686bf && \
+    pip install --no-cache-dir -r requirements.txt && \
+    git config --global --add safe.directory '/opt/yolov5'
 
 COPY predict*.py /opt/yolov5/
 COPY bash.bashrc /etc/bash.bashrc
