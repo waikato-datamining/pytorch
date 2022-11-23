@@ -68,7 +68,7 @@ def main(args=None):
     :param args: the command-line arguments to use, uses sys.argv if None
     :type args: list
     """
-    parser = create_parser('Yolov5 - Prediction (Redis)', prog="yolov5_predict_redis", prefix="redis_")
+    parser = create_parser('Yolov5 - Prediction (Redis)', prog="yolov5seg_predict_redis", prefix="redis_")
     parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The ONNX Yolov5 model to use.')
     parser.add_argument('--data', metavar='FILE', type=str, required=True, help='The YAML file with the data definition (example: https://github.com/ultralytics/yolov5/blob/master/data/coco128.yaml).')
     parser.add_argument('--image_size', metavar="SIZE", type=int, required=False, default=640, help='The image size to use (for width and height).')

@@ -131,6 +131,9 @@ def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, output_f
     :type quiet: bool
     """
 
+    if output_format not in OUTPUT_FORMATS:
+        raise Exception("Unknown output format: %s" % output_format)
+
     if verbose:
         print("Loading model: %s" % model)
     model_instance = load_model(model, data, image_size)
@@ -171,7 +174,7 @@ def main(args=None):
 
     parser = argparse.ArgumentParser(
         description="Yolov5 - Prediction (file-polling)",
-        prog="yolov5_predict_poll",
+        prog="yolov5seg_predict_poll",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The ONNX Yolov5 model to use.')
     parser.add_argument('--data', metavar="FILE", type=str, required=True, help='The YAML file with the data definition (example: https://github.com/ultralytics/yolov5/blob/master/data/coco128.yaml).')
