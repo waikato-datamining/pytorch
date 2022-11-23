@@ -2,7 +2,7 @@
 
 Command-line utilities for building/using Yolov5 models. 
 
-Uses Yolov5 2022-11-22 (fde77584687041aa62795bb2c27e895cf73686bf), CPU only
+Uses Yolov5 2022-11-05 (fde77584687041aa62795bb2c27e895cf73686bf), CPU only
 
 
 ## Docker
@@ -21,7 +21,7 @@ Uses Yolov5 2022-11-22 (fde77584687041aa62795bb2c27e895cf73686bf), CPU only
   docker run \
     --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-11-22_cpu
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-11-05_cpu
   ```
 
 * If need be, remove all containers and images from your system:
@@ -32,7 +32,7 @@ Uses Yolov5 2022-11-22 (fde77584687041aa62795bb2c27e895cf73686bf), CPU only
 
 ### Build local image
 
-* Build the image from Docker file (from within `/path_to/2022-11-22_cpu`)
+* Build the image from Docker file (from within `/path_to/2022-11-05_cpu`)
 
   ```bash
   docker build -t py5 .
@@ -52,21 +52,21 @@ Uses Yolov5 2022-11-22 (fde77584687041aa62795bb2c27e895cf73686bf), CPU only
 * Build
 
   ```bash
-  docker build -t pytorch-yolov5:2022-11-22_cpu .
+  docker build -t pytorch-yolov5:2022-11-05_cpu .
   ```
   
 * Tag
 
   ```bash
   docker tag \
-    pytorch-yolov5:2022-11-22_cpu \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-11-22_cpu
+    pytorch-yolov5:2022-11-05_cpu \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-11-05_cpu
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-11-22_cpu
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-11-05_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -79,7 +79,7 @@ Uses Yolov5 2022-11-22 (fde77584687041aa62795bb2c27e895cf73686bf), CPU only
   If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
 
   ```bash
-  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-11-22_cpu
+  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-11-05_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -90,8 +90,8 @@ Uses Yolov5 2022-11-22 (fde77584687041aa62795bb2c27e895cf73686bf), CPU only
   
   ```bash
   docker tag \
-    public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-11-22_cpu \
-    pytorch-yolov5:2022-11-22_cpu
+    public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-11-05_cpu \
+    pytorch-yolov5:2022-11-05_cpu
   ```
   
 * <a name="run">Run</a>
@@ -99,7 +99,7 @@ Uses Yolov5 2022-11-22 (fde77584687041aa62795bb2c27e895cf73686bf), CPU only
   ```bash
   docker run \
     --shm-size 8G \
-    -v /local/dir:/container/dir -it pytorch-yolov5:2022-11-22_cpu
+    -v /local/dir:/container/dir -it pytorch-yolov5:2022-11-05_cpu
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
