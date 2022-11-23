@@ -86,7 +86,7 @@ def process_image(fname, output_dir, poller):
 
 def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, output_format=OUTPUT_ROIS, suffix="-rois.csv",
                       poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
-                      delete_input=False, image_size=640, confidence_threshold=0.3, iou_threshold=0.45,
+                      delete_input=False, device="cuda:0", image_size=640, confidence_threshold=0.3, iou_threshold=0.45,
                       max_detection=1000, output_width_height=False, verbose=False, quiet=False):
     """
     Performs predictions on images found in input_dir and outputs the prediction PNG files in output_dir.
@@ -115,6 +115,8 @@ def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, output_f
     :type watchdog_check_interval: float
     :param delete_input: whether to delete the input images rather than moving them to the output directory
     :type delete_input: bool
+    :param device: the device to run the model on, eg cuda:0
+    :type device: str
     :param image_size: the image size to use for the model (applied to width and height)
     :type image_size: int
     :param confidence_threshold: the probability threshold to use (0-1)
@@ -131,9 +133,12 @@ def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, output_f
     :type quiet: bool
     """
 
+    if output_format not in OUTPUT_FORMATS:
+        raise Exception("Unknown output format: %s" % output_format)
+
     if verbose:
         print("Loading model: %s" % model)
-    model_instance = load_model(model, data, image_size)
+    model_instance = load_model(model, data, image_size, device_id=device)
 
     poller = Poller()
     poller.input_dir = input_dir
@@ -152,7 +157,7 @@ def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, output_f
     poller.params.output_format = output_format
     poller.params.suffix = suffix
     poller.params.model = model_instance
-    poller.params.device = torch.device("cpu")
+    poller.params.device = torch.device(device)
     poller.params.image_size = image_size
     poller.params.confidence_threshold = confidence_threshold
     poller.params.iou_threshold = iou_threshold
@@ -171,9 +176,10 @@ def main(args=None):
 
     parser = argparse.ArgumentParser(
         description="Yolov5 - Prediction (file-polling)",
-        prog="yolov5_predict_poll",
+        prog="yolov5seg_predict_poll",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The ONNX Yolov5 model to use.')
+    parser.add_argument('--device', metavar="DEVICE", type=str, default="cuda:0", help='The device to run the model on.')
     parser.add_argument('--data', metavar="FILE", type=str, required=True, help='The YAML file with the data definition (example: https://github.com/ultralytics/yolov5/blob/master/data/coco128.yaml).')
     parser.add_argument('--prediction_in', help='Path to the test images', required=True, default=None)
     parser.add_argument('--prediction_out', help='Path to the output csv files folder', required=True, default=None)
@@ -198,7 +204,7 @@ def main(args=None):
                       output_format=parsed.prediction_format, suffix=parsed.prediction_suffix,
                       poll_wait=parsed.poll_wait, continuous=parsed.continuous,
                       use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
-                      delete_input=parsed.delete_input, image_size=parsed.image_size,
+                      delete_input=parsed.delete_input, device=parsed.device, image_size=parsed.image_size,
                       confidence_threshold=parsed.confidence_threshold, iou_threshold=parsed.iou_threshold,
                       max_detection=parsed.max_detection, output_width_height=parsed.output_width_height,
                       verbose=parsed.verbose, quiet=parsed.quiet)
