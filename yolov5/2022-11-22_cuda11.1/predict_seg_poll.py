@@ -6,7 +6,7 @@ import traceback
 from datetime import datetime
 from image_complete import auto
 from sfp import Poller
-from predict_common import load_model, prepare_image, predict_image_rois, predict_image_opex
+from predict_common import load_model, prepare_image, predict_segmentation_rois, predict_segmentation_opex
 from predict_common import OUTPUT_ROIS, OUTPUT_OPEX, OUTPUT_FORMATS
 from wai.annotations.core import ImageInfo
 from wai.annotations.roi.io import ROIWriter
@@ -54,10 +54,10 @@ def process_image(fname, output_dir, poller):
         image_height = im0.shape[0]
         im = prepare_image(im0, poller.params.image_size, poller.params.model.fp16, poller.params.model.stride, poller.params.device)
         if poller.params.output_format == OUTPUT_ROIS:
-            results = predict_image_rois(poller.params.model, im, im0,
-                                         confidence_threshold=poller.params.confidence_threshold,
-                                         iou_threshold=poller.params.iou_threshold,
-                                         max_detection=poller.params.max_detection)
+            results = predict_segmentation_rois(poller.params.model, im, im0,
+                                                confidence_threshold=poller.params.confidence_threshold,
+                                                iou_threshold=poller.params.iou_threshold,
+                                                max_detection=poller.params.max_detection)
             info = ImageInfo(filename=os.path.basename(fname), size=(image_width, image_height))
             roiext = (info, results)
             options = ["--output=%s" % output_dir, "--no-images", "--suffix=%s" % poller.params.suffix]
@@ -67,12 +67,12 @@ def process_image(fname, output_dir, poller):
             roiwriter.save([roiext])
             result.append(output_path)
         elif poller.params.output_format == OUTPUT_OPEX:
-            preds = predict_image_opex(poller.params.model,
-                                       str(start_time),
-                                       im, im0,
-                                       confidence_threshold=poller.params.confidence_threshold,
-                                       iou_threshold=poller.params.iou_threshold,
-                                       max_detection=poller.params.max_detection)
+            preds = predict_segmentation_opex(poller.params.model,
+                                              str(start_time),
+                                              im, im0,
+                                              confidence_threshold=poller.params.confidence_threshold,
+                                              iou_threshold=poller.params.iou_threshold,
+                                              max_detection=poller.params.max_detection)
             preds.save_json_to_file(output_path)
             result.append(output_path)
         else:
@@ -131,9 +131,6 @@ def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, output_f
     :type quiet: bool
     """
 
-    if output_format not in OUTPUT_FORMATS:
-        raise Exception("Unknown output format: %s" % output_format)
-
     if verbose:
         print("Loading model: %s" % model)
     model_instance = load_model(model, data, image_size)
@@ -179,8 +176,8 @@ def main(args=None):
     parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The ONNX Yolov5 model to use.')
     parser.add_argument('--data', metavar="FILE", type=str, required=True, help='The YAML file with the data definition (example: https://github.com/ultralytics/yolov5/blob/master/data/coco128.yaml).')
     parser.add_argument('--prediction_in', help='Path to the test images', required=True, default=None)
-    parser.add_argument('--prediction_out', help='Path to the folder for the prediction files', required=True, default=None)
-    parser.add_argument('--prediction_tmp', help='Path to the temporary folder for the prediction files', required=False, default=None)
+    parser.add_argument('--prediction_out', help='Path to the output csv files folder', required=True, default=None)
+    parser.add_argument('--prediction_tmp', help='Path to the temporary csv files folder', required=False, default=None)
     parser.add_argument('--prediction_format', choices=OUTPUT_FORMATS, help='The type of output format to generate', default=OUTPUT_ROIS, required=False)
     parser.add_argument('--prediction_suffix', metavar='SUFFIX', help='The suffix to use for the prediction files', default="-rois.csv", required=False)
     parser.add_argument('--poll_wait', type=float, help='poll interval in seconds when not using watchdog mode', required=False, default=1.0)

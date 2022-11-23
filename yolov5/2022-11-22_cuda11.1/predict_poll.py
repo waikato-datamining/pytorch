@@ -3,9 +3,11 @@ import cv2
 import os
 import torch
 import traceback
+from datetime import datetime
 from image_complete import auto
 from sfp import Poller
-from predict_common import load_model, prepare_image, predict_image_rois
+from predict_common import load_model, prepare_image, predict_image_rois, predict_image_opex
+from predict_common import OUTPUT_ROIS, OUTPUT_OPEX, OUTPUT_FORMATS
 from wai.annotations.core import ImageInfo
 from wai.annotations.roi.io import ROIWriter
 
@@ -45,23 +47,36 @@ def process_image(fname, output_dir, poller):
     """
     result = []
     try:
-        roi_path = "{}/{}{}".format(output_dir, os.path.splitext(os.path.basename(fname))[0], poller.params.suffix)
+        start_time = datetime.now()
+        output_path = "{}/{}{}".format(output_dir, os.path.splitext(os.path.basename(fname))[0], poller.params.suffix)
         im0 = cv2.imread(fname)
         image_width = im0.shape[1]
         image_height = im0.shape[0]
-        im = prepare_image(im0, poller.params.image_size, poller.params.model.stride, poller.params.device)
-        results = predict_image_rois(poller.params.model, im, im0,
-                                     confidence_threshold=poller.params.confidence_threshold,
-                                     iou_threshold=poller.params.iou_threshold,
-                                     max_detection=poller.params.max_detection)
-        info = ImageInfo(filename=os.path.basename(fname), size=(image_width, image_height))
-        roiext = (info, results)
-        options = ["--output=%s" % output_dir, "--no-images", "--suffix=%s" % poller.params.suffix]
-        if poller.params.output_width_height:
-            options.append("--size-mode")
-        roiwriter = ROIWriter(options)
-        roiwriter.save([roiext])
-        result.append(roi_path)
+        im = prepare_image(im0, poller.params.image_size, poller.params.model.fp16, poller.params.model.stride, poller.params.device)
+        if poller.params.output_format == OUTPUT_ROIS:
+            results = predict_image_rois(poller.params.model, im, im0,
+                                         confidence_threshold=poller.params.confidence_threshold,
+                                         iou_threshold=poller.params.iou_threshold,
+                                         max_detection=poller.params.max_detection)
+            info = ImageInfo(filename=os.path.basename(fname), size=(image_width, image_height))
+            roiext = (info, results)
+            options = ["--output=%s" % output_dir, "--no-images", "--suffix=%s" % poller.params.suffix]
+            if poller.params.output_width_height:
+                options.append("--size-mode")
+            roiwriter = ROIWriter(options)
+            roiwriter.save([roiext])
+            result.append(output_path)
+        elif poller.params.output_format == OUTPUT_OPEX:
+            preds = predict_image_opex(poller.params.model,
+                                       str(start_time),
+                                       im, im0,
+                                       confidence_threshold=poller.params.confidence_threshold,
+                                       iou_threshold=poller.params.iou_threshold,
+                                       max_detection=poller.params.max_detection)
+            preds.save_json_to_file(output_path)
+            result.append(output_path)
+        else:
+            poller.error("Unknown output format: %s" + poller.params.output_format)
     except KeyboardInterrupt:
         poller.keyboard_interrupt()
     except:
@@ -69,7 +84,7 @@ def process_image(fname, output_dir, poller):
     return result
 
 
-def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, suffix="-rois.csv",
+def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, output_format=OUTPUT_ROIS, suffix="-rois.csv",
                       poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
                       delete_input=False, device="cuda:0", image_size=640, confidence_threshold=0.3, iou_threshold=0.45,
                       max_detection=1000, output_width_height=False, verbose=False, quiet=False):
@@ -86,6 +101,8 @@ def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, suffix="
     :type output_dir: str
     :param tmp_dir: the temporary directory to store the predictions until finished
     :type tmp_dir: str
+    :param output_format: the output format to generate (see OUTPUT_FORMATS)
+    :type output_format: str
     :param suffix: the suffix to use for the prediction files, incl extension
     :type suffix: str
     :param poll_wait: the amount of seconds between polls when not in watchdog mode
@@ -98,10 +115,10 @@ def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, suffix="
     :type watchdog_check_interval: float
     :param delete_input: whether to delete the input images rather than moving them to the output directory
     :type delete_input: bool
-    :param image_size: the image size to use for the model (applied to width and height)
-    :type image_size: int
     :param device: the device to run the model on, eg cuda:0
     :type device: str
+    :param image_size: the image size to use for the model (applied to width and height)
+    :type image_size: int
     :param confidence_threshold: the probability threshold to use (0-1)
     :type confidence_threshold: float
     :param iou_threshold: the threshold of IoU (intersect over union; 0-1)
@@ -115,6 +132,9 @@ def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, suffix="
     :param quiet: whether to suppress output
     :type quiet: bool
     """
+
+    if output_format not in OUTPUT_FORMATS:
+        raise Exception("Unknown output format: %s" % output_format)
 
     if verbose:
         print("Loading model: %s" % model)
@@ -134,6 +154,7 @@ def predict_on_images(model, data, input_dir, output_dir, tmp_dir=None, suffix="
     poller.continuous = continuous
     poller.use_watchdog = use_watchdog
     poller.watchdog_check_interval = watchdog_check_interval
+    poller.params.output_format = output_format
     poller.params.suffix = suffix
     poller.params.model = model_instance
     poller.params.device = torch.device(device)
@@ -161,8 +182,9 @@ def main(args=None):
     parser.add_argument('--device', metavar="DEVICE", type=str, default="cuda:0", help='The device to run the model on.')
     parser.add_argument('--data', metavar="FILE", type=str, required=True, help='The YAML file with the data definition (example: https://github.com/ultralytics/yolov5/blob/master/data/coco128.yaml).')
     parser.add_argument('--prediction_in', help='Path to the test images', required=True, default=None)
-    parser.add_argument('--prediction_out', help='Path to the output csv files folder', required=True, default=None)
-    parser.add_argument('--prediction_tmp', help='Path to the temporary csv files folder', required=False, default=None)
+    parser.add_argument('--prediction_out', help='Path to the folder for the prediction files', required=True, default=None)
+    parser.add_argument('--prediction_tmp', help='Path to the temporary folder for the prediction files', required=False, default=None)
+    parser.add_argument('--prediction_format', choices=OUTPUT_FORMATS, help='The type of output format to generate', default=OUTPUT_ROIS, required=False)
     parser.add_argument('--prediction_suffix', metavar='SUFFIX', help='The suffix to use for the prediction files', default="-rois.csv", required=False)
     parser.add_argument('--poll_wait', type=float, help='poll interval in seconds when not using watchdog mode', required=False, default=1.0)
     parser.add_argument('--continuous', action='store_true', help='Whether to continuously load test images and perform prediction', required=False, default=False)
@@ -179,7 +201,8 @@ def main(args=None):
     parsed = parser.parse_args(args=args)
 
     predict_on_images(parsed.model, parsed.data, parsed.prediction_in, parsed.prediction_out, tmp_dir=parsed.prediction_tmp,
-                      suffix=parsed.prediction_suffix, poll_wait=parsed.poll_wait, continuous=parsed.continuous,
+                      output_format=parsed.prediction_format, suffix=parsed.prediction_suffix,
+                      poll_wait=parsed.poll_wait, continuous=parsed.continuous,
                       use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
                       delete_input=parsed.delete_input, device=parsed.device, image_size=parsed.image_size,
                       confidence_threshold=parsed.confidence_threshold, iou_threshold=parsed.iou_threshold,

@@ -24,7 +24,7 @@ def process_image(msg_cont):
 
         jpg_as_np = np.frombuffer(msg_cont.message['data'], dtype=np.uint8)
         im0 = cv2.imdecode(jpg_as_np, flags=1)
-        im = prepare_image(im0, config.image_size, config.model.stride, config.device)
+        im = prepare_image(im0, config.image_size, config.model.fp16, config.model.stride, config.device)
         preds = predict_image_opex(config.model,
                                    str(start_time),
                                    im, im0,
