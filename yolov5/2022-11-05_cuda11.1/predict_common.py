@@ -187,7 +187,7 @@ def predict_segmentation_opex(model, id, img_scaled, image_orig, confidence_thre
             masks = process_mask(proto[i], det[:, 6:], det[:, :4], img_scaled.shape[2:], upsample=True)  # HWC
             det[:, :4] = scale_boxes(img_scaled.shape[2:], det[:, :4], image_orig.shape).round()  # rescale boxes to original size
             segments = reversed(masks2segments(masks))
-            segments = [scale_segments(img_scaled.shape[2:], x, image_orig.shape, normalize=False) for x in segments]
+            segments = [scale_segments(img_scaled.shape[2:], x, image_orig.shape) for x in segments]
 
             for n, d in enumerate(det):
                 score = float(d[4])
@@ -233,7 +233,7 @@ def predict_segmentation_rois(model, img_scaled, image_orig, confidence_threshol
             masks = process_mask(proto[i], det[:, 6:], det[:, :4], img_scaled.shape[2:], upsample=True)  # HWC
             det[:, :4] = scale_boxes(img_scaled.shape[2:], det[:, :4], image_orig.shape).round()  # rescale boxes to original size
             segments = reversed(masks2segments(masks))
-            segments = [scale_segments(img_scaled.shape[2:], x, image_orig.shape, normalize=False) for x in segments]
+            segments = [scale_segments(img_scaled.shape[2:], x, image_orig.shape) for x in segments]
 
             for n, d in enumerate(det):
                 score = float(d[4])
