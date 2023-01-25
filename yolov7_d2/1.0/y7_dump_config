@@ -1,4 +1,0 @@
-#!/bin/bash
-
-python3 /opt/yolov7_d2/y7_dump_config.py "$@"
-
