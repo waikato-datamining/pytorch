@@ -75,14 +75,11 @@ def process_image(fname, output_dir, poller):
             masks = [GenericMask(x, image_height, image_width) for x in masks]
             polygons = [x.polygons for x in masks]
         else:
-            masks = None
             polygons = None
 
         output_path = "{}/{}{}".format(output_dir, os.path.splitext(os.path.basename(fname))[0], poller.params.suffix)
-        img_path = "{}/{}{}".format(output_dir, os.path.splitext(os.path.basename(fname))[0], poller.params.mask_suffix)
 
         pred_objs = []
-        mask_comb = None
         for i in range(num_instances):
             score = scores[i].item()
             if score >= poller.params.score_threshold:
@@ -159,11 +156,6 @@ def process_image(fname, output_dir, poller):
         else:
             poller.error("Unknown output format: %s" % poller.params.output_format)
 
-        if mask_comb is not None:
-            im = Image.fromarray(np.uint8(mask_comb), 'P')
-            im.save(img_path, "PNG")
-            result.append(img_path)
-
     except KeyboardInterrupt:
         poller.keyboard_interrupt()
     except:
@@ -171,7 +163,7 @@ def process_image(fname, output_dir, poller):
     return result
 
 
-def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTPUT_ROIS, suffix="-rois.csv", mask_suffix="-mask.png",
+def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTPUT_ROIS, suffix="-rois.csv",
             score_threshold=0.0, poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
             delete_input=False, max_files=-1, output_width_height=False, output_minrect=False,
             fit_bbox_to_polygon=False, verbose=False, quiet=False):
@@ -192,8 +184,6 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTP
     :type output_format: str
     :param suffix: the suffix to use for the prediction files, incl extension
     :type suffix: str
-    :param mask_suffix: the suffix to use for the mask image files, incl extension
-    :type mask_suffix: str
     :param score_threshold: the minimum score predictions have to have
     :type score_threshold: float
     :param poll_wait: the amount of seconds between polls when not in watchdog mode
@@ -245,7 +235,6 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTP
     poller.params.predictor = DefaultPredictor(cfg)
     poller.params.output_format = output_format
     poller.params.suffix = suffix
-    poller.params.mask_suffix = mask_suffix
     poller.poll()
 
 
@@ -292,7 +281,6 @@ def main(args=None):
     parser.add_argument('--max_files', type=int, default=-1, help="Maximum files to poll at a time, use -1 for unlimited", required=False)
     parser.add_argument('--output_width_height', action='store_true', help="Whether to output x/y/w/h instead of x0/y0/x1/y1 in the ROI CSV files", required=False, default=False)
     parser.add_argument('--output_minrect', action='store_true', help='When outputting polygons whether to store the minimal rectangle around the objects in the CSV files as well', required=False, default=False)
-    parser.add_argument('--mask_image_suffix', metavar='SUFFIX', help='The suffix to use for the mask images', default="-mask.png", required=False)
     parser.add_argument('--fit_bbox_to_polygon', action='store_true', help='Whether to fit the bounding box to the polygon', required=False, default=False)
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
     parser.add_argument('--quiet', action='store_true', help='Whether to suppress output', required=False, default=False)
@@ -314,8 +302,7 @@ def main(args=None):
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = num_classes
     cfg.MODEL.WEIGHTS = parsed.model
 
-    predict(cfg, parsed.prediction_in, parsed.prediction_out, parsed.prediction_tmp, labels,
-            suffix=parsed.prediction_suffix, mask_suffix=parsed.mask_image_suffix,
+    predict(cfg, parsed.prediction_in, parsed.prediction_out, parsed.prediction_tmp, labels, suffix=parsed.prediction_suffix,
             score_threshold=parsed.score_threshold, poll_wait=parsed.poll_wait, continuous=parsed.continuous,
             use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
             delete_input=parsed.delete_input, max_files=parsed.max_files, output_format=parsed.prediction_format,
