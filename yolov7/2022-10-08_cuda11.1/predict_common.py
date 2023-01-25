@@ -10,6 +10,11 @@ from utils.datasets import letterbox
 from utils.general import non_max_suppression, scale_coords
 
 
+OUTPUT_ROIS = "rois"
+OUTPUT_OPEX = "opex"
+OUTPUT_FORMATS = [OUTPUT_ROIS, OUTPUT_OPEX]
+
+
 class ModelParams:
     """
     Container for the model and additional parameters.
