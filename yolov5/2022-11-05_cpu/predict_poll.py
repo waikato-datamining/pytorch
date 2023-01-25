@@ -76,7 +76,7 @@ def process_image(fname, output_dir, poller):
             preds.save_json_to_file(output_path)
             result.append(output_path)
         else:
-            poller.error("Unknown output format: %s" + poller.params.output_format)
+            poller.error("Unknown output format: %s" % poller.params.output_format)
     except KeyboardInterrupt:
         poller.keyboard_interrupt()
     except:
