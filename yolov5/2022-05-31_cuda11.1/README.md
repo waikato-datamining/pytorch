@@ -35,7 +35,7 @@ Uses Yolov5 2022-05-31 (dcf8073881d60e3ac6f14cce561d06fa114d9fc9), CUDA 11.1 and
 * Build the image from Docker file (from within `/path_to/2022-05-31_cuda11.1`)
 
   ```bash
-  docker build -t py5 .
+  docker build -t yolov5 .
   ```
   
 * Run the container
@@ -43,7 +43,7 @@ Uses Yolov5 2022-05-31 (dcf8073881d60e3ac6f14cce561d06fa114d9fc9), CUDA 11.1 and
   ```bash
   docker run \
     --gpus=all --shm-size 8G \
-    -v /local/dir:/container/dir -it py5
+    -v /local/dir:/container/dir -it yolov5
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 

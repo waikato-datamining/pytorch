@@ -35,7 +35,7 @@ Uses Yolov5 2022-11-05 (fde77584687041aa62795bb2c27e895cf73686bf), CPU only
 * Build the image from Docker file (from within `/path_to/2022-11-05_cpu`)
 
   ```bash
-  docker build -t py5 .
+  docker build -t yolov5 .
   ```
   
 * Run the container
@@ -43,7 +43,7 @@ Uses Yolov5 2022-11-05 (fde77584687041aa62795bb2c27e895cf73686bf), CPU only
   ```bash
   docker run \
     --shm-size 8G \
-    -v /local/dir:/container/dir -it py5
+    -v /local/dir:/container/dir -it yolov5
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
