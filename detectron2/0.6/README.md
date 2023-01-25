@@ -44,12 +44,10 @@ October 26, 2021
 * Pull and run image (adjust volume mappings `-v`):
 
   ```bash
-  docker run --runtime=nvidia --shm-size 8G --net=host \
+  docker run --gpus=all --shm-size 8G --net=host \
     -v /local/dir:/container/dir \
     -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.6
   ```
-
-  **NB:** For docker versions 19.03 (`docker version`) and newer, use `--gpus=all` instead of `--runtime=nvidia`.
 
 * If need be, remove all containers and images from your system:
 
@@ -76,7 +74,7 @@ waikatodatamining/detectron2:0.6
 * Run the container
 
   ```bash
-  docker run --runtime=nvidia --shm-size 8G --net=host -v /local/dir:/container/dir -it detectron2
+  docker run --gpus=all --shm-size 8G --net=host -v /local/dir:/container/dir -it detectron2
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
@@ -130,7 +128,7 @@ waikatodatamining/detectron2:0.6
 * <a name="run">Run</a>
 
   ```bash
-  docker run --runtime=nvidia --shm-size 8G --net=host \
+  docker run --gpus=all --shm-size 8G --net=host \
     -v /local/dir:/container/dir -it pytorch/detectron2:0.6
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
