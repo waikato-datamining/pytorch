@@ -5,7 +5,7 @@ import traceback
 
 from datetime import datetime
 from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
-from predict_common import load_model, prepare_image, predict_image_opex
+from predict_common import load_model, prepare_image, predict_segmentation_opex
 
 
 def process_image(msg_cont):
@@ -25,12 +25,12 @@ def process_image(msg_cont):
         jpg_as_np = np.frombuffer(msg_cont.message['data'], dtype=np.uint8)
         im0 = cv2.imdecode(jpg_as_np, flags=1)
         im = prepare_image(im0, config.image_size, config.model.fp16, config.model.stride, config.device)
-        preds = predict_image_opex(config.model,
-                                   str(start_time),
-                                   im, im0,
-                                   confidence_threshold=config.confidence_threshold,
-                                   iou_threshold=config.iou_threshold,
-                                   max_detection=config.max_detection)
+        preds = predict_segmentation_opex(config.model,
+                                          str(start_time),
+                                          im, im0,
+                                          confidence_threshold=config.confidence_threshold,
+                                          iou_threshold=config.iou_threshold,
+                                          max_detection=config.max_detection)
         preds_str = preds.to_json_string()
         msg_cont.params.redis.publish(msg_cont.params.channel_out, preds_str)
         if config.verbose:
