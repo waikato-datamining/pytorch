@@ -29,7 +29,7 @@ cat<<DBG
 |____/|_____/_/\\_\\ |_| |_| \\_\\
                               
 
-0.1.2, CUDA 11.1
+0.1.2, CPU, PyTorch 1.9.1, TorchVision 0.10.1
 
 DBG
 echo -e "\e[0;33m"
