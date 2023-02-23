@@ -3,7 +3,7 @@
 Command-line utilities for [DEXTR](https://github.com/Britefury/dextr) 
 ([Deep Extreme Cut](http://people.ee.ethz.ch/~cvlsegmentation/dextr/)). 
 
-Uses DEXTR 0.1.2, CUDA 11.1 and torch 1.9.1.
+Uses DEXTR 0.1.2, CUDA 11.1 and torch 1.10.0.
 
 
 ## Docker

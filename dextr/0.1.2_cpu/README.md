@@ -3,7 +3,7 @@
 Command-line utilities for [DEXTR](https://github.com/Britefury/dextr) 
 ([Deep Extreme Cut](http://people.ee.ethz.ch/~cvlsegmentation/dextr/)). 
 
-Uses DEXTR 0.1.2, CPU.
+Uses DEXTR 0.1.2, CPU, PyTorch 1.9.1
 
 
 ## Docker
