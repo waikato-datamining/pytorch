@@ -116,6 +116,17 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 ```
 
 
+### Cache directory
+
+When DEXTR uses pretrained models, it stores them in a cache directory. In order
+to avoid downloading the model every time a container is run, map this 
+directory into one on the host, e.g., using:
+
+```
+  -v `pwd`/cache:/.cache
+```
+
+
 ## Scripts
 
 The following scripts are available in the image:
