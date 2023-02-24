@@ -46,7 +46,7 @@ def process_image(fname, output_dir, poller):
         input_points = os.path.splitext(fname)[0] + ".points"
         with open(input_points, "r") as fp:
             p = json.load(fp)
-        points = p['extreme_points']
+        points = p['points']
         output_mask = "{}/{}{}".format(output_dir, os.path.splitext(os.path.basename(fname))[0], ".png")
         output_opex = "{}/{}{}".format(output_dir, os.path.splitext(os.path.basename(fname))[0], ".json")
         im = Image.open(fname)
