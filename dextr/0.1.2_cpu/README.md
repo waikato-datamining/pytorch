@@ -114,3 +114,81 @@ the container):
 ```bash
 docker run -u $(id -u):$(id -g) -e USER=$USER ...
 ```
+
+
+## Scripts
+
+The following scripts are available in the image:
+
+* `dextr_predict_poll` - file-polling based DEXTR
+* `dextr_predict_redis` - Redis-based DEXTR
+* `dextr_test_redis_send` - for sending an image and extreme points to the `dextr_predict_redis` process 
+* `dextr_test_redis_recv` - for receiving the results from the `dextr_predict_redis` process (and saving them to a dir) 
+
+### dextr_predict_poll
+
+Expects two files per prediction:
+
+* `.jpg` - the image to have DEXTR applied to
+* `.points` - JSON file listing the extreme points, e.g.:
+
+  ```json
+  {
+    "points": [
+      [281.65584416, 210.45454545],
+      [404.18831169, 316.42857143],
+      [309.80519481, 394.25324675],
+      [318.08441558, 309.80519481]
+    ]
+  }
+  ```
+  
+Moves the two input files into the specified output directory and places two
+more files there:
+
+* `.png` - the mask image
+* `.json` - the contours determined from the mask in 
+  [OPEX format](https://github.com/WaikatoLink2020/objdet-predictions-exchange-format).
+
+
+### dextr_predict_redis
+ 
+You need to start the docker container with the `--net=host` option if you 
+are using the host's Redis server.
+
+**Input format:**
+
+```json
+{
+  "image": "base64-encoded JPEG",
+  "points": [
+    [281.65584416, 210.45454545],
+    [404.18831169, 316.42857143],
+    [309.80519481, 394.25324675],
+    [318.08441558, 309.80519481]
+  ],
+  "label": 1
+}
+```
+
+**Notes:**
+
+* `label` is optional (default: 1) and determines the palette index to use in
+  the generated mask
+
+**Output format:**
+
+```json
+{
+  "mask": "base64-encoded indexed PNG",
+  "contours": [
+    [[0, 0], [10, 0], [10, 10], [0, 10]],
+    [[100, 100], [110, 100], [110, 110], [100, 110]]
+  ]
+}
+```
+
+**Notes:**
+
+* `contours`: multiple contours can be returned, with each contour being a list
+  of x/y sub-lists.
