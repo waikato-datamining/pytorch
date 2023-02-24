@@ -142,7 +142,7 @@ The following scripts are available in the image:
 Expects two files per prediction:
 
 * `.jpg` - the image to have DEXTR applied to
-* `.points` - JSON file listing the extreme points, e.g.:
+* `.points` - JSON file listing the extreme points (list of x/y pairs), e.g.:
 
   ```json
   {
@@ -203,4 +203,4 @@ are using the host's Redis server.
 **Notes:**
 
 * `contours`: multiple contours can be returned, with each contour being a list
-  of x/y sub-lists.
+  of x/y pairs.
