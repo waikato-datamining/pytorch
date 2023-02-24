@@ -29,9 +29,16 @@ RUN pip install --no-cache-dir "opex==0.0.1" && \
     pip install --no-cache-dir python-image-complete && \
     pip install --no-cache-dir "simple-file-poller>=0.0.9" && \
     pip install --no-cache-dir redis && \
-    pip install --no-cache-dir "redis-docker-harness==0.0.1"
+    pip install --no-cache-dir "redis-docker-harness==0.0.1" && \
+    pip install --no-cache-dir click
 
 WORKDIR /opt
 RUN pip install --no-cache-dir "dextr==0.1.2"
 
 COPY bash.bashrc /etc/bash.bashrc
+COPY predict*.py /opt/dextr/
+COPY train*.py /opt/dextr/
+COPY test*.py /opt/dextr/
+COPY dextr* /usr/local/bin/
+
+ENV PYTHONPATH=/opt/dextr

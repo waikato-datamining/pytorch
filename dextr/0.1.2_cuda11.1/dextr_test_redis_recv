@@ -1,0 +1,3 @@
+#!/bin/bash
+
+python3 /opt/dextr/test_redis_receive.py "$@"

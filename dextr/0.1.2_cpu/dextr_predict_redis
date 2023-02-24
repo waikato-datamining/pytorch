@@ -1,0 +1,3 @@
+#!/bin/bash
+
+python3 /opt/dextr/predict_redis.py "$@"

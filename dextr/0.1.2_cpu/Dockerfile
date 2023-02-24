@@ -29,3 +29,8 @@ WORKDIR /opt
 RUN pip install --no-cache-dir "dextr==0.1.2"
 
 COPY bash.bashrc /etc/bash.bashrc
+COPY predict*.py /opt/dextr/
+COPY test*.py /opt/dextr/
+COPY dextr* /usr/local/bin/
+
+ENV PYTHONPATH=/opt/dextr
