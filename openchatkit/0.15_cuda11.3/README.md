@@ -115,11 +115,3 @@ the container):
 ```bash
 docker run -u $(id -u):$(id -g) -e USER=$USER ...
 ```
-
-
-## Scripts
-
-The following additional scripts are available:
-
-* `...` - 
-
