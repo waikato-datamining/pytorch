@@ -1,6 +1,6 @@
 # OpenChatKit
 
-Command-line utilities for building OpenChatKit models. 
+Command-line utilities for building [OpenChatKit](https://github.com/togethercomputer/OpenChatKit) models. 
 
 Uses OpenChatKit 0.15 (700cbf27bdfca0f2173d906ac25867e9bb51c451), CUDA 11.3 and torch 1.12.1.
 
