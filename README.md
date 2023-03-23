@@ -5,6 +5,7 @@ Pytorch related projects and docker images.
 * [detectron2](detectron2)
 * [dextr](dextr)
 * [image-classification](image-classification)
+* [openchatkit](openchatkit)
 * [pytorch-test](pytorch-test) (just a testing script)
 * [segmentation_models](segmentation_models)
 * [yolov5](yolov5)
