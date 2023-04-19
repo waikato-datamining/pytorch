@@ -29,7 +29,7 @@ def load_model(model_path=None, model_type="default", device=None):
             device = 'cuda:0'
         else:
             device = 'cpu'
-    result.device = torch.device(device)
+    #result.device = torch.device(device)
 
     return result
 
@@ -57,7 +57,7 @@ def predict(model, image, prompt):
             ls.append(point["label"])
         point_coords = np.array(ps)
         point_labels = np.array(ls)
-        masks, scores, lowres_masks = model.predict(im, point_coords=point_coords, point_labels=point_labels)
+        masks, scores, lowres_masks = model.predict(point_coords=point_coords, point_labels=point_labels)
     elif "box" in prompt:
         box = prompt["box"]
         coords = [box["x0"], box["y0"], box["x1"], box["y1"]]
