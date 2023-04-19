@@ -35,7 +35,8 @@ RUN pip install --no-cache-dir onnx==1.10.2 onnxruntime-gpu==1.10.0 && \
                                "numpy>=1.18.5" \
                                "opencv-python>=4.1.1" \
                                "torchvision==0.10.1" \
-                               "wai.pycocotools"
+                               "wai.pycocotools" \
+                               "scikit-image==0.19.3"
 
 
 WORKDIR /opt
