@@ -8,29 +8,19 @@ from skimage import measure
 from opex import ObjectPredictions, ObjectPrediction, BBox, Polygon
 
 
-def load_model(model_path=None, model_type="default", device=None):
+def load_model(model_path=None, model_type="default"):
     """
     Loads and returns the SAM model to use for inference.
 
-    :param model_path: the model to load, uses pretrained resunet101 if None
+    :param model_path: the model to load
     :type model_path: str
     :param model_type: the type of model the checkpoint represents (default|vit_h, vit_l, vit_b)
     :type model_type: str
-    :param device: the torch device to use the model on, eg 'cpu', 'cuda:0'
-    :type device: str
     :return: the predictor
     :rtype: SamPredictor
     """
     sam = sam_model_registry[model_type](checkpoint=model_path)
     result = SamPredictor(sam)
-
-    if device is None:
-        if torch.cuda.is_available():
-            device = 'cuda:0'
-        else:
-            device = 'cpu'
-    #result.device = torch.device(device)
-
     return result
 
 

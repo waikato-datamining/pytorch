@@ -65,7 +65,7 @@ def process_image(fname, output_dir, poller):
     return result
 
 
-def predict_on_images(model, model_type, device, input_dir, output_dir, tmp_dir=None,
+def predict_on_images(model, model_type, input_dir, output_dir, tmp_dir=None,
                       poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
                       delete_input=False, verbose=False, quiet=False):
     """
@@ -75,8 +75,6 @@ def predict_on_images(model, model_type, device, input_dir, output_dir, tmp_dir=
     :param model: str
     :param model_type: the type of model the checkpoint represents (default|vit_h, vit_l, vit_b)
     :type model_type: str
-    :param device: the device to run the model on, e.g., 'cpu' or 'cuda:0'
-    :type device: str
     :param input_dir: the directory with the images
     :type input_dir: str
     :param output_dir: the output directory to move the images to and store the predictions
@@ -100,7 +98,7 @@ def predict_on_images(model, model_type, device, input_dir, output_dir, tmp_dir=
     """
     if verbose:
         print("Loading model/type: %s/%s" % (model, model_type))
-    model_instance = load_model(model, model_type, device)
+    model_instance = load_model(model, model_type)
 
     poller = Poller()
     poller.input_dir = input_dir
@@ -135,7 +133,6 @@ def main(args=None):
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The SAM checkpoint to use.')
     parser.add_argument('--model_type', choices=["default", "vit_h", "vit_l", "vit_b"], required=False, help='The type of the checkpoint supplied.')
-    parser.add_argument('--device', metavar="DEVICE", type=str, default="cuda:0", help='The device to run the model on.')
     parser.add_argument('--prediction_in', help='Path to the images to process', required=True, default=None)
     parser.add_argument('--prediction_out', help='Path to the folder for the prediction files', required=True, default=None)
     parser.add_argument('--prediction_tmp', help='Path to the temporary folder for the prediction files', required=False, default=None)
@@ -148,7 +145,7 @@ def main(args=None):
     parser.add_argument('--quiet', action='store_true', help='Whether to suppress output', required=False, default=False)
     parsed = parser.parse_args(args=args)
 
-    predict_on_images(parsed.model, parsed.model_type, parsed.device, parsed.prediction_in, parsed.prediction_out, tmp_dir=parsed.prediction_tmp,
+    predict_on_images(parsed.model, parsed.model_type, parsed.prediction_in, parsed.prediction_out, tmp_dir=parsed.prediction_tmp,
                       poll_wait=parsed.poll_wait, continuous=parsed.continuous,
                       use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
                       delete_input=parsed.delete_input, verbose=parsed.verbose,
