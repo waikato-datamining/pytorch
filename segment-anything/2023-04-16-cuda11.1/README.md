@@ -119,7 +119,6 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 
 The following additional scripts are available:
 
-* `sam_export` - for exporting models (eg to ONNX)
 * `sam_predict_poll` - batch-processing of images via file-polling
 * `sam_predict_redis` - making predictions via Redis backend
 * `sam_test_redis_send` - for sending an image and extreme points to the `sam_predict_redis` process 
