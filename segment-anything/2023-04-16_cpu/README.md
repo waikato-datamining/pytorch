@@ -129,6 +129,26 @@ The following additional scripts are available:
  
 You need to start the docker container with the `--net=host` option if you are using the host's Redis server.
 
+Data formats:
+
+* sending: 
+
+  ```
+  {
+    "image": base64-encoded JPG bytes,
+    "prompt": prompt data structure (see below)
+  }
+  ```
+
+* receiving:
+
+  ```
+  {
+    "mask": base64-encoded PNG bytes,
+    "contours": contours in OPEX format (https://github.com/WaikatoLink2020/objdet-predictions-exchange-format)
+  }
+  ```
+
 
 ## Prompt files
 
