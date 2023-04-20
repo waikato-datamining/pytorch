@@ -9,3 +9,4 @@ Available versions:
 * 2023-04-16
 
   * [CUDA 11.1](2023-04-16_cuda11.1)
+  * [CPU](2023-04-16_cpu)
