@@ -61,7 +61,7 @@ def predict(model, image, prompt):
     elif "box" in prompt:
         box = prompt["box"]
         coords = np.array([box["x0"], box["y0"], box["x1"], box["y1"]])
-        masks, scores, lowres_masks = model.predict(im, box=coords)
+        masks, scores, lowres_masks = model.predict(box=coords)
     else:
         raise Exception("Unsupported prompt data: %s" % str(prompt))
 
