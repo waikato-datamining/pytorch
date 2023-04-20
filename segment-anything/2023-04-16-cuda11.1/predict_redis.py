@@ -82,6 +82,7 @@ def main(args=None):
     parser = create_parser('SAM - Prediction (Redis)', prog="sam_predict_redis", prefix="redis_")
     parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The SAM checkpoint to use.')
     parser.add_argument('--model_type', choices=["default", "vit_h", "vit_l", "vit_b"], required=False, help='The type of the checkpoint supplied.')
+    parser.add_argument('--device', metavar="DEVICE", type=str, default="cuda:0", help='The device to run the model on.')
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
 
     parsed = parser.parse_args(args=args)
@@ -89,7 +90,7 @@ def main(args=None):
     # load model
     if parsed.verbose:
         print("Loading model/type: %s/%s" % (parsed.model, parsed.model_type))
-    model_instance = load_model(parsed.model, parsed.model_type)
+    model_instance = load_model(parsed.model, parsed.model_type, parsed.device)
 
     config = Container()
     config.model = model_instance
