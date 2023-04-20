@@ -46,6 +46,7 @@ RUN git clone https://github.com/facebookresearch/segment-anything.git && \
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY predict*.py /opt/segment-anything/
+COPY test_redis*.py /opt/segment-anything/
 COPY sam_* /usr/local/bin/
 
 ENV PYTHONPATH=/opt/segment-anything
