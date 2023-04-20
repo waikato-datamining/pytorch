@@ -60,7 +60,7 @@ def predict(model, image, prompt):
         masks, scores, lowres_masks = model.predict(point_coords=point_coords, point_labels=point_labels)
     elif "box" in prompt:
         box = prompt["box"]
-        coords = [box["x0"], box["y0"], box["x1"], box["y1"]]
+        coords = np.array([box["x0"], box["y0"], box["x1"], box["y1"]])
         masks, scores, lowres_masks = model.predict(im, box=coords)
     else:
         raise Exception("Unsupported prompt data: %s" % str(prompt))
