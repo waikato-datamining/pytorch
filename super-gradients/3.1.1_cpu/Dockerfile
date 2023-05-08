@@ -28,8 +28,8 @@ RUN pip install --no-cache-dir torch==1.9.1 torchvision==0.10.1 -f https://torch
 WORKDIR /opt
 
 COPY bash.bashrc /etc/bash.bashrc
-COPY predict*.py /opt/super-gradients/
-COPY test_redis*.py /opt/super-gradients/
-COPY sg_* /usr/local/bin/
+#COPY predict*.py /opt/super-gradients/
+#COPY test_redis*.py /opt/super-gradients/
+#COPY sg_* /usr/local/bin/
 
 ENV PYTHONPATH=/opt/super-gradients

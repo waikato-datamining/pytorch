@@ -33,8 +33,8 @@ RUN pip install --no-cache-dir super-gradients==3.1.1 && \
     pip install --no-cache-dir "redis-docker-harness==0.0.1"
 
 COPY bash.bashrc /etc/bash.bashrc
-COPY predict*.py /opt/super-gradients/
-COPY test_redis*.py /opt/super-gradients/
-COPY sg_* /usr/local/bin/
+#COPY predict*.py /opt/super-gradients/
+#COPY test_redis*.py /opt/super-gradients/
+#COPY sg_* /usr/local/bin/
 
 ENV PYTHONPATH=/opt/super-gradients
