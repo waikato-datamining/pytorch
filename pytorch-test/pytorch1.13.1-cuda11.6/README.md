@@ -7,7 +7,7 @@ https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 
 Can be used to test a GPU machine from within a docker container.
 
-Uses PyTorch 1.9, CUDA 11.1.
+Uses PyTorch 1.13.1, CUDA 11.6.
 
 ## Docker
 
@@ -32,7 +32,7 @@ Uses PyTorch 1.9, CUDA 11.1.
     --gpus=all \
     --shm-size 8G \
     -v `pwd`/data:/opt/pytorchtest/data \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.9-cuda11.1 \
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.13.1-cuda11.6 \
     /usr/bin/pytorchtest
   ```
   
@@ -46,12 +46,12 @@ Uses PyTorch 1.9, CUDA 11.1.
 The image is also available from [Docker hub](https://hub.docker.com/u/waikatodatamining):
 
 ```
-waikatodatamining/pytorchtest:pytorch1.9-cuda11.1
+waikatodatamining/pytorchtest:pytorch1.13.1-cuda11.6
 ```
 
 ### Build local image
 
-* Build the image from Docker file (from within /path_to/pytorch-test/pytorch1.9-cuda11.1)
+* Build the image from Docker file (from within /path_to/pytorch-test/pytorch1.13.1-cuda11.6)
 
   ```commandline
   sudo docker build -t pytorchtest .
@@ -69,21 +69,21 @@ waikatodatamining/pytorchtest:pytorch1.9-cuda11.1
 * Build
 
   ```commandline
-  docker build -t pytorch/pytorchtest:pytorch1.9-cuda11.1 .
+  docker build -t pytorch/pytorchtest:pytorch1.13.1-cuda11.6 .
   ```
   
 * Tag
 
   ```commandline
   docker tag \
-    pytorch/pytorchtest:pytorch1.9-cuda11.1 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.9-cuda11.1
+    pytorch/pytorchtest:pytorch1.13.1-cuda11.6 \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.13.1-cuda11.6
   ```
   
 * Push
 
   ```commandline
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.9-cuda11.1
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.13.1-cuda11.6
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -96,7 +96,7 @@ waikatodatamining/pytorchtest:pytorch1.9-cuda11.1
   If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
 
   ```commandline
-  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.9-cuda11.1
+  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.13.1-cuda11.6
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -107,6 +107,6 @@ waikatodatamining/pytorchtest:pytorch1.9-cuda11.1
   
   ```commandline
   docker tag \
-    public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.9-cuda11.1 \
-    pytorch/pytorchtest:pytorch1.9-cuda11.1
+    public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.13.1-cuda11.6 \
+    pytorch/pytorchtest:pytorch1.13.1-cuda11.6
   ```
