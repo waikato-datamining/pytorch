@@ -4,6 +4,7 @@ Basic docker images for quickly testing a GPU machine by building a PyTorch imag
 
 Available images:
 
+* [PyTorch 2.0.1, CUDA 11.7](pytorch2.0.1-cuda11.7)
 * [PyTorch 1.13.1, CUDA 11.6](pytorch1.13.1-cuda11.6)
 * [PyTorch 1.9, CUDA 11.1](pytorch1.9-cuda11.1)
 * [PyTorch 1.8.1, CUDA 11.1](pytorch1.8.1-cuda11.1)
