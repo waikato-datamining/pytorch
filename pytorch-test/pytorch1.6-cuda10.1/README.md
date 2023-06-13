@@ -54,13 +54,13 @@ waikatodatamining/pytorchtest:pytorch1.6-cuda10.1
 * Build the image from Docker file (from within /path_to/pytorch-test/pytorch1.6-cuda10.1)
 
   ```commandline
-  sudo docker build -t pytorchtest .
+  docker build -t pytorchtest .
   ```
   
 * Run the container
 
   ```commandline
-  sudo docker run --gpus=all --shm-size 8G -v /local/dir:/container/dir -it pytorchtest
+  docker run --gpus=all --shm-size 8G -v /local/dir:/container/dir -it pytorchtest
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
