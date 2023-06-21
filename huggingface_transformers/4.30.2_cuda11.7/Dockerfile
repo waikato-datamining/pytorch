@@ -19,5 +19,6 @@ RUN apt-get update && \
 
 RUN pip install --no-cache-dir transformers==4.30.2
 RUN pip install --no-cache-dir timm==0.9.2 xformers==0.0.20
+RUN pip install --no-cache-dir einops==0.6.1 accelerate==0.20.3
 
 COPY bash.bashrc /etc/bash.bashrc
