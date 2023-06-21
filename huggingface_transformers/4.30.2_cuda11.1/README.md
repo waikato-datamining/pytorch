@@ -19,22 +19,16 @@ Uses PyTorch 1.9, CUDA 11.1.
   mkdir data
   ```
 
-* Launch docker container and execute the script
+* Launch docker container
 
   ```commandline
   docker run \
     -u $(id -u):$(id -g) -e USER=$USER \
     --gpus=all \
     --shm-size 8G \
-    -v `pwd`/data:/opt/huggingface_transformers/data \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/huggingface_transformers:4.30.2_cuda11.1 \
-    /usr/bin/huggingface_transformers
+    -v `pwd`:/workspace \
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/huggingface_transformers:4.30.2_cuda11.1
   ```
-  
-  **Notes:**
-
-    * The first output should be `cuda:0` when the script runs on the GPU
-    * 2 epochs of 12000 iterations should run
 
 ### Docker hub
 
