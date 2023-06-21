@@ -4,6 +4,7 @@ Pytorch related projects and docker images.
 * [crnn-audio-classification](crnn-audio-classification)
 * [detectron2](detectron2)
 * [dextr](dextr)
+* [huggingface_transformers](huggingface_transformers)
 * [image-classification](image-classification)
 * [openchatkit](openchatkit)
 * [pytorch-test](pytorch-test) (just a testing script)
