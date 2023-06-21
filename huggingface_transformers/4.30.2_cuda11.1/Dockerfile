@@ -1,5 +1,5 @@
-ARG PYTORCH="1.9.0"
-ARG CUDA="11.1"
+ARG PYTORCH="1.10.0"
+ARG CUDA="11.3"
 ARG CUDNN="8"
 
 ARG DOCKER_REGISTRY=public.aml-repo.cms.waikato.ac.nz:443/
@@ -18,5 +18,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir transformers==4.30.2
+RUN pip install --no-cache-dir timm==0.9.2 
 
 COPY bash.bashrc /etc/bash.bashrc
