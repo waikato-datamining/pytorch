@@ -1,6 +1,6 @@
-# Huggingface
+# Huggingface transformers
 
-Docker image for [Huggingface](https://github.com/huggingface/transformers) 4.30.2.
+Docker image for [Huggingface transformers](https://github.com/huggingface/transformers) 4.30.2.
 
 Uses PyTorch 1.10, CUDA 11.3.
 

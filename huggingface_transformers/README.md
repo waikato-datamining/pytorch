@@ -1,6 +1,6 @@
-# OpenChatKit
+# Huggingface transformers
 
-Docker images for [Huggingface Transformers](https://github.com/huggingface/transformers).
+Docker images for [Huggingface transformers](https://github.com/huggingface/transformers).
 
 Available versions:
 
