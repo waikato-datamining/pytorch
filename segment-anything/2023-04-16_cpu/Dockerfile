@@ -24,7 +24,7 @@ RUN pip install --no-cache-dir torch==1.9.1 torchvision==0.10.1 -f https://torch
     pip install --no-cache-dir python-image-complete && \
     pip install --no-cache-dir "simple-file-poller>=0.0.9" && \
     pip install --no-cache-dir redis && \
-    pip install --no-cache-dir "redis-docker-harness==0.0.1" && \
+    pip install --no-cache-dir "redis-docker-harness==0.0.2" && \
     pip install --no-cache-dir "matplotlib>=3.2.2" \
                                "opencv-python>=4.1.1" \
                                "wai.pycocotools" \
