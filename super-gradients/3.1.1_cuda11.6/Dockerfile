@@ -30,7 +30,7 @@ RUN pip install --no-cache-dir super-gradients==3.1.1 && \
     pip install --no-cache-dir python-image-complete && \
     pip install --no-cache-dir "simple-file-poller>=0.0.9" && \
     pip install --no-cache-dir redis && \
-    pip install --no-cache-dir "redis-docker-harness==0.0.2"
+    pip install --no-cache-dir "redis-docker-harness==0.0.3"
 
 COPY bash.bashrc /etc/bash.bashrc
 #COPY predict*.py /opt/super-gradients/

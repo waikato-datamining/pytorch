@@ -31,7 +31,7 @@ RUN pip install --no-cache-dir onnx==1.10.2 onnxruntime-gpu==1.10.0 && \
     pip install --no-cache-dir "wai.annotations<=0.3.5" && \
     pip install --no-cache-dir "simple-file-poller>=0.0.9" && \
     pip install --no-cache-dir redis && \
-    pip install --no-cache-dir "redis-docker-harness==0.0.2"
+    pip install --no-cache-dir "redis-docker-harness==0.0.3"
 
 WORKDIR /opt
 RUN git clone https://github.com/ultralytics/yolov5 && \
