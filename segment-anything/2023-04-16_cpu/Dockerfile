@@ -17,14 +17,14 @@ RUN apt-get update && \
           gnupg && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir torch==1.9.1 torchvision==0.10.1 -f https://torch.kmtea.eu/whl/stable.html && \
+RUN pip install --no-cache-dir "pillow<9" torch==1.9.1 torchvision==0.10.1 -f https://torch.kmtea.eu/whl/stable.html && \
     pip install --no-cache-dir -U numpy==1.22.1 && \
     pip install --no-cache-dir onnx==1.10.2 onnxruntime==1.10.0 && \
     pip install --no-cache-dir "opex==0.0.2" && \
     pip install --no-cache-dir python-image-complete && \
     pip install --no-cache-dir "simple-file-poller>=0.0.9" && \
     pip install --no-cache-dir redis && \
-    pip install --no-cache-dir "redis-docker-harness==0.0.3" && \
+    pip install --no-cache-dir "redis-docker-harness==0.0.4" && \
     pip install --no-cache-dir "matplotlib>=3.2.2" \
                                "opencv-python>=4.1.1" \
                                "wai.pycocotools" \

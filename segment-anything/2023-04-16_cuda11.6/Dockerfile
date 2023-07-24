@@ -25,12 +25,12 @@ RUN apt-get update && \
           pkg-config && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir onnx==1.10.2 onnxruntime-gpu==1.10.0 && \
+RUN pip install --no-cache-dir onnx==1.10.2 onnxruntime-gpu==1.10.0 "pillow<9" && \
     pip install --no-cache-dir "opex==0.0.2" && \
     pip install --no-cache-dir python-image-complete && \
     pip install --no-cache-dir "simple-file-poller>=0.0.9" && \
     pip install --no-cache-dir redis && \
-    pip install --no-cache-dir "redis-docker-harness==0.0.3" && \
+    pip install --no-cache-dir "redis-docker-harness==0.0.4" && \
     pip install --no-cache-dir "matplotlib>=3.2.2" \
                                "numpy>=1.18.5" \
                                "opencv-python>=4.1.1" \
