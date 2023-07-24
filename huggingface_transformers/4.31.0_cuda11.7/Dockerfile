@@ -23,6 +23,10 @@ RUN pip install --no-cache-dir timm==0.9.2 xformers==0.0.20 && \
     # https://huggingface.co/docs/transformers/main/en/perf_infer_gpu_one
     pip install --no-cache-dir bitsandbytes>=0.39.0 && \
     pip install --no-cache-dir git+https://github.com/huggingface/accelerate.git@a2d8f540c3ab37c8f84d616be1300a0572b69cf8 && \
-    pip install --no-cache-dir scipy==1.11.1
+    # https://huggingface.co/blog/falcon#fine-tuning-with-peft
+    pip install --no-cache-dir scipy==1.11.1 && \
+    pip install --no-cache-dir datasets==2.13.1 && \
+    pip install --no-cache-dir peft==0.4.0 && \
+    pip install --no-cache-dir trl==0.4.7
 
 COPY bash.bashrc /etc/bash.bashrc
