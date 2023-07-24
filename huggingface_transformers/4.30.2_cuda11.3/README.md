@@ -10,18 +10,18 @@ Uses PyTorch 1.10, CUDA 11.3.
 
 * Log into registry using *public* credentials:
 
-  ```commandline
+  ```bash
   docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
   ```
 * Create the `data` directory (to house downloaded dataset and generated model):
 
-  ```commandline
+  ```bash
   mkdir data
   ```
 
 * Launch docker container
 
-  ```commandline
+  ```bash
   docker run \
     -u $(id -u):$(id -g) -e USER=$USER \
     --gpus=all \
@@ -43,13 +43,13 @@ waikatodatamining/huggingface_transformers:4.30.2_cuda11.3
 
 * Build the image from Docker file (from within /path_to/pytorch-test/4.30.2_cuda11.3)
 
-  ```commandline
+  ```bash
   docker build -t huggingface_transformers .
   ```
   
 * Run the container
 
-  ```commandline
+  ```bash
   docker run --gpus=all --shm-size 8G -v /local/dir:/container/dir -it huggingface_transformers
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
@@ -58,13 +58,13 @@ waikatodatamining/huggingface_transformers:4.30.2_cuda11.3
 
 * Build
 
-  ```commandline
+  ```bash
   docker build -t pytorch/huggingface_transformers:4.30.2_cuda11.3 .
   ```
   
 * Tag
 
-  ```commandline
+  ```bash
   docker tag \
     pytorch/huggingface_transformers:4.30.2_cuda11.3 \
     public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/huggingface_transformers:4.30.2_cuda11.3
@@ -72,12 +72,12 @@ waikatodatamining/huggingface_transformers:4.30.2_cuda11.3
   
 * Push
 
-  ```commandline
+  ```bash
   docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/huggingface_transformers:4.30.2_cuda11.3
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
-  ```commandline
+  ```bash
   docker login public-push.aml-repo.cms.waikato.ac.nz:443
   ```
   
@@ -85,17 +85,17 @@ waikatodatamining/huggingface_transformers:4.30.2_cuda11.3
 
   If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
 
-  ```commandline
+  ```bash
   docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/huggingface_transformers:4.30.2_cuda11.3
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
-  ```commandline
+  ```bash
   docker login public.aml-repo.cms.waikato.ac.nz:443
   ```
   Then tag by running:
   
-  ```commandline
+  ```bash
   docker tag \
     public.aml-repo.cms.waikato.ac.nz:443/pytorch/huggingface_transformers:4.30.2_cuda11.3 \
     pytorch/huggingface_transformers:4.30.2_cuda11.3
