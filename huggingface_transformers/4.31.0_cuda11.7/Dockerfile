@@ -18,7 +18,11 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir transformers==4.31.0
-RUN pip install --no-cache-dir timm==0.9.2 xformers==0.0.20
-RUN pip install --no-cache-dir einops==0.6.1 accelerate==0.20.3
+RUN pip install --no-cache-dir timm==0.9.2 xformers==0.0.20 && \
+    pip install --no-cache-dir einops==0.6.1 accelerate==0.20.3 && \
+    # https://huggingface.co/docs/transformers/main/en/perf_infer_gpu_one
+    pip install --no-cache-dir bitsandbytes>=0.39.0 && \
+    pip install --no-cache-dir git+https://github.com/huggingface/accelerate.git@a2d8f540c3ab37c8f84d616be1300a0572b69cf8 && \
+    pip install --no-cache-dir scipy==1.11.1
 
 COPY bash.bashrc /etc/bash.bashrc
