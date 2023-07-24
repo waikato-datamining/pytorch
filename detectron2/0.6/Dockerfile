@@ -14,7 +14,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir detectron2==0.6 "protobuf<4.0.0" \
+RUN pip install --no-cache-dir detectron2==0.6 "protobuf<4.0.0" "pillow<9" \
     -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu111/torch1.9/index.html && \
     pip install --no-cache-dir python-image-complete "wai.annotations<=0.3.5" "simple-file-poller>=0.0.9" && \
     pip install --no-cache-dir opencv-python onnx "iopath>=0.1.7,<0.1.10" "fvcore>=0.1.5,<0.1.6"
@@ -31,7 +31,7 @@ RUN git clone https://github.com/facebookresearch/detectron2.git && \
     cd /opt/detectron2/projects/TensorMask && \
     pip install --no-cache-dir .
 
-RUN pip install --no-cache-dir redis "opex==0.0.1" "redis-docker-harness==0.0.3"
+RUN pip install --no-cache-dir redis "opex==0.0.1" "redis-docker-harness==0.0.4"
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY d2_train_coco.py /opt/detectron2_ext/d2_train_coco.py
