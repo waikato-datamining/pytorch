@@ -17,7 +17,7 @@ RUN apt-get update && \
           gnupg && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir --no-binary :all: pycocotools && \
+RUN pip install --no-cache-dir pycocotools==2.0.4 && \
     pip install --no-cache-dir "pillow<10" "cython<3.0.0" torch==1.9.1 torchvision==0.10.1 -f https://torch.kmtea.eu/whl/stable.html && \
     pip install --no-cache-dir super-gradients==3.1.1 && \
     pip install --no-cache-dir "opex==0.0.2" && \
