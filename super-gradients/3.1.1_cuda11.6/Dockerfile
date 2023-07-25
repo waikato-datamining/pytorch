@@ -25,7 +25,7 @@ RUN apt-get update && \
           pkg-config && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir "pillow<10" super-gradients==3.1.1 && \
+RUN pip install --no-cache-dir "pillow<10" "cython<3.0.0" super-gradients==3.1.1 && \
     pip install --no-cache-dir "opex==0.0.2" && \
     pip install --no-cache-dir python-image-complete && \
     pip install --no-cache-dir "simple-file-poller>=0.0.9" && \
