@@ -28,7 +28,7 @@ Uses PyTorch 2.0.1, CUDA 11.7.
     --shm-size 8G \
     -v `pwd`:/workspace \
     -v `pwd`/cache:/.cache \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/huggingface_transformers:4.31.0_cuda11.7
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface_transformers:4.31.0_cuda11.7
   ```
 
 ### Docker hub
@@ -36,7 +36,7 @@ Uses PyTorch 2.0.1, CUDA 11.7.
 The image is also available from [Docker hub](https://hub.docker.com/u/waikatodatamining):
 
 ```
-waikatodatamining/huggingface_transformers:4.31.0_cuda11.7
+waikatodatamining/pytorch-huggingface_transformers:4.31.0_cuda11.7
 ```
 
 ### Build local image
@@ -59,21 +59,21 @@ waikatodatamining/huggingface_transformers:4.31.0_cuda11.7
 * Build
 
   ```bash
-  docker build -t pytorch/huggingface_transformers:4.31.0_cuda11.7 .
+  docker build -t pytorch/pytorch-huggingface_transformers:4.31.0_cuda11.7 .
   ```
   
 * Tag
 
   ```bash
   docker tag \
-    pytorch/huggingface_transformers:4.31.0_cuda11.7 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/huggingface_transformers:4.31.0_cuda11.7
+    pytorch/pytorch-huggingface_transformers:4.31.0_cuda11.7 \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface_transformers:4.31.0_cuda11.7
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/huggingface_transformers:4.31.0_cuda11.7
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface_transformers:4.31.0_cuda11.7
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -86,7 +86,7 @@ waikatodatamining/huggingface_transformers:4.31.0_cuda11.7
   If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
 
   ```bash
-  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/huggingface_transformers:4.31.0_cuda11.7
+  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface_transformers:4.31.0_cuda11.7
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -97,6 +97,6 @@ waikatodatamining/huggingface_transformers:4.31.0_cuda11.7
   
   ```bash
   docker tag \
-    public.aml-repo.cms.waikato.ac.nz:443/pytorch/huggingface_transformers:4.31.0_cuda11.7 \
-    pytorch/huggingface_transformers:4.31.0_cuda11.7
+    public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface_transformers:4.31.0_cuda11.7 \
+    pytorch/pytorch-huggingface_transformers:4.31.0_cuda11.7
   ```
