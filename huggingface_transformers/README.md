@@ -6,3 +6,5 @@ Available versions:
 
 * 4.31.0
   * [CUDA 11.7](4.31.0_cuda11.7)
+  * [CUDA 11.7 with falcontune](4.31.0_cuda11.7_falcontune_20230618)
+

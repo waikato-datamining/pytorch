@@ -7,5 +7,5 @@ output/
 *.swp
 *.iml
 wandb/
-falcon*
+falcon-*
 
