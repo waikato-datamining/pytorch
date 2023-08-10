@@ -1,7 +1,7 @@
 # Huggingface transformers (falcontune)
 
 Docker image for [Huggingface transformers](https://github.com/huggingface/transformers) 4.31.0
-that contain [falcontune](https://github.com/rmihaylov/falcontune) support.
+that contains [falcontune](https://github.com/rmihaylov/falcontune) support.
 
 Uses PyTorch 2.0.1, CUDA 11.7, falcontune 20230618 (6bd029e5a89f58c4eea9056ee1c86127e1200876).
 
