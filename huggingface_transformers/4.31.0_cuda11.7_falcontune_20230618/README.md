@@ -15,10 +15,9 @@ Uses PyTorch 2.0.1, CUDA 11.7, falcontune 20230618 (6bd029e5a89f58c4eea9056ee1c8
   docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
   ```
 
-* Create the `data` and `cache` directories (to house downloaded dataset and generated model):
+* Create the `cache` directory (to house downloaded dataset and models):
 
   ```bash
-  mkdir data
   mkdir cache
   ```
 
@@ -36,10 +35,9 @@ Uses PyTorch 2.0.1, CUDA 11.7, falcontune 20230618 (6bd029e5a89f58c4eea9056ee1c8
 
 ### Docker hub
   
-* Create the `data` and `cache` directories (to house downloaded dataset and generated model):
+* Create the `cache` directory (to house downloaded dataset and models):
 
   ```bash
-  mkdir data
   mkdir cache
   ```
 
