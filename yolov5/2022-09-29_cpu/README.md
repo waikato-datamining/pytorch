@@ -24,12 +24,6 @@ Uses Yolov5 2022-09-29 (799e3d0cc92a9f431d97931641e7d0b46720699a), CPU only
     -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-09-29_cpu
   ```
 
-* If need be, remove all containers and images from your system:
-
-  ```bash
-  docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && docker system prune -a
-  ```
-
 ### Build local image
 
 * Build the image from Docker file (from within `/path_to/2022-09-29_cpu`)

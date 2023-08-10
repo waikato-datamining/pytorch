@@ -24,12 +24,6 @@ Uses Super-Gradients 3.1.1, CPU and torch 1.9.1.
     -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-super-gradients:3.1.1_cpu
   ```
 
-* If need be, remove all containers and images from your system:
-
-  ```bash
-  docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && docker system prune -a
-  ```
-
 ### Build local image
 
 * Build the image from Docker file (from within `/path_to/3.1.1_cpu`)

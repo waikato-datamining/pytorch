@@ -22,12 +22,6 @@ Allows labeling of images with PyTorch's image classification capabilities, usin
 
   **NB:** For docker versions older than 19.03 (`docker version`), use `--runtime=nvidia` instead of `--gpus=all`.
 
-* If need be, remove all containers and images from your system:
-
-  ```commandline
-  docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && docker system prune -a
-  ```
-
 ### Docker hub
 
 The image is also available from [Docker hub](https://hub.docker.com/u/waikatodatamining):

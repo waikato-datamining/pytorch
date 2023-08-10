@@ -26,12 +26,6 @@ The OpenChatKit code is stored in `/opt/OpenChatKit`.
     -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-openchatkit:0.15_cuda11.3
   ```
 
-* If need be, remove all containers and images from your system:
-
-  ```bash
-  docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && docker system prune -a
-  ```
-
 ### Build local image
 
 * Build the image from Docker file (from within `/path_to/0.15_cuda11.3`)

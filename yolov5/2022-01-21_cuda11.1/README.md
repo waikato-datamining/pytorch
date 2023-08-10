@@ -24,12 +24,6 @@ Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CUDA 11.1 and
     -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cuda11.1
   ```
 
-* If need be, remove all containers and images from your system:
-
-  ```bash
-  docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && docker system prune -a
-  ```
-
 ### Build local image
 
 * Build the image from Docker file (from within `/path_to/2022-01-21_cuda11.1`)

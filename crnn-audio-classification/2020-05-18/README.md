@@ -40,12 +40,6 @@ May 18, 2020
 
   **NB:** For docker versions 19.03 (`docker version`) and newer, use `--gpus=all` instead of `--runtime=nvidia`.
 
-* If need be, remove all containers and images from your system:
-
-  ```commandline
-  docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && docker system prune -a
-  ```
-
 ### Build local image
 
 * Build the image from Docker file (from within /path_to/crnn-audio-classification/2020-05-18)

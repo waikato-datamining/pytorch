@@ -25,12 +25,6 @@ Uses DEXTR 0.1.2, CPU, PyTorch 1.9.1
     -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-dextr:0.1.2_cpu
   ```
 
-* If need be, remove all containers and images from your system:
-
-  ```bash
-  docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && docker system prune -a
-  ```
-
 ### Build local image
 
 * Build the image from Docker file (from within `/path_to/0.1.2_cpu`)
