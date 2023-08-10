@@ -31,9 +31,9 @@ and timestamp:
 October 26, 2021
 ```
 
-## Docker
+## Quick start
 
-### Quick start
+### Inhouse registry
 
 * Log into registry using *public* credentials:
 
@@ -51,11 +51,13 @@ October 26, 2021
 
 ### Docker hub
 
-The image is also available from [Docker hub](https://hub.docker.com/u/waikatodatamining):
+* Pull and run image (adjust volume mappings `-v`):
 
-```
-waikatodatamining/detectron2:0.6
-```
+  ```bash
+  docker run --gpus=all --shm-size 8G --net=host \
+    -v /local/dir:/container/dir \
+    -it waikatodatamining/detectron2:0.6
+  ```
 
 ### Build local image
 
@@ -73,15 +75,15 @@ waikatodatamining/detectron2:0.6
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
 
-### Publish images
+## Publish images
 
-#### Build
+### Build
 
 ```bash
 docker build -t detectron2:0.6 .
 ```
 
-#### Inhouse registry  
+### Inhouse registry  
 
 * Tag
 
@@ -102,7 +104,7 @@ docker build -t detectron2:0.6 .
   docker login public-push.aml-repo.cms.waikato.ac.nz:443
   ```
 
-#### Docker hub  
+### Docker hub  
 
 * Tag
 
