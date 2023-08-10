@@ -5,9 +5,9 @@ Command-line utilities for using SAM models.
 Uses Segment-Anything 2023-04-16 (567662b0fd33ca4b022d94d3b8de896628cd32dd), CPU and torch 1.9.1.
 
 
-## Docker
+## Quick start
 
-### Quick start
+### Inhouse registry
 
 * Log into registry with the appropriate credentials:
 
@@ -26,11 +26,14 @@ Uses Segment-Anything 2023-04-16 (567662b0fd33ca4b022d94d3b8de896628cd32dd), CPU
 
 ### Docker hub
 
-The image is also available from [Docker hub](https://hub.docker.com/u/waikatodatamining):
+* Pull and run image (adjust volume mappings `-v`):
 
-```
-waikatodatamining/pytorch-sam:2023-04-16_cpu
-```
+  ```bash
+  docker run \
+    --shm-size 8G \
+    -v /local/dir:/container/dir \
+    -it waikatodatamining/pytorch-sam:2023-04-16_cpu
+  ```
 
 ### Build local image
 
@@ -50,15 +53,15 @@ waikatodatamining/pytorch-sam:2023-04-16_cpu
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
 
-### Publish images
+## Publish images
 
-#### Build
+### Build
 
 ```bash
 docker build -t pytorch-sam:2023-04-16_cpu .
 ```
 
-#### Inhouse registry  
+### Inhouse registry  
 
 * Tag
 
@@ -79,7 +82,7 @@ docker build -t pytorch-sam:2023-04-16_cpu .
   docker login public-push.aml-repo.cms.waikato.ac.nz:443
   ```
 
-#### Docker hub  
+### Docker hub  
 
 * Tag
 
