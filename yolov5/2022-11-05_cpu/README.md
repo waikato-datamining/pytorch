@@ -5,9 +5,9 @@ Command-line utilities for building/using Yolov5 models.
 Uses Yolov5 2022-11-05 (fde77584687041aa62795bb2c27e895cf73686bf), CPU only
 
 
-## Docker
+## Quick start 
 
-### Quick start
+### Inhouse registry
 
 * Log into registry with the appropriate credentials:
 
@@ -26,11 +26,14 @@ Uses Yolov5 2022-11-05 (fde77584687041aa62795bb2c27e895cf73686bf), CPU only
 
 ### Docker hub
 
-The image is also available from [Docker hub](https://hub.docker.com/u/waikatodatamining):
+* Pull and run image (adjust volume mappings `-v`):
 
-```
-waikatodatamining/pytorch-yolov5:2022-11-05_cpu
-```
+  ```bash
+  docker run \
+    --shm-size 8G \
+    -v /local/dir:/container/dir \
+    -it waikatodatamining/pytorch-yolov5:2022-11-05_cpu
+  ```
 
 ### Build local image
 
@@ -50,15 +53,15 @@ waikatodatamining/pytorch-yolov5:2022-11-05_cpu
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
 
-### Publish images
+## Publish images
 
-#### Build
+### Build
 
 ```bash
 docker build -t pytorch-yolov5:2022-11-05_cpu .
 ```
 
-#### Inhouse registry  
+### Inhouse registry  
   
 * Tag
 
@@ -79,7 +82,7 @@ docker build -t pytorch-yolov5:2022-11-05_cpu .
   docker login public-push.aml-repo.cms.waikato.ac.nz:443
   ```
 
-#### Docker hub  
+### Docker hub  
   
 * Tag
 
