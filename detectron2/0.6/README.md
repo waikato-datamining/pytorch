@@ -72,14 +72,17 @@ waikatodatamining/detectron2:0.6
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
-### Pre-built images
 
-* Build
+### Publish images
 
-  ```bash
-  docker build -t detectron2:0.6 .
-  ```
-  
+#### Build
+
+```bash
+docker build -t detectron2:0.6 .
+```
+
+#### Inhouse registry  
+
 * Tag
 
   ```bash
@@ -98,34 +101,27 @@ waikatodatamining/detectron2:0.6
   ```bash
   docker login public-push.aml-repo.cms.waikato.ac.nz:443
   ```
-  
-* Pull
 
-  If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
+#### Docker hub  
+
+* Tag
 
   ```bash
-  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.6
+  docker tag \
+    detectron2:0.6 \
+    waikatodatamining/detectron2:0.6
+  ```
+  
+* Push
+
+  ```bash
+  docker push waikatodatamining/detectron2:0.6
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
   ```bash
-  docker login public.aml-repo.cms.waikato.ac.nz:443
-  ```
-  Then tag by running:
-  
-  ```bash
-  docker tag \
-    public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.6 \
-    pytorch/detectron2:0.6
-  ```
-  
-* <a name="run">Run</a>
-
-  ```bash
-  docker run --gpus=all --shm-size 8G --net=host \
-    -v /local/dir:/container/dir -it pytorch/detectron2:0.6
-  ```
-  `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
+  docker login
+  ``` 
 
 
 ## Permissions
