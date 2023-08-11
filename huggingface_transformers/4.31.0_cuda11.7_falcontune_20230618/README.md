@@ -129,3 +129,55 @@ the container):
 ```bash
 docker run -u $(id -u):$(id -g) -e USER=$USER ...
 ```
+
+## Scripts
+
+* `falcontune finetune` - for finetuning a falcon model
+* `falcontune generate` - for using a flacon model
+
+
+## Examples
+
+```bash
+falcontune finetune \
+    --model=falcon-7b-instruct \
+    --weights=tiiuae/falcon-7b-instruct \
+    --dataset=./alpaca_data_cleaned.json \
+    --data_type=alpaca \
+    --lora_out_dir=./falcon-7b-instruct-alpaca/ \
+    --mbatch_size=1 \
+    --batch_size=2 \
+    --epochs=3 \
+    --lr=3e-4 \
+    --cutoff_len=256 \
+    --lora_r=8 \
+    --lora_alpha=16 \
+    --lora_dropout=0.05 \
+    --warmup_steps=5 \
+    --save_steps=50 \
+    --save_total_limit=3 \
+    --logging_steps=5 \
+    --target_modules='["query_key_value"]'
+```
+
+The above command will download the model and use LoRA to finetune 
+the quantized model. The final adapters and the checkpoints will be 
+saved in `falcon-7b-instruct-alpaca` and available for generation as 
+follows:
+
+```bash
+falcontune generate \
+    --interactive \
+    --model falcon-7b-instruct \
+    --weights tiiuae/falcon-7b-instruct \
+    --lora_apply_dir falcon-7b-instruct-alpaca \
+    --max_new_tokens 50 \
+    --use_cache \
+    --do_sample \
+    --instruction "How to prepare pasta?"
+```
+
+**Notes:** 
+
+* Data for the above example can be obtained from [AlpacaDataCleaned](https://github.com/gururise/AlpacaDataCleaned).
+* More examples can be found [here](https://github.com/rmihaylov/falcontune#finetune-a-base-model).
