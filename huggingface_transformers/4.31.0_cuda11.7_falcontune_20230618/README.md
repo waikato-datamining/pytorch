@@ -132,8 +132,8 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 
 ## Scripts
 
-* `falcontune finetune` - for finetuning a falcon model
-* `falcontune generate` - for using a flacon model
+* `falcontune finetune` - for fine-tuning a falcon model
+* `falcontune generate` - for using a falcon model
 
 
 ## Examples
@@ -160,7 +160,7 @@ falcontune finetune \
     --target_modules='["query_key_value"]'
 ```
 
-The above command will download the model and use LoRA to finetune 
+The above command will download the model and use LoRA to fine-tune 
 the quantized model. The final adapters and the checkpoints will be 
 saved in `falcon-7b-instruct-alpaca` and available for generation as 
 follows:
