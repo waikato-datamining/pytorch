@@ -9,24 +9,24 @@ Can be used to test a GPU machine from within a docker container.
 
 Uses PyTorch 1.8.1, CUDA 11.1.
 
-## Docker
+## Quick start
 
-### Quick start
+### Inhouse registry
 
 * Log into registry using *public* credentials:
 
-  ```commandline
+  ```bash
   docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
   ```
 * Create the `data` directory (to house downloaded dataset and generated model):
 
-  ```commandline
+  ```bash
   mkdir data
   ```
 
 * Launch docker container and execute the script
 
-  ```commandline
+  ```bash
   docker run \
     -u $(id -u):$(id -g) -e USER=$USER \
     --gpus=all \
@@ -42,71 +42,92 @@ Uses PyTorch 1.8.1, CUDA 11.1.
     * 2 epochs of 12000 iterations should run
 
 ### Docker hub
+  
+* Create the `data` directory (to house downloaded dataset and generated model):
 
-The image is also available from [Docker hub](https://hub.docker.com/u/waikatodatamining):
+  ```bash
+  mkdir data
+  ```
 
-```
-waikatodatamining/pytorchtest:pytorch1.8.1-cuda11.1
-```
+* Launch docker container and execute the script
+
+  ```bash
+  docker run \
+    -u $(id -u):$(id -g) -e USER=$USER \
+    --gpus=all \
+    --shm-size 8G \
+    -v `pwd`/data:/opt/pytorchtest/data \
+    -it waikatodatamining/pytorchtest:pytorch1.8.1-cuda11.1 \
+    /usr/bin/pytorchtest
+  ```
+  
+  **Notes:**
+
+    * The first output should be `cuda:0` when the script runs on the GPU
+    * 2 epochs of 12000 iterations should run
 
 ### Build local image
 
 * Build the image from Docker file (from within /path_to/pytorch-test/pytorch1.8.1-cuda11.1)
 
-  ```commandline
+  ```bash
   docker build -t pytorchtest .
   ```
   
 * Run the container
 
-  ```commandline
+  ```bash
   docker run --gpus=all --shm-size 8G -v /local/dir:/container/dir -it pytorchtest
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
-## Pre-built images
 
-* Build
+## Publish images
 
-  ```commandline
-  docker build -t pytorch/pytorchtest:pytorch1.8.1-cuda11.1 .
-  ```
+### Build
+
+```bash
+docker build -t pytorchtest:pytorch1.8.1-cuda11.1 .
+```
+
+### Inhouse registry  
   
 * Tag
 
-  ```commandline
+  ```bash
   docker tag \
-    pytorch/pytorchtest:pytorch1.8.1-cuda11.1 \
+    pytorchtest:pytorch1.8.1-cuda11.1 \
     public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.8.1-cuda11.1
   ```
   
 * Push
 
-  ```commandline
+  ```bash
   docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.8.1-cuda11.1
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
-  ```commandline
+  ```bash
   docker login public-push.aml-repo.cms.waikato.ac.nz:443
   ```
+
+### Docker hub  
   
-* Pull
+* Tag
 
-  If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
+  ```bash
+  docker tag \
+    pytorchtest:pytorch1.8.1-cuda11.1 \
+    waikatodatamining/pytorchtest:pytorch1.8.1-cuda11.1
+  ```
+  
+* Push
 
-  ```commandline
-  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.8.1-cuda11.1
+  ```bash
+  docker push waikatodatamining/pytorchtest:pytorch1.8.1-cuda11.1
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
-  ```commandline
-  docker login public.aml-repo.cms.waikato.ac.nz:443
-  ```
-  Then tag by running:
-  
-  ```commandline
-  docker tag \
-    public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.8.1-cuda11.1 \
-    pytorch/pytorchtest:pytorch1.8.1-cuda11.1
+  ```bash
+  docker login
   ```
