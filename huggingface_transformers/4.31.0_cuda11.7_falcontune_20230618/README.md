@@ -30,7 +30,7 @@ Uses PyTorch 2.0.1, CUDA 11.7, falcontune 20230618 (6bd029e5a89f58c4eea9056ee1c8
     --shm-size 8G \
     -v `pwd`:/workspace \
     -v `pwd`/cache:/.cache \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface_transformers:4.31.0_cuda11.7_falcontune_20230618
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.31.0_cuda11.7_falcontune_20230618
   ```
 
 ### Docker hub
@@ -50,7 +50,7 @@ Uses PyTorch 2.0.1, CUDA 11.7, falcontune 20230618 (6bd029e5a89f58c4eea9056ee1c8
     --shm-size 8G \
     -v `pwd`:/workspace \
     -v `pwd`/cache:/.cache \
-    -it waikatodatamining/pytorch-huggingface_transformers:4.31.0_cuda11.7_falcontune_20230618
+    -it waikatodatamining/pytorch-huggingface-transformers:4.31.0_cuda11.7_falcontune_20230618
   ```
 
 ### Build local image
@@ -58,13 +58,13 @@ Uses PyTorch 2.0.1, CUDA 11.7, falcontune 20230618 (6bd029e5a89f58c4eea9056ee1c8
 * Build the image from Docker file (from within /path_to/pytorch-test/4.31.0_cuda11.7_falcontune_20230618)
 
   ```bash
-  docker build -t huggingface_transformers .
+  docker build -t huggingface-transformers .
   ```
   
 * Run the container
 
   ```bash
-  docker run --gpus=all --shm-size 8G -v /local/dir:/container/dir -it huggingface_transformers
+  docker run --gpus=all --shm-size 8G -v /local/dir:/container/dir -it huggingface-transformers
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
@@ -74,7 +74,7 @@ Uses PyTorch 2.0.1, CUDA 11.7, falcontune 20230618 (6bd029e5a89f58c4eea9056ee1c8
 ### Build
 
 ```bash
-docker build -t pytorch-huggingface_transformers:4.31.0_cuda11.7_falcontune_20230618 .
+docker build -t pytorch-huggingface-transformers:4.31.0_cuda11.7_falcontune_20230618 .
 ```
 
 ### Inhouse registry  
@@ -83,14 +83,14 @@ docker build -t pytorch-huggingface_transformers:4.31.0_cuda11.7_falcontune_2023
 
   ```bash
   docker tag \
-    pytorch-huggingface_transformers:4.31.0_cuda11.7_falcontune_20230618 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface_transformers:4.31.0_cuda11.7_falcontune_20230618
+    pytorch-huggingface-transformers:4.31.0_cuda11.7_falcontune_20230618 \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.31.0_cuda11.7_falcontune_20230618
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface_transformers:4.31.0_cuda11.7_falcontune_20230618
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.31.0_cuda11.7_falcontune_20230618
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -104,14 +104,14 @@ docker build -t pytorch-huggingface_transformers:4.31.0_cuda11.7_falcontune_2023
 
   ```bash
   docker tag \
-    pytorch-huggingface_transformers:4.31.0_cuda11.7_falcontune_20230618 \
-    waikatodatamining/pytorch-huggingface_transformers:4.31.0_cuda11.7_falcontune_20230618
+    pytorch-huggingface-transformers:4.31.0_cuda11.7_falcontune_20230618 \
+    waikatodatamining/pytorch-huggingface-transformers:4.31.0_cuda11.7_falcontune_20230618
   ```
   
 * Push
 
   ```bash
-  docker push waikatodatamining/pytorch-huggingface_transformers:4.31.0_cuda11.7_falcontune_20230618
+  docker push waikatodatamining/pytorch-huggingface-transformers:4.31.0_cuda11.7_falcontune_20230618
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
