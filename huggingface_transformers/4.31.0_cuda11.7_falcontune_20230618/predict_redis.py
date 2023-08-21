@@ -111,7 +111,7 @@ def main(args=None):
     parsed = parser.parse_args(args=args)
 
     if parsed.verbose:
-        print("Loading weights: %s" % weights)
+        print("Loading weights: %s" % parsed.weights)
     model, tokenizer = load_model(
         parsed.model,
         parsed.weights,
