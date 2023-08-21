@@ -30,8 +30,7 @@ def process_prompt(msg_cont):
         if config.verbose:
             log("process_prompts - start processing prompt")
         # read data
-        data = json.loads(msg_cont.message['data'].decode())
-        d = json.loads(data)
+        d = json.loads(msg_cont.message['data'].decode())
 
         prompt = d["prompt"] if ("prompt" in d) else ""
         instruction = d["instruction"] if ("instruction" in d) else ""
