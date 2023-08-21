@@ -71,7 +71,7 @@ def process_prompt(fname, output_dir, poller):
         input_ids = poller.params.tokenizer.encode(input_data, return_tensors="pt").to(poller.params.model.device)
 
         with torch.no_grad():
-            generated_ids = model.generate(
+            generated_ids = poller.params.model.generate(
                 inputs=input_ids,
                 do_sample=poller.params.do_sample,
                 max_new_tokens=poller.params.max_new_tokens,

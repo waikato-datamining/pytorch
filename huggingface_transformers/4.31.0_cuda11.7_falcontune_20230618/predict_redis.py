@@ -41,7 +41,7 @@ def process_prompt(msg_cont):
         input_ids = config.tokenizer.encode(input_data, return_tensors="pt").to(config.model.device)
 
         with torch.no_grad():
-            generated_ids = model.generate(
+            generated_ids = config.model.generate(
                 inputs=input_ids,
                 do_sample=config.do_sample,
                 max_new_tokens=config.max_new_tokens,
