@@ -4,3 +4,7 @@ RUN pip install --no-cache-dir git+https://github.com/rmihaylov/falcontune.git@6
     pip install --no-cache-dir wandb==0.15.3 sentencepiece==0.1.99
 
 COPY bash.bashrc /etc/bash.bashrc
+COPY predict*.py /opt/falcontune/
+COPY falcon* /usr/local/bin/
+
+ENV PYTHONPATH=/opt/falcontune
