@@ -16,6 +16,10 @@ from falcontune.model.utils import model_to_half
 from falcontune.generate import AMPWrapper
 
 
+def format_output(raw_output):
+    return raw_output.split("### Response:")[1].strip()
+
+
 def process_prompt(msg_cont):
     """
     Processes the message container, loading the image from the message and forwarding the predictions.
