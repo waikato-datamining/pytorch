@@ -30,7 +30,8 @@ def check_prompt(fname, poller):
     :rtype: bool
     """
     try:
-        json.load(fname)
+        with open(fname, "r") as fp:
+            json.load(fp)
         result = True
     except:
         result = False
