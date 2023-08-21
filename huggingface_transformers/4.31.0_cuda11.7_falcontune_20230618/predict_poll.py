@@ -132,7 +132,7 @@ def main(args=None):
     parser.add_argument('--quiet', action='store_true', help='Whether to suppress output', required=False, default=False)
     parsed = parser.parse_args(args=args)
 
-    if verbose:
+    if parsed.verbose:
         print("Loading weights: %s" % weights)
     model, tokenizer = load_model(
         parsed.model,
