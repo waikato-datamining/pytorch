@@ -143,7 +143,7 @@ def main(args=None):
     if getattr(model, 'loaded_in_4bit', False):
         model_to_half(model)
 
-    if parsed.parsed.verbose:
+    if parsed.verbose:
         print('Applying AMP Wrapper ...')
     wrapper = AMPWrapper(model)
     wrapper.apply_generate()
