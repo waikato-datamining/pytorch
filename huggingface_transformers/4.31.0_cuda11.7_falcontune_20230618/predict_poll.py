@@ -67,7 +67,7 @@ def process_prompt(fname, output_dir, poller):
         input_ = d["input"] if ("input" in d) else ""
         input_data = make_prompt(instruction, input_=input_) if (len(instruction) > 0) else prompt
 
-        input_ids = tokenizer.encode(input_data, return_tensors="pt").to(poller.params.model.device)
+        input_ids = poller.params.tokenizer.encode(input_data, return_tensors="pt").to(poller.params.model.device)
 
         with torch.no_grad():
             generated_ids = model.generate(
@@ -78,13 +78,13 @@ def process_prompt(fname, output_dir, poller):
                 top_k=poller.params.top_k,
                 temperature=poller.params.temperature,
                 use_cache=poller.params.use_cache,
-                eos_token_id=tokenizer.eos_token_id,
-                bos_token_id=tokenizer.bos_token_id,
-                pad_token_id=tokenizer.eos_token_id,
+                eos_token_id=poller.params.tokenizer.eos_token_id,
+                bos_token_id=poller.params.tokenizer.bos_token_id,
+                pad_token_id=poller.params.tokenizer.eos_token_id,
                 num_beams=poller.params.num_beams
             )
 
-        output = tokenizer.decode(generated_ids.cpu().tolist()[0], skip_special_tokens=True)
+        output = poller.params.tokenizer.decode(generated_ids.cpu().tolist()[0], skip_special_tokens=True)
         if len(instruction) > 0:
             output = format_output(output)
         with open(output_response, "w") as fp:
@@ -164,6 +164,7 @@ def main(args=None):
     poller.use_watchdog = parsed.use_watchdog
     poller.watchdog_check_interval = parsed.watchdog_check_interval
     poller.params.model = model
+    poller.params.tokenizer = tokenizer
     poller.params.max_new_tokens = parsed.max_new_tokens
     poller.params.top_p = parsed.top_p
     poller.params.top_k = parsed.top_k

@@ -37,7 +37,7 @@ def process_prompt(msg_cont):
         input_ = d["input"] if ("input" in d) else ""
         input_data = make_prompt(instruction, input_=input_) if (len(instruction) > 0) else prompt
 
-        input_ids = tokenizer.encode(input_data, return_tensors="pt").to(config.model.device)
+        input_ids = config.tokenizer.encode(input_data, return_tensors="pt").to(config.model.device)
 
         with torch.no_grad():
             generated_ids = model.generate(
@@ -48,13 +48,13 @@ def process_prompt(msg_cont):
                 top_k=config.top_k,
                 temperature=config.temperature,
                 use_cache=config.use_cache,
-                eos_token_id=tokenizer.eos_token_id,
-                bos_token_id=tokenizer.bos_token_id,
-                pad_token_id=tokenizer.eos_token_id,
+                eos_token_id=config.tokenizer.eos_token_id,
+                bos_token_id=config.tokenizer.bos_token_id,
+                pad_token_id=config.tokenizer.eos_token_id,
                 num_beams=config.num_beams
             )
 
-        output = tokenizer.decode(generated_ids.cpu().tolist()[0], skip_special_tokens=True)
+        output = config.tokenizer.decode(generated_ids.cpu().tolist()[0], skip_special_tokens=True)
         if len(instruction) > 0:
             output = format_output(output)
 
@@ -128,6 +128,7 @@ def main(args=None):
 
     config = Container()
     config.model = model
+    config.tokenizer = tokenizer
     config.max_new_tokens = parsed.max_new_tokens
     config.top_p = parsed.top_p
     config.top_k = parsed.top_k
