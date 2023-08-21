@@ -11,7 +11,7 @@ from falcontune.data import make_prompt
 from falcontune.model import load_model
 from falcontune.model.lora import load_adapter
 from falcontune.model.utils import model_to_half
-from falcontune import AMPWrapper
+from falcontune.generate import AMPWrapper
 
 
 SUPPORTED_EXTS = [".json"]
