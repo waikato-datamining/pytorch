@@ -27,6 +27,7 @@ RUN pip install --no-cache-dir timm==0.9.2 xformers==0.0.20 && \
     pip install --no-cache-dir scipy==1.11.1 && \
     pip install --no-cache-dir datasets==2.13.1 && \
     pip install --no-cache-dir peft==0.4.0 && \
-    pip install --no-cache-dir trl==0.4.7
+    pip install --no-cache-dir trl==0.4.7 && \
+    pip install --no-cache-dir deepspeed==0.10.1
 
 COPY bash.bashrc /etc/bash.bashrc

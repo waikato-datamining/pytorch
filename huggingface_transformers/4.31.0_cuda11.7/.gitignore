@@ -1,3 +1,14 @@
+test/
+cache/
+data/
+output/
+triton/
+.idea/
+*~
+*.swp
+*.iml
 wandb/
 falcon*
+test*.py
 alpaca*
+
