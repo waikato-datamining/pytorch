@@ -28,6 +28,7 @@ Uses PyTorch 1.8.1, CUDA 11.1, finetune-gpt2xl 20220924 (e0b02491d7773af34a4cedb
     -u $(id -u):$(id -g) -e USER=$USER \
     --gpus=all \
     --shm-size 8G \
+    --net=host \
     -v `pwd`:/workspace \
     -v `pwd`/cache:/.cache \
     -v `pwd`/triton:/.triton \
@@ -49,6 +50,7 @@ Uses PyTorch 1.8.1, CUDA 11.1, finetune-gpt2xl 20220924 (e0b02491d7773af34a4cedb
     -u $(id -u):$(id -g) -e USER=$USER \
     --gpus=all \
     --shm-size 8G \
+    --net=host \
     -v `pwd`:/workspace \
     -v `pwd`/cache:/.cache \
     -v `pwd`/triton:/.triton \
@@ -66,7 +68,7 @@ Uses PyTorch 1.8.1, CUDA 11.1, finetune-gpt2xl 20220924 (e0b02491d7773af34a4cedb
 * Run the container
 
   ```bash
-  docker run --gpus=all --shm-size 8G -v /local/dir:/container/dir -it huggingface-transformers
+  docker run --gpus=all --shm-size --net=host 8G -v /local/dir:/container/dir -it huggingface-transformers
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
@@ -135,6 +137,16 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 ## Scripts
 
 * `gpt_text2csv` - for converting text files into CSV ones
+* `gpt_predict_poll` - for generating text using file-polling of JSON files with prompts
+* `gpt_predict_redis` - for generating text from JSON prompts via redis
+
+### Prompt format
+
+```json
+{
+  "prompt": "the prompt text."
+}
+```
 
 
 ## Examples
