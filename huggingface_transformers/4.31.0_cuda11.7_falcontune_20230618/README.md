@@ -28,6 +28,7 @@ Uses PyTorch 2.0.1, CUDA 11.7, falcontune 20230618 (6bd029e5a89f58c4eea9056ee1c8
     -u $(id -u):$(id -g) -e USER=$USER \
     --gpus=all \
     --shm-size 8G \
+    --net=host \
     -v `pwd`:/workspace \
     -v `pwd`/cache:/.cache \
     -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.31.0_cuda11.7_falcontune_20230618
@@ -48,6 +49,7 @@ Uses PyTorch 2.0.1, CUDA 11.7, falcontune 20230618 (6bd029e5a89f58c4eea9056ee1c8
     -u $(id -u):$(id -g) -e USER=$USER \
     --gpus=all \
     --shm-size 8G \
+    --net=host \
     -v `pwd`:/workspace \
     -v `pwd`/cache:/.cache \
     -it waikatodatamining/pytorch-huggingface-transformers:4.31.0_cuda11.7_falcontune_20230618
@@ -64,7 +66,7 @@ Uses PyTorch 2.0.1, CUDA 11.7, falcontune 20230618 (6bd029e5a89f58c4eea9056ee1c8
 * Run the container
 
   ```bash
-  docker run --gpus=all --shm-size 8G -v /local/dir:/container/dir -it huggingface-transformers
+  docker run --gpus=all --shm-size --net=host 8G -v /local/dir:/container/dir -it huggingface-transformers
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
