@@ -158,21 +158,21 @@ and outputs the resulting model in `/workspace/output-xl`:
 
 ```bash
 deepspeed --num_gpus=1 \
-/opt/finetune-gpt2xl/run_clm.py \
---deepspeed /opt/finetune-gpt2xl/ds_config.json \
---model_name_or_path gpt2-xl \
---train_file /workspace/data/train.csv \
---validation_file /workspace/data/validation.csv \
---do_train \
---do_eval \
---fp16 \
---overwrite_cache \
---evaluation_strategy="steps" \
---output_dir /workspace/output-xl \
---eval_steps 200 \
---num_train_epochs 1 \
---gradient_accumulation_steps 2 \
---per_device_train_batch_size 8
+  /opt/finetune-gpt2xl/run_clm.py \
+  --deepspeed /opt/finetune-gpt2xl/ds_config.json \
+  --model_name_or_path gpt2-xl \
+  --train_file /workspace/data/train.csv \
+  --validation_file /workspace/data/validation.csv \
+  --do_train \
+  --do_eval \
+  --fp16 \
+  --overwrite_cache \
+  --evaluation_strategy="steps" \
+  --output_dir /workspace/output-xl \
+  --eval_steps 200 \
+  --num_train_epochs 1 \
+  --gradient_accumulation_steps 2 \
+  --per_device_train_batch_size 8
 ```
 
 ### GPT-Neo
@@ -182,22 +182,22 @@ and outputs the resulting model in `/workspace/output-neo`:
 
 ```bash
 deepspeed --num_gpus=1 \
-/opt/finetune-gpt2xl/run_clm.py \
---deepspeed /opt/finetune-gpt2xl/ds_config_gptneo.json \
---model_name_or_path EleutherAI/gpt-neo-2.7B \
---train_file /workspace/data/train.csv \
---validation_file /workspace/data/validation.csv \
---do_train \
---do_eval \
---fp16 \
---overwrite_cache \
---evaluation_strategy="steps" \
---output_dir /workspace/output-neo \
---num_train_epochs 1 \
---eval_steps 15 \
---gradient_accumulation_steps 2 \
---per_device_train_batch_size 4 \
---use_fast_tokenizer False \
---learning_rate 5e-06 \
---warmup_steps 10
+  /opt/finetune-gpt2xl/run_clm.py \
+  --deepspeed /opt/finetune-gpt2xl/ds_config_gptneo.json \
+  --model_name_or_path EleutherAI/gpt-neo-2.7B \
+  --train_file /workspace/data/train.csv \
+  --validation_file /workspace/data/validation.csv \
+  --do_train \
+  --do_eval \
+  --fp16 \
+  --overwrite_cache \
+  --evaluation_strategy="steps" \
+  --output_dir /workspace/output-neo \
+  --num_train_epochs 1 \
+  --eval_steps 15 \
+  --gradient_accumulation_steps 2 \
+  --per_device_train_batch_size 4 \
+  --use_fast_tokenizer False \
+  --learning_rate 5e-06 \
+  --warmup_steps 10
 ```
