@@ -104,7 +104,7 @@ def main(args=None):
     parser.add_argument("--lora_apply_dir", default=None, required=False, help="Path to directory from which LoRA has to be applied before training.")
     parser.add_argument('--max_new_tokens', type=int, default=400, help='Maximum new tokens of the sequence to be generated.')
     parser.add_argument('--top_p', type=float, default=.95, help='Top p sampling parameter.')
-    parser.add_argument('--top_k', type=int, default=40, help='Top p sampling parameter.')
+    parser.add_argument('--top_k', type=int, default=40, help='Top k sampling parameter.')
     parser.add_argument('--temperature', type=float, default=0.8, help='Sampling temperature.')
     parser.add_argument('--use_cache', action="store_true", help='Use cache when generating.')
     parser.add_argument('--do_sample', action="store_true", help='Sampling when generating.')
