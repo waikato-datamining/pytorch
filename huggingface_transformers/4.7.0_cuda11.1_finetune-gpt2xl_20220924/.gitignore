@@ -1,0 +1,12 @@
+test/
+cache/
+data/
+output/
+triton/
+.idea/
+*~
+*.swp
+*.iml
+wandb/
+results/
+
