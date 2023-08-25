@@ -75,21 +75,6 @@ def process_prompt(msg_cont):
         log("process_prompts - failed to process: %s" % traceback.format_exc())
 
 
-def load_labels(labels_file):
-    """
-    Loads the labels from the specified file.
-
-    :param labels_file: the file to load (comma-separated list)
-    :type labels_file: str
-    :return: the list of labels
-    :rtype: list
-    """
-    with open(labels_file) as lf:
-        line = lf.readline()
-        line = line.strip()
-        return line.split(",")
-
-
 def main(args=None):
     """
     Performs the predictions.
