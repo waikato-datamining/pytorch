@@ -137,8 +137,8 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 ## Scripts
 
 * `gpt_text2csv` - for converting text files into CSV ones
-* `gpt_predict_poll` - for generating text using file-polling of JSON files with prompts
-* `gpt_predict_redis` - for generating text from JSON prompts via redis
+* `gpt_predict_poll` - for generating plain text file using file-polling of JSON files with prompts
+* `gpt_predict_redis` - for generating plain text from JSON prompts via redis
 
 ### Prompt format
 
