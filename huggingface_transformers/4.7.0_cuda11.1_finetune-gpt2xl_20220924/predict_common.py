@@ -110,7 +110,7 @@ def load_gptneo(model_path, device="cuda", fp16=False):
 
 
 def predict_gpt2xl(prompt, model, tokenizer, length=400, device="cuda", temperature=0.9, top_p=0.9, top_k=0,
-                   use_cache=True, do_sample=Trye):
+                   use_cache=True, do_sample=True):
     """
     Makes a prediction with a GPT2-XL model.
 
@@ -155,7 +155,7 @@ def predict_gpt2xl(prompt, model, tokenizer, length=400, device="cuda", temperat
 
 
 def predict_gptneo(prompt, model, tokenizer, length=400, device="cuda", temperature=0.9, top_p=0.9, top_k=0,
-                   use_cache=True, do_sample=Trye):
+                   use_cache=True, do_sample=True):
     """
     Makes a prediction with a GPT-Neo model.
 
