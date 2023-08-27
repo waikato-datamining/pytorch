@@ -151,6 +151,19 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 
 ## Examples
 
+### Data
+
+Convert the text files for training and validation (located in `/workspace/data`) 
+into CSV files:
+
+```bash
+gpt_text2csv -i /workspace/data/train.txt 
+gpt_text2csv -i /workspace/data/validation.txt 
+```
+
+**NB:** Each line in the text file gets turned into a separated row in the CSV file. 
+
+
 ### GPT2-XL
 
 Fine-tune a GPT2-XL model on your dataset (located in `/workspace/data/`)
@@ -172,7 +185,21 @@ deepspeed --num_gpus=1 \
   --eval_steps 200 \
   --num_train_epochs 1 \
   --gradient_accumulation_steps 2 \
-  --per_device_train_batch_size 8
+  --per_device_train_batch_size 8 \
+  --overwrite_output_dir
+```
+
+Generate predictions using file polling on .json prompt files:
+
+```bash
+gpt_predict_poll \
+    --model_type gptneo \
+    --model_path /workspace/output-xl/ \
+    --fp16 \
+    --use_cache \
+    --do_sample \
+    --prediction_in /workspace/predictions/in/ \
+    --prediction_out /workspace/predictions/out/
 ```
 
 ### GPT-Neo
@@ -199,5 +226,19 @@ deepspeed --num_gpus=1 \
   --per_device_train_batch_size 4 \
   --use_fast_tokenizer False \
   --learning_rate 5e-06 \
-  --warmup_steps 10
+  --warmup_steps 10 \
+  --overwrite_output_dir
+```
+
+Generate predictions using file polling on .json prompt files:
+
+```bash
+gpt_predict_poll \
+    --model_type gptneo \
+    --model_path /workspace/output-neo/ \
+    --fp16 \
+    --use_cache \
+    --do_sample \
+    --prediction_in /workspace/predictions/in/ \
+    --prediction_out /workspace/predictions/out/
 ```
