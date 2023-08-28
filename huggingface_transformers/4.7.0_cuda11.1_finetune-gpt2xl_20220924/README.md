@@ -195,6 +195,7 @@ Generate predictions using file polling on .json prompt files:
 gpt_predict_poll \
     --model_type gptneo \
     --model_path /workspace/output-xl/ \
+    --length 100 \
     --fp16 \
     --use_cache \
     --do_sample \
@@ -236,6 +237,7 @@ Generate predictions using file polling on .json prompt files:
 gpt_predict_poll \
     --model_type gptneo \
     --model_path /workspace/output-neo/ \
+    --length 100 \
     --fp16 \
     --use_cache \
     --do_sample \
