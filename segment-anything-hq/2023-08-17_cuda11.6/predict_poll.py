@@ -73,7 +73,7 @@ def predict_on_images(model, model_type, device, input_dir, output_dir, tmp_dir=
 
     :param model: the checkpoint file to use
     :param model: str
-    :param model_type: the type of model the checkpoint represents (default|vit_h, vit_l, vit_b)
+    :param model_type: the type of model the checkpoint represents (default|vit_h|vit_l|vit_b|vit_tiny)
     :type model_type: str
     :param device: the device to run the model on, e.g., 'cpu' or 'cuda:0'
     :type device: str
@@ -134,7 +134,7 @@ def main(args=None):
         prog="sam_predict_poll",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The SAM checkpoint to use.')
-    parser.add_argument('--model_type', choices=["default", "vit_h", "vit_l", "vit_b"], required=False, help='The type of the checkpoint supplied.')
+    parser.add_argument('--model_type', choices=["default", "vit_h", "vit_l", "vit_b", "vit_tiny"], required=False, help='The type of the checkpoint supplied.')
     parser.add_argument('--device', metavar="DEVICE", type=str, default="cuda:0", help='The device to run the model on.')
     parser.add_argument('--prediction_in', help='Path to the images to process', required=True, default=None)
     parser.add_argument('--prediction_out', help='Path to the folder for the prediction files', required=True, default=None)
