@@ -119,13 +119,13 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 
 The following additional scripts are available:
 
-* `sam_predict_poll` - batch-processing of images via file-polling
-* `sam_predict_redis` - making predictions via Redis backend
-* `sam_test_redis_send` - for sending an image and extreme points to the `sam_predict_redis` process 
-* `sam_test_redis_recv` - for receiving the results from the `sam_predict_redis` process (and saving them to a dir) 
+* `samhq_predict_poll` - batch-processing of images via file-polling
+* `samhq_predict_redis` - making predictions via Redis backend
+* `samhq_test_redis_send` - for sending an image and extreme points to the `samhq_predict_redis` process 
+* `samhq_test_redis_recv` - for receiving the results from the `samhq_predict_redis` process (and saving them to a dir) 
 
 
-### sam_predict_redis
+### samhq_predict_redis
  
 You need to start the docker container with the `--net=host` option if you are using the host's Redis server.
 

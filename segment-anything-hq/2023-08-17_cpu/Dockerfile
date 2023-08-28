@@ -39,6 +39,6 @@ RUN git clone https://github.com/SysCV/sam-hq.git && \
 COPY bash.bashrc /etc/bash.bashrc
 COPY predict*.py /opt/sam-hq/
 COPY test_redis*.py /opt/sam-hq/
-COPY sam_* /usr/local/bin/
+COPY samhq_* /usr/local/bin/
 
 ENV PYTHONPATH=/opt/sam-hq

@@ -2,7 +2,7 @@
 
 Command-line utilities for using [SAM-HQ](https://github.com/SysCV/sam-hq) models. 
 
-Uses Segment-Anything 2023-04-16 (1db02cad10e4bee154b32fdc1565850332b322f6), CUDA 11.6 and torch 1.13.0.
+Uses Segment-Anything 2023-08-17 (1db02cad10e4bee154b32fdc1565850332b322f6), CUDA 11.6 and torch 1.13.0.
 
 
 ## Quick start
@@ -21,7 +21,7 @@ Uses Segment-Anything 2023-04-16 (1db02cad10e4bee154b32fdc1565850332b322f6), CUD
   docker run \
     --gpus=all --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam:2023-04-16_cuda11.6
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam-hq:2023-08-17_cuda11.6
   ```
 
 ### Docker hub
@@ -32,15 +32,15 @@ Uses Segment-Anything 2023-04-16 (1db02cad10e4bee154b32fdc1565850332b322f6), CUD
   docker run \
     --gpus=all --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it waikatodatamining/pytorch-sam:2023-04-16_cuda11.6
+    -it waikatodatamining/pytorch-sam-hq:2023-08-17_cuda11.6
   ```
 
 ### Build local image
 
-* Build the image from Docker file (from within `/path_to/2023-04-16_cuda11.6`)
+* Build the image from Docker file (from within `/path_to/2023-08-17_cuda11.6`)
 
   ```bash
-  docker build -t sam .
+  docker build -t sam-hq .
   ```
   
 * Run the container
@@ -48,7 +48,7 @@ Uses Segment-Anything 2023-04-16 (1db02cad10e4bee154b32fdc1565850332b322f6), CUD
   ```bash
   docker run \
     --gpus=all --shm-size 8G \
-    -v /local/dir:/container/dir -it sam
+    -v /local/dir:/container/dir -it sam-hq
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
@@ -58,7 +58,7 @@ Uses Segment-Anything 2023-04-16 (1db02cad10e4bee154b32fdc1565850332b322f6), CUD
 ### Build
 
 ```bash
-docker build -t pytorch-sam:2023-04-16_cuda11.6 .
+docker build -t pytorch-sam-hq:2023-08-17_cuda11.6 .
 ```
 
 ### Inhouse registry  
@@ -67,14 +67,14 @@ docker build -t pytorch-sam:2023-04-16_cuda11.6 .
 
   ```bash
   docker tag \
-    pytorch-sam:2023-04-16_cuda11.6 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam:2023-04-16_cuda11.6
+    pytorch-sam-hq:2023-08-17_cuda11.6 \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam-hq:2023-08-17_cuda11.6
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam:2023-04-16_cuda11.6
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam-hq:2023-08-17_cuda11.6
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -88,14 +88,14 @@ docker build -t pytorch-sam:2023-04-16_cuda11.6 .
 
   ```bash
   docker tag \
-    pytorch-sam:2023-04-16_cuda11.6 \
-    waikatodatamining/pytorch-sam:2023-04-16_cuda11.6
+    pytorch-sam-hq:2023-08-17_cuda11.6 \
+    waikatodatamining/pytorch-sam-hq:2023-08-17_cuda11.6
   ```
   
 * Push
 
   ```bash
-  docker push waikatodatamining/pytorch-sam:2023-04-16_cuda11.6
+  docker push waikatodatamining/pytorch-sam-hq:2023-08-17_cuda11.6
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -119,13 +119,13 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 
 The following additional scripts are available:
 
-* `sam_predict_poll` - batch-processing of images via file-polling
-* `sam_predict_redis` - making predictions via Redis backend
-* `sam_test_redis_send` - for sending an image and extreme points to the `sam_predict_redis` process 
-* `sam_test_redis_recv` - for receiving the results from the `sam_predict_redis` process (and saving them to a dir) 
+* `samhq_predict_poll` - batch-processing of images via file-polling
+* `samhq_predict_redis` - making predictions via Redis backend
+* `samhq_test_redis_send` - for sending an image and extreme points to the `samhq_predict_redis` process 
+* `samhq_test_redis_recv` - for receiving the results from the `samhq_predict_redis` process (and saving them to a dir) 
 
 
-### sam_predict_redis
+### samhq_predict_redis
  
 You need to start the docker container with the `--net=host` option if you are using the host's Redis server.
 
