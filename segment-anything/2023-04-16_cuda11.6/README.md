@@ -1,6 +1,6 @@
 # Segment-Anything Model
 
-Command-line utilities for using SAM models. 
+Command-line utilities for using [SAM](https://github.com/facebookresearch/segment-anything) models. 
 
 Uses Segment-Anything 2023-04-16 (567662b0fd33ca4b022d94d3b8de896628cd32dd), CUDA 11.6 and torch 1.13.0.
 
