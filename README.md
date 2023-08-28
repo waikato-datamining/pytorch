@@ -9,6 +9,7 @@ Pytorch related projects and docker images.
 * [openchatkit](openchatkit)
 * [pytorch-test](pytorch-test) (just a testing script)
 * [segment-anything](segment-anything)
+* [segment-anything-hq](segment-anything-hq)
 * [segmentation_models](segmentation_models)
 * [yolov5](yolov5)
 * [yolov7](yolov7)
