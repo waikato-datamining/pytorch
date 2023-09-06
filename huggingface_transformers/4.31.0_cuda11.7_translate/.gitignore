@@ -1,0 +1,9 @@
+test/
+cache/
+data/
+triton/
+output/
+.idea/
+*~
+*.swp
+*.iml
