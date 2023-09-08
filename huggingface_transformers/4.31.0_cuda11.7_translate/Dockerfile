@@ -9,5 +9,6 @@ RUN pip install --no-cache-dir "simple-file-poller>=0.0.9" && \
 COPY bash.bashrc /etc/bash.bashrc
 COPY run*.py /opt/translate/
 COPY predict*.py /opt/translate/
+COPY translation_* /usr/local/bin/
 
 ENV PYTHONPATH=/opt/translate
