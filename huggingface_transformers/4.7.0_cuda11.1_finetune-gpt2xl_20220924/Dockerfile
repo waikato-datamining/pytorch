@@ -10,5 +10,6 @@ COPY run_clm.py /opt/finetune-gpt2xl/
 COPY text2csv.py /opt/finetune-gpt2xl/
 COPY ds_config*.json /opt/finetune-gpt2xl/
 COPY gpt* /usr/local/bin/
+COPY train_clm /usr/local/bin/
 
 ENV PYTHONPATH=/opt/finetune-gpt2xl

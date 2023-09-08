@@ -137,6 +137,7 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 ## Scripts
 
 * `gpt_text2csv` - for converting text files into CSV ones
+* `train_clm` - for training a causal language model (calls `/opt/finetune-gpt2xl/run_clm.py`) 
 * `gpt_predict_poll` - for generating plain text file using file-polling of JSON files with prompts
 * `gpt_predict_redis` - for generating plain text from JSON prompts via redis
 
@@ -188,6 +189,9 @@ deepspeed --num_gpus=1 \
   --per_device_train_batch_size 8 \
   --overwrite_output_dir
 ```
+
+Or, without using deepspeed, you can just use the `train_clm` script and supply 
+it with all the options of `run_clm.py`.
 
 Generate predictions using file polling on .json prompt files:
 
