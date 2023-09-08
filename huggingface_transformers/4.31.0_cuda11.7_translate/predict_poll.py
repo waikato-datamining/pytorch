@@ -106,7 +106,7 @@ def main(args=None):
 
     if parsed.verbose:
         print("Loading model: %s" % parsed.model_path)
-    model, tokenizer = load_model(parsed.model_path, parsed.device)
+    tokenizer, model = load_model(parsed.model_path, parsed.device)
 
     poller = Poller()
     poller.input_dir = parsed.prediction_in

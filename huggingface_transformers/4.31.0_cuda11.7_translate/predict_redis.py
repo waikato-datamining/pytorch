@@ -70,7 +70,7 @@ def main(args=None):
 
     if parsed.verbose:
         print("Loading model: %s" % parsed.model_path)
-    model, tokenizer = load_model(parsed.model_path, device=parsed.device, fp16=parsed.fp16)
+    tokenizer, model = load_model(parsed.model_path, device=parsed.device, fp16=parsed.fp16)
 
     config = Container()
     config.model = model
