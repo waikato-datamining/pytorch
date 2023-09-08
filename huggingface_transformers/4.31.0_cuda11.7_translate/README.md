@@ -137,6 +137,16 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 ## Scripts
 
 * `train_translation` - performs a training run (calls `/opt/translate/run_translation.py`)
+* `translation_predict_poll` - file polling for making predictions on JSON prompts
+* `translation_predict_redis` - makes predictions for JSON prompts via Redis
+
+### Prompt format
+
+```json
+{
+  "prompt": "the prompt text."
+}
+```
 
 
 ## Usage
