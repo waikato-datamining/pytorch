@@ -133,3 +133,70 @@ the container):
 ```bash
 docker run -u $(id -u):$(id -g) -e USER=$USER ...
 ```
+
+## Scripts
+
+* `train_translation` - performs a training run (calls `/opt/translate/run_translation.py`)
+
+
+## Usage
+
+### Launch image
+
+```bash
+docker run \
+  -u $(id -u):$(id -g) -e USER=$USER \
+  --gpus=all \
+  --shm-size 8G \
+  --net=host \
+  -v `pwd`:/workspace \
+  -v `pwd`/cache:/.cache \
+  -v `pwd`/triton:/.triton \
+  -it pytorch-huggingface-transformers:4.31.0_cuda11.7_translate
+```
+
+### Train
+
+* Have the data in [jsonlines](https://jsonlines.org/) format and make sure to use `.json` as extension,
+  not `.jsonl` or `.jsonlines`:
+
+  ```json
+  { "translation": { "en": "Others have dismissed him as a joke.", "ro": "Alții l-au numit o glumă." } }
+  ```
+
+* Store the data in the current directory from which you started the docker container in the `data`
+  sub directory.
+
+* Create the directory `output` on the same level as `data`.
+
+* Assuming that you are translating from English to French, you can start the 
+  training with a command like this (uses train and validation set):
+
+```bash
+train_translation \
+  --model_name_or_path t5-small \
+  --tokenizer_name t5-small \
+  --cache_dir /.cache \
+  --source_lang en \
+  --target_lang mi \
+  --source_prefix 'translate English to French: ' \
+  --train_file /workspace/data/train.json \
+  --validation_file /workspace/data/val.json \
+  --overwrite_cache \
+  --output_dir /workspace/output \
+  --overwrite_output_dir \
+  --do_train \
+  --do_eval \
+  --evaluation_strategy="steps" \
+  --num_train_epochs 10 \
+  --fp16 \
+  --eval_steps 150 \
+  --use_fast_tokenizer \
+  --logging_dir /workspace/output/runs \
+  --gradient_accumulation_steps 8 \
+  --per_device_train_batch_size 4 \
+  --learning_rate 5e-06 \
+  --warmup_steps 10 \
+  --save_strategy="epoch"
+```
+
