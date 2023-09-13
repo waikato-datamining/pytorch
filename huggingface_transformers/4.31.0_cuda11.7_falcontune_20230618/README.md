@@ -18,7 +18,7 @@ Uses PyTorch 2.0.1, CUDA 11.7, falcontune 20230618 (6bd029e5a89f58c4eea9056ee1c8
 * Create the `cache` directory (to house downloaded dataset and models):
 
   ```bash
-  mkdir cache
+  mkdir cache config
   ```
 
 * Launch docker container
@@ -30,6 +30,7 @@ Uses PyTorch 2.0.1, CUDA 11.7, falcontune 20230618 (6bd029e5a89f58c4eea9056ee1c8
     --shm-size 8G \
     --net=host \
     -v `pwd`:/workspace \
+    -v `pwd`/config:/.config \
     -v `pwd`/cache:/.cache \
     -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.31.0_cuda11.7_falcontune_20230618
   ```
@@ -39,7 +40,7 @@ Uses PyTorch 2.0.1, CUDA 11.7, falcontune 20230618 (6bd029e5a89f58c4eea9056ee1c8
 * Create the `cache` directory (to house downloaded dataset and models):
 
   ```bash
-  mkdir cache
+  mkdir cache config
   ```
 
 * Launch docker container
@@ -51,6 +52,7 @@ Uses PyTorch 2.0.1, CUDA 11.7, falcontune 20230618 (6bd029e5a89f58c4eea9056ee1c8
     --shm-size 8G \
     --net=host \
     -v `pwd`:/workspace \
+    -v `pwd`/config:/.config \
     -v `pwd`/cache:/.cache \
     -it waikatodatamining/pytorch-huggingface-transformers:4.31.0_cuda11.7_falcontune_20230618
   ```
