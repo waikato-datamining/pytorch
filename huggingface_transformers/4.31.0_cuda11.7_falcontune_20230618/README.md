@@ -134,6 +134,7 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 
 ## Scripts
 
+* `wandb disabled` - to disable wandb logging (and prompt asking to log in)
 * `falcontune finetune` - for fine-tuning a falcon model
 * `falcontune generate` - for using a falcon model
 
