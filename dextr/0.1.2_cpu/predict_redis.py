@@ -44,7 +44,7 @@ def process_image(msg_cont):
                     "type": "dextr",
                 },
                 "prompt": {
-                    "points": p,
+                    "points": points,
                     "label": label
                 }
             }
