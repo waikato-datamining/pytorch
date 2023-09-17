@@ -146,8 +146,16 @@ Data formats:
   {
     "mask": base64-encoded PNG bytes,
     "contours": contours in OPEX format (https://github.com/WaikatoLink2020/objdet-predictions-exchange-format)
+    "meta": {
+      "key": "value"
+    }
   }
   ```
+
+**Notes:**
+
+* `meta`: contains meta-data, like the segmenter and prompt that was used
+
 
 ## Prompt data structures
 

@@ -57,6 +57,14 @@ def process_image(fname, output_dir, poller):
         result.append(output_mask)
         # save contours as opex json
         opex = contours_to_opex(contours_to_list(contours), id=os.path.splitext(os.path.basename(fname))[0])
+        opex.meta = {
+            "segmenter": {
+                "type": "dextr",
+            },
+            "prompt": {
+                "points": p
+            }
+        }
         opex.save_json_to_file(output_opex)
         result.append(output_opex)
     except KeyboardInterrupt:

@@ -196,7 +196,10 @@ are using the host's Redis server.
   "contours": [
     [[0, 0], [10, 0], [10, 10], [0, 10]],
     [[100, 100], [110, 100], [110, 110], [100, 110]]
-  ]
+  ],
+  "meta": {
+    "key": "value"
+  }
 }
 ```
 
@@ -204,3 +207,4 @@ are using the host's Redis server.
 
 * `contours`: multiple contours can be returned, with each contour being a list
   of x/y pairs.
+* `meta`: contains meta-data, like the segmenter and prompt that was used

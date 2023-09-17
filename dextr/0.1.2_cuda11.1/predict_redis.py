@@ -39,6 +39,15 @@ def process_image(msg_cont):
         output_data = {
             "contours": contours_list,
             "mask": im_out_b64.decode("ascii"),
+            "meta": {
+                "segmenter": {
+                    "type": "dextr",
+                },
+                "prompt": {
+                    "points": p,
+                    "label": label
+                }
+            }
         }
         preds_str = json.dumps(output_data)
         msg_cont.params.redis.publish(msg_cont.params.channel_out, preds_str)

@@ -56,6 +56,14 @@ def process_image(fname, output_dir, poller):
         result.append(output_mask)
         # save contours as opex json
         opex = contours_to_opex(contours_to_list(contours), id=os.path.splitext(os.path.basename(fname))[0])
+        opex.meta = {
+            "segmenter": {
+                "type": "sam",
+                "model_type": poller.params.model_type,
+                "model_file": poller.params.model_file,
+            },
+            "prompt": prompt
+        }
         opex.save_json_to_file(output_opex)
         result.append(output_opex)
     except KeyboardInterrupt:
@@ -118,6 +126,8 @@ def predict_on_images(model, model_type, device, input_dir, output_dir, tmp_dir=
     poller.use_watchdog = use_watchdog
     poller.watchdog_check_interval = watchdog_check_interval
     poller.params.model = model_instance
+    poller.params.model_type = model_type
+    poller.params.model_file = model
     poller.poll()
 
 

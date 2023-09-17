@@ -41,6 +41,14 @@ def process_image(msg_cont):
         output_data = {
             "contours": contours_list,
             "mask": im_out_b64.decode("ascii"),
+            "meta": {
+                "segmenter": {
+                    "type": "sam-hq",
+                    "model_type": config.model_type,
+                    "model_file": config.model_file,
+                },
+                "prompt": prompt
+            }
         }
         preds_str = json.dumps(output_data)
         msg_cont.params.redis.publish(msg_cont.params.channel_out, preds_str)
@@ -93,6 +101,8 @@ def main(args=None):
 
     config = Container()
     config.model = model_instance
+    config.model_type = parsed.model_type
+    config.model_file = parsed.model
     config.verbose = parsed.verbose
 
     params = configure_redis(parsed, config=config)
