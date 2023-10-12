@@ -54,7 +54,7 @@ Uses PyTorch 2.0.1, CUDA 11.7.
 
 ### Build local image
 
-* Build the image from Docker file (from within /path_to/pytorch-test/4.31.0_cuda11.7)
+* Build the image from Docker file (from within /path_to/huggingface-transformers/4.31.0_cuda11.7)
 
   ```bash
   docker build -t huggingface-transformers .
