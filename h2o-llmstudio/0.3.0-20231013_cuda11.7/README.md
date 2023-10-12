@@ -14,7 +14,7 @@ Uses PyTorch 2.0.1, CUDA 11.7.
   docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
   ```
   
-* Create the `cache` directory (to house downloaded dataset and models):
+* Create the following directories (to house downloaded dataset and models):
 
   ```bash
   mkdir cache
@@ -40,7 +40,7 @@ Uses PyTorch 2.0.1, CUDA 11.7.
 
 ### Docker hub
   
-* Create the `cache` directory (to house downloaded dataset and models):
+* Create the following directories (to house downloaded dataset and models):
 
   ```bash
   mkdir cache
