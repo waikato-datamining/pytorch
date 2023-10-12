@@ -38,6 +38,9 @@ Uses PyTorch 2.0.1, CUDA 11.7.
     -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-h2o-llmstudio:0.3.0-20231013_cuda11.7
   ```
 
+* Open browser on `localhost:10101`
+
+
 ### Docker hub
   
 * Create the following directories (to house downloaded dataset and models):
@@ -63,6 +66,9 @@ Uses PyTorch 2.0.1, CUDA 11.7.
     -v `pwd`/cache:/.cache \
     -it waikatodatamining/pytorch-h2o-llmstudio:0.3.0-20231013_cuda11.7
   ```
+
+* Open browser on `localhost:10101`
+
 
 ### Build local image
 
