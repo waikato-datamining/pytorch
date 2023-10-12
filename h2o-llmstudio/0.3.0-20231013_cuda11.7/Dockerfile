@@ -57,7 +57,9 @@ RUN pip install --no-cache-dir \
 	"keyring==24.2.0"
 
 WORKDIR /opt
-RUN git clone https://github.com/h2oai/h2o-llmstudio.git
+RUN git clone https://github.com/h2oai/h2o-llmstudio.git && \
+    cd h2o-llmstudio && \
+    git reset --hard 5d079879e89dafda97a1620a46bc0e690ac535cf
 ENV PYTHONPATH=/opt/h2o-llmstudio
 
 RUN mkdir /opt/conda/data && \

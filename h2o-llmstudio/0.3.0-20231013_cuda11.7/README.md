@@ -1,6 +1,6 @@
 # h2o llm-studio
 
-Docker image for [h2o llm-studio](https://github.com/h2oai/h2o-llmstudio) "latest".
+Docker image for [h2o llm-studio](https://github.com/h2oai/h2o-llmstudio) "0.3.0-20231013".
 
 Uses PyTorch 2.0.1, CUDA 11.7.
 
@@ -31,10 +31,10 @@ Uses PyTorch 2.0.1, CUDA 11.7.
     --shm-size 32G \
     -p 10101:10101 \
     -v `pwd`:/workspace \
-    -v `pwd`/data:/workspace/data \
-    -v `pwd`/output:/workspace/output \
+    -v `pwd`/data:/opt/h2o-llmstudio/data \
+    -v `pwd`/output:/opt/h2o-llmstudio/output \
     -v `pwd`/cache:/.cache \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-h2o-llmstudio:latest_cuda11.7
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-h2o-llmstudio:0.3.0-20231013_cuda11.7
   ```
 
 ### Docker hub
@@ -56,15 +56,15 @@ Uses PyTorch 2.0.1, CUDA 11.7.
     --shm-size 32G \
     -p 10101:10101 \
     -v `pwd`:/workspace \
-    -v `pwd`/data:/workspace/data \
-    -v `pwd`/output:/workspace/output \
+    -v `pwd`/data:/opt/h2o-llmstudio/data \
+    -v `pwd`/output:/opt/h2o-llmstudio/output \
     -v `pwd`/cache:/.cache \
-    -it waikatodatamining/pytorch-h2o-llmstudio:latest_cuda11.7
+    -it waikatodatamining/pytorch-h2o-llmstudio:0.3.0-20231013_cuda11.7
   ```
 
 ### Build local image
 
-* Build the image from Docker file (from within /path_to/h2o-llmstudio/latest_cuda11.7)
+* Build the image from Docker file (from within /path_to/h2o-llmstudio/0.3.0-20231013_cuda11.7)
 
   ```bash
   docker build -t h2o-llmstudio .
@@ -83,7 +83,7 @@ Uses PyTorch 2.0.1, CUDA 11.7.
 ### Build
 
 ```bash
-docker build -t pytorch-h2o-llmstudio:latest_cuda11.7 .
+docker build -t pytorch-h2o-llmstudio:0.3.0-20231013_cuda11.7 .
 ```
 
 ### Inhouse registry  
@@ -92,14 +92,14 @@ docker build -t pytorch-h2o-llmstudio:latest_cuda11.7 .
 
   ```bash
   docker tag \
-    pytorch-h2o-llmstudio:latest_cuda11.7 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-h2o-llmstudio:latest_cuda11.7
+    pytorch-h2o-llmstudio:0.3.0-20231013_cuda11.7 \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-h2o-llmstudio:0.3.0-20231013_cuda11.7
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-h2o-llmstudio:latest_cuda11.7
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-h2o-llmstudio:0.3.0-20231013_cuda11.7
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -113,14 +113,14 @@ docker build -t pytorch-h2o-llmstudio:latest_cuda11.7 .
 
   ```bash
   docker tag \
-    pytorch-h2o-llmstudio:latest_cuda11.7 \
-    waikatodatamining/pytorch-h2o-llmstudio:latest_cuda11.7
+    pytorch-h2o-llmstudio:0.3.0-20231013_cuda11.7 \
+    waikatodatamining/pytorch-h2o-llmstudio:0.3.0-20231013_cuda11.7
   ```
   
 * Push
 
   ```bash
-  docker push waikatodatamining/pytorch-h2o-llmstudio:latest_cuda11.7
+  docker push waikatodatamining/pytorch-h2o-llmstudio:0.3.0-20231013_cuda11.7
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
