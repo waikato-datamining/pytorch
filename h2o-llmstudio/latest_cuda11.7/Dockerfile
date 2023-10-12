@@ -57,8 +57,18 @@ RUN pip install --no-cache-dir \
 	"keyring==24.2.0"
 
 WORKDIR /opt
-
 RUN git clone https://github.com/h2oai/h2o-llmstudio.git
-
 ENV PYTHONPATH=/opt/h2o-llmstudio
+
+RUN mkdir /opt/conda/data && \
+    chmod 777 /opt/conda/data
+
+ENV H2O_WAVE_APP_ADDRESS=http://127.0.0.1:8756
+ENV H2O_WAVE_MAX_REQUEST_SIZE=25MB
+ENV H2O_WAVE_NO_LOG=true
+ENV H2O_WAVE_PRIVATE_DIR="/download/@/workspace/output/download"
+EXPOSE 10101
+
+WORKDIR /opt/h2o-llmstudio
+ENTRYPOINT ["wave", "run", "--no-reload", "app"]
 
