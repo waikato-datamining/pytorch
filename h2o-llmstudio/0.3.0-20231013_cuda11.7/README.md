@@ -26,6 +26,7 @@ Uses PyTorch 2.0.1, CUDA 11.7.
 
   ```bash
   docker run \
+    --rm \
     -u $(id -u):$(id -g) -e USER=$USER \
     --gpus=all \
     --shm-size 32G \
@@ -51,6 +52,7 @@ Uses PyTorch 2.0.1, CUDA 11.7.
 
   ```bash
   docker run \
+    --rm \
     -u $(id -u):$(id -g) -e USER=$USER \
     --gpus=all \
     --shm-size 32G \
@@ -73,7 +75,7 @@ Uses PyTorch 2.0.1, CUDA 11.7.
 * Run the container
 
   ```bash
-  docker run --gpus=all --shm-size 32G -v /local/dir:/container/dir -it h2o-llmstudio
+  docker run --rm --gpus=all --shm-size 32G -v /local/dir:/container/dir -it h2o-llmstudio
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
