@@ -1,3 +1,0 @@
-#!/bin/bash
-
-python /opt/finetune-gpt2xl/run_clm.py "$@"

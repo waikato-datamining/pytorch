@@ -1,3 +1,0 @@
-#!/bin/bash
-
-python3 /opt/finetune-gpt2xl/predict_poll.py "$@"
