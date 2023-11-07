@@ -27,7 +27,7 @@ WORKDIR /opt
 RUN git clone https://github.com/facebookresearch/detectron2.git && \
     cd detectron2 && \
     git reset --hard d1e04565d3bec8719335b88be9e9b961bf3ec464 && \
-    pip install --no-cache-dir "numpy<1.20" "pillow<9.0" && \
+    pip install --no-cache-dir "numpy<1.20" "pillow<9.0" "matplotlib<3.7" && \
     pip -v install --no-cache-dir . && \
     cd /opt/detectron2/projects/TensorMask && \
     pip install --no-cache-dir .
