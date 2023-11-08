@@ -104,6 +104,15 @@ docker build -t pytorch-sam:2023-04-16_cpu .
   ``` 
 
 
+### Requirements
+
+```bash
+docker run --rm \
+  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam:2023-04-16_cpu \
+  pip freeze > requirements.txt
+```
+
+
 ## Permissions
 
 When running the docker container as regular use, you will want to set the correct
