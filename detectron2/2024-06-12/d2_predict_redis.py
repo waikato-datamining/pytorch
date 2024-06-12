@@ -9,7 +9,7 @@ from detectron2.data.detection_utils import read_image, _apply_exif_orientation,
 from detectron2.engine.defaults import DefaultPredictor
 from detectron2.utils.visualizer import GenericMask
 from PIL import Image
-from d2_predict_common import polygon_to_minrect, lists_to_polygon, polygon_to_bbox
+from d2_predict_common import lists_to_polygon, polygon_to_bbox
 from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
 from opex import ObjectPredictions, ObjectPrediction, Polygon, BBox
 
@@ -149,7 +149,6 @@ def main(args=None):
     parser.add_argument('--labels', metavar='FILE', required=True, help='the file with the labels (comma-separate list)')
     parser.add_argument('--score_threshold', type=float, default=0.5, help="Minimum score for instance predictions to be shown")
     parser.add_argument('--output_width_height', action='store_true', help="Whether to output x/y/w/h instead of x0/y0/x1/y1 in the ROI CSV files", required=False, default=False)
-    parser.add_argument('--output_minrect', action='store_true', help='When outputting polygons whether to store the minimal rectangle around the objects in the CSV files as well', required=False, default=False)
     parser.add_argument('--fit_bbox_to_polygon', action='store_true', help='Whether to fit the bounding box to the polygon', required=False, default=False)
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
 
@@ -158,7 +157,6 @@ def main(args=None):
     config = Container()
     config.score_threshold = parsed.score_threshold
     config.output_width_height = parsed.output_width_height
-    config.output_minrect = parsed.output_minrect
     config.fit_bbox_to_polygon = parsed.fit_bbox_to_polygon
     config.verbose = parsed.verbose
 

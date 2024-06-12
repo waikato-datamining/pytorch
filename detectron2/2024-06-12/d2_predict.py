@@ -13,7 +13,7 @@ from image_complete import auto
 from opex import ObjectPredictions, ObjectPrediction, BBox, Polygon
 from PIL import Image
 from sfp import Poller
-from d2_predict_common import polygon_to_minrect, lists_to_polygon, polygon_to_bbox
+from d2_predict_common import lists_to_polygon, polygon_to_bbox
 
 
 SUPPORTED_EXTS = [".jpg", ".jpeg", ".png", ".bmp"]
@@ -109,8 +109,6 @@ def process_image(fname, output_dir, poller):
                             else:
                                 py.append(poly[n])
                                 pyn.append(poly[n] / image_height)
-                        if poller.params.output_minrect:
-                            bw, bh = polygon_to_minrect(lists_to_polygon(px, py))
                         if poller.params.fit_bbox_to_polygon:
                             if len(px) >= 3:
                                 x0, y0, x1, y1 = polygon_to_bbox(lists_to_polygon(px, py))
@@ -147,7 +145,7 @@ def process_image(fname, output_dir, poller):
 
 def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTPUT_OPEX, suffix=".json",
             score_threshold=0.0, poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
-            delete_input=False, max_files=-1, output_width_height=False, output_minrect=False,
+            delete_input=False, max_files=-1, output_width_height=False,
             fit_bbox_to_polygon=False, verbose=False, quiet=False):
     """
     Method for performing predictions on images.
@@ -182,8 +180,6 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTP
     :type max_files: int
     :param output_width_height: whether to output x/y/w/h instead of x0/y0/x1/y1
     :type output_width_height: bool
-    :param output_minrect: when predicting polygons, whether to output the minimal rectangles around the objects as well
-    :type output_minrect: bool
     :param fit_bbox_to_polygon: whether to fit the bounding box to the polygon
     :type fit_bbox_to_polygon: bool
     :param verbose: whether to output more logging information
@@ -211,7 +207,6 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTP
     poller.params.class_names = class_names
     poller.params.score_threshold = score_threshold
     poller.params.output_width_height = output_width_height
-    poller.params.output_minrect = output_minrect
     poller.params.fit_bbox_to_polygon = fit_bbox_to_polygon
     poller.params.cpu_device = torch.device("cpu")
     poller.params.predictor = DefaultPredictor(cfg)
@@ -262,7 +257,6 @@ def main(args=None):
     parser.add_argument('--delete_input', action='store_true', help='Whether to delete the input images rather than move them to --prediction_out directory', required=False, default=False)
     parser.add_argument('--max_files', type=int, default=-1, help="Maximum files to poll at a time, use -1 for unlimited", required=False)
     parser.add_argument('--output_width_height', action='store_true', help="Whether to output x/y/w/h instead of x0/y0/x1/y1 in the ROI CSV files", required=False, default=False)
-    parser.add_argument('--output_minrect', action='store_true', help='When outputting polygons whether to store the minimal rectangle around the objects in the CSV files as well', required=False, default=False)
     parser.add_argument('--fit_bbox_to_polygon', action='store_true', help='Whether to fit the bounding box to the polygon', required=False, default=False)
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
     parser.add_argument('--quiet', action='store_true', help='Whether to suppress output', required=False, default=False)
@@ -288,7 +282,7 @@ def main(args=None):
             score_threshold=parsed.score_threshold, poll_wait=parsed.poll_wait, continuous=parsed.continuous,
             use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
             delete_input=parsed.delete_input, max_files=parsed.max_files, output_format=parsed.prediction_format,
-            output_width_height=parsed.output_width_height, output_minrect=parsed.output_minrect,
+            output_width_height=parsed.output_width_height,
             verbose=parsed.verbose, quiet=parsed.quiet)
 
 

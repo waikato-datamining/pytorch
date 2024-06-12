@@ -1,25 +1,4 @@
-import cv2
-
 from planar import Polygon, Vec2
-
-
-def polygon_to_minrect(poly):
-    """
-    Determines the minimal rectangle around the provided polygon.
-    Uses OpenCV's cv2.minAreaRect method for this.
-    http://opencvpython.blogspot.com/2012/06/contours-2-brotherhood.html
-
-    :param poly: the polygon describing a detected object: each contour is an ndarray of shape (n, 2),
-                 consisting of n (x, y) coordinates along the contour
-    :param poly: np.ndarray
-    :return: the minimal rectangle, a tuple of width and height
-    :rtype: tuple
-    """
-
-    rect = cv2.minAreaRect(np.float32(poly))
-    w = rect[1][0]
-    h = rect[1][1]
-    return w, h
 
 
 def lists_to_polygon(x, y):
