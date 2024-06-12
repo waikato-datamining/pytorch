@@ -1,8 +1,8 @@
 # Detectron2
 
-Uses [Detectron2](https://github.com/facebookresearch/detectron2) ([documentation](https://detectron2.readthedocs.io/en/v2024-06-06/)). 
+Uses [Detectron2](https://github.com/facebookresearch/detectron2) ([documentation](https://detectron2.readthedocs.io/en/v2024-06-12/)). 
 
-Uses PyTorch 2.3.0, CUDA 12.1 and Detectron2 2024-06-06.
+Uses PyTorch 2.3.0, CUDA 12.1 and Detectron2 2024-06-12.
 
 Though Detectron2 is installed via a wheel file, you can find Detectron2's source code \
 inside the container in:
@@ -46,7 +46,7 @@ June 12, 2024
   ```bash
   docker run --gpus=all --shm-size 8G --net=host \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2024-06-06
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2024-06-12
   ```
 
 ### Docker hub
@@ -56,12 +56,12 @@ June 12, 2024
   ```bash
   docker run --gpus=all --shm-size 8G --net=host \
     -v /local/dir:/container/dir \
-    -it waikatodatamining/detectron2:2024-06-06
+    -it waikatodatamining/detectron2:2024-06-12
   ```
 
 ### Build local image
 
-* Build the image from Docker file (from within /path_to/detectron2/2024-06-06)
+* Build the image from Docker file (from within /path_to/detectron2/2024-06-12)
 
   ```bash
   docker build -t detectron2 .
@@ -80,7 +80,7 @@ June 12, 2024
 ### Build
 
 ```bash
-docker build -t detectron2:2024-06-06 .
+docker build -t detectron2:2024-06-12 .
 ```
 
 ### Inhouse registry  
@@ -89,14 +89,14 @@ docker build -t detectron2:2024-06-06 .
 
   ```bash
   docker tag \
-    detectron2:2024-06-06 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2024-06-06
+    detectron2:2024-06-12 \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2024-06-12
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2024-06-06
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2024-06-12
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -110,14 +110,14 @@ docker build -t detectron2:2024-06-06 .
 
   ```bash
   docker tag \
-    detectron2:2024-06-06 \
-    waikatodatamining/detectron2:2024-06-06
+    detectron2:2024-06-12 \
+    waikatodatamining/detectron2:2024-06-12
   ```
   
 * Push
 
   ```bash
-  docker push waikatodatamining/detectron2:2024-06-06
+  docker push waikatodatamining/detectron2:2024-06-12
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -130,7 +130,7 @@ docker build -t detectron2:2024-06-06 .
 
 ```bash
 docker run --rm \
-  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2024-06-06 \
+  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2024-06-12 \
   pip freeze > requirements.txt
 ```
 
