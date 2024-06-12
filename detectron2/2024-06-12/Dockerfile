@@ -42,7 +42,8 @@ RUN pip install --no-cache-dir \
         "simple-file-poller>=0.0.9" \
         redis \
         "opex==0.0.3" \
-        "redis-docker-harness==0.0.4"
+        "redis-docker-harness==0.0.4" \
+        planar==0.4
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY d2_predict_common.py /opt/detectron2_ext/
