@@ -9,7 +9,7 @@ from detectron2.data.detection_utils import read_image, _apply_exif_orientation,
 from detectron2.engine.defaults import DefaultPredictor
 from detectron2.utils.visualizer import GenericMask
 from PIL import Image
-from wai.annotations.image_utils import polygon_to_minrect, lists_to_polygon, polygon_to_bbox
+from d2_predict_common import polygon_to_minrect, lists_to_polygon, polygon_to_bbox
 from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
 from opex import ObjectPredictions, ObjectPrediction, Polygon, BBox
 

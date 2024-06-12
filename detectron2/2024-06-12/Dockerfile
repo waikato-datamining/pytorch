@@ -45,15 +45,18 @@ RUN pip install --no-cache-dir \
         "redis-docker-harness==0.0.4"
 
 COPY bash.bashrc /etc/bash.bashrc
-COPY d2_train_coco.py /opt/detectron2_ext/d2_train_coco.py
-COPY d2_train_coco /usr/bin/d2_train_coco
-COPY d2_predict.py /opt/detectron2_ext/d2_predict.py
-COPY d2_predict /usr/bin/d2_predict
-COPY d2_predict_redis.py /opt/detectron2_ext/d2_predict_redis.py
-COPY d2_predict_redis /usr/bin/d2_predict_redis
-COPY d2_export.py /opt/detectron2_ext/d2_export.py
-COPY d2_export /usr/bin/d2_export
-COPY d2_test_image_redis.py /opt/detectron2_ext/d2_test_image_redis.py
-COPY d2_test_image_redis /usr/bin/d2_test_image_redis
-COPY d2_dump_config.py /opt/detectron2_ext/d2_dump_config.py
-COPY d2_dump_config /usr/bin/d2_dump_config
+COPY d2_predict_common.py /opt/detectron2_ext/
+COPY d2_train_coco.py /opt/detectron2_ext/
+COPY d2_train_coco /usr/bin/
+COPY d2_predict.py /opt/detectron2_ext/
+COPY d2_predict /usr/bin/
+COPY d2_predict_redis.py /opt/detectron2_ext/
+COPY d2_predict_redis /usr/bin/
+COPY d2_export.py /opt/detectron2_ext/
+COPY d2_export /usr/bin/
+COPY d2_test_image_redis.py /opt/detectron2_ext/
+COPY d2_test_image_redis /usr/bin/
+COPY d2_dump_config.py /opt/detectron2_ext/
+COPY d2_dump_config /usr/bin/
+
+ENV PYTHONPATH=/opt/detectron2_ext/

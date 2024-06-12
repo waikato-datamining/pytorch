@@ -13,8 +13,7 @@ from image_complete import auto
 from opex import ObjectPredictions, ObjectPrediction, BBox, Polygon
 from PIL import Image
 from sfp import Poller
-from wai.annotations.image_utils import polygon_to_minrect, lists_to_polygon, polygon_to_bbox
-from wai.annotations.core import ImageInfo
+from d2_predict_common import polygon_to_minrect, lists_to_polygon, polygon_to_bbox
 
 
 SUPPORTED_EXTS = [".jpg", ".jpeg", ".png", ".bmp"]
