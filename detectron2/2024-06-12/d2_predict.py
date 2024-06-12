@@ -15,16 +15,13 @@ from PIL import Image
 from sfp import Poller
 from wai.annotations.image_utils import polygon_to_minrect, lists_to_polygon, polygon_to_bbox
 from wai.annotations.core import ImageInfo
-from wai.annotations.roi import ROIObject
-from wai.annotations.roi.io import ROIWriter
 
 
 SUPPORTED_EXTS = [".jpg", ".jpeg", ".png", ".bmp"]
 """ supported file extensions (lower case). """
 
-OUTPUT_ROIS = "rois"
 OUTPUT_OPEX = "opex"
-OUTPUT_FORMATS = [OUTPUT_ROIS, OUTPUT_OPEX]
+OUTPUT_FORMATS = [OUTPUT_OPEX]
 
 
 def check_image(fname, poller):
@@ -122,12 +119,7 @@ def process_image(fname, output_dir, poller):
                     except:
                         poller.error("Failed to access polygon #%d: %s" % (i, traceback.format_exc()))
 
-                if poller.params.output_format == OUTPUT_ROIS:
-                    roi_obj = ROIObject(x0, y0, x1, y1, x0n, y0n, x1n, y1n, label, label_str, score=score,
-                                        poly_x=px, poly_y=py, poly_xn=pxn, poly_yn=pyn,
-                                        minrect_w=bw, minrect_h=bh)
-                    pred_objs.append(roi_obj)
-                elif poller.params.output_format == OUTPUT_OPEX:
+                if poller.params.output_format == OUTPUT_OPEX:
                     if px is None:
                         px = [int(x0), int(x1), int(x1), int(x0)]
                         py = [int(y0), int(y0), int(y1), int(y1)]
@@ -141,16 +133,7 @@ def process_image(fname, output_dir, poller):
                 else:
                     poller.error("Unknown output format: %s" % poller.params.output_format)
 
-        if poller.params.output_format == OUTPUT_ROIS:
-            info = ImageInfo(filename=os.path.basename(fname), size=(image_width, image_height))
-            roiext = (info, pred_objs)
-            options = ["--output=%s" % output_dir, "--no-images", "--suffix=%s" % poller.params.suffix]
-            if poller.params.output_width_height:
-                options.append("--size-mode")
-            roiwriter = ROIWriter(options)
-            roiwriter.save([roiext])
-            result.append(output_path)
-        elif poller.params.output_format == OUTPUT_OPEX:
+        if poller.params.output_format == OUTPUT_OPEX:
             opex_preds = ObjectPredictions(id=os.path.basename(fname), timestamp=str(datetime.now()), objects=pred_objs)
             opex_preds.save_json_to_file(output_path)
         else:
@@ -163,7 +146,7 @@ def process_image(fname, output_dir, poller):
     return result
 
 
-def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTPUT_ROIS, suffix="-rois.csv",
+def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTPUT_OPEX, suffix=".json",
             score_threshold=0.0, poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
             delete_input=False, max_files=-1, output_width_height=False, output_minrect=False,
             fit_bbox_to_polygon=False, verbose=False, quiet=False):
@@ -271,8 +254,8 @@ def main(args=None):
     parser.add_argument('--prediction_in', metavar='DIR', required=True, help='The input directory to poll for images to make predictions for')
     parser.add_argument('--prediction_out', metavar='DIR', required=True, help='The directory to place predictions in and move input images to')
     parser.add_argument('--prediction_tmp', metavar='DIR', help='The directory to place the prediction files in first before moving them to the output directory')
-    parser.add_argument('--prediction_format', choices=OUTPUT_FORMATS, help='The type of output format to generate', default=OUTPUT_ROIS, required=False)
-    parser.add_argument('--prediction_suffix', metavar='SUFFIX', help='The suffix to use for the prediction files', default="-rois.csv", required=False)
+    parser.add_argument('--prediction_format', choices=OUTPUT_FORMATS, help='The type of output format to generate', default=OUTPUT_OPEX, required=False)
+    parser.add_argument('--prediction_suffix', metavar='SUFFIX', help='The suffix to use for the prediction files', default=".json", required=False)
     parser.add_argument('--poll_wait', type=float, help='poll interval in seconds when not using watchdog mode', required=False, default=1.0)
     parser.add_argument('--continuous', action='store_true', help='Whether to continuously load test images and perform prediction', required=False, default=False)
     parser.add_argument('--use_watchdog', action='store_true', help='Whether to react to file creation events rather than performing fixed-interval polling', required=False, default=False)
