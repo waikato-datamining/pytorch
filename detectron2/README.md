@@ -6,6 +6,7 @@ https://github.com/facebookresearch/detectron2
 
 Available versions:
 
-* [0.3](0.3)
-* [0.5](0.5)
+* [2024-06-12](2024-06-12)
 * [0.6](0.6)
+* [0.5](0.5)
+* [0.3](0.3)
