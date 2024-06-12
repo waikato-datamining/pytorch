@@ -148,7 +148,6 @@ def main(args=None):
     parser.add_argument('--config', metavar='FILE', required=True, help='The model config file to use')
     parser.add_argument('--labels', metavar='FILE', required=True, help='the file with the labels (comma-separate list)')
     parser.add_argument('--score_threshold', type=float, default=0.5, help="Minimum score for instance predictions to be shown")
-    parser.add_argument('--output_width_height', action='store_true', help="Whether to output x/y/w/h instead of x0/y0/x1/y1 in the ROI CSV files", required=False, default=False)
     parser.add_argument('--fit_bbox_to_polygon', action='store_true', help='Whether to fit the bounding box to the polygon', required=False, default=False)
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
 
@@ -156,7 +155,6 @@ def main(args=None):
 
     config = Container()
     config.score_threshold = parsed.score_threshold
-    config.output_width_height = parsed.output_width_height
     config.fit_bbox_to_polygon = parsed.fit_bbox_to_polygon
     config.verbose = parsed.verbose
 

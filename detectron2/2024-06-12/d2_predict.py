@@ -83,17 +83,9 @@ def process_image(fname, output_dir, poller):
                 label_str = poller.params.class_names[label]
                 box = boxes[i].tensor.numpy()
                 x0, y0, x1, y1 = box[0]
-                x0n = x0 / image_width
-                y0n = y0 / image_height
-                x1n = x1 / image_width
-                y1n = y1 / image_height
 
                 px = None
                 py = None
-                pxn = None
-                pyn = None
-                bw = None
-                bh = None
 
                 if polygons is not None:
                     try:
@@ -112,7 +104,6 @@ def process_image(fname, output_dir, poller):
                         if poller.params.fit_bbox_to_polygon:
                             if len(px) >= 3:
                                 x0, y0, x1, y1 = polygon_to_bbox(lists_to_polygon(px, py))
-                                x0n, y0n, x1n, y1n = polygon_to_bbox(lists_to_polygon(pxn, pyn))
                     except:
                         poller.error("Failed to access polygon #%d: %s" % (i, traceback.format_exc()))
 
@@ -145,8 +136,7 @@ def process_image(fname, output_dir, poller):
 
 def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTPUT_OPEX, suffix=".json",
             score_threshold=0.0, poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
-            delete_input=False, max_files=-1, output_width_height=False,
-            fit_bbox_to_polygon=False, verbose=False, quiet=False):
+            delete_input=False, max_files=-1, fit_bbox_to_polygon=False, verbose=False, quiet=False):
     """
     Method for performing predictions on images.
 
@@ -178,8 +168,6 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTP
     :type delete_input: bool
     :param max_files: The maximum number of files retrieve with each poll, use <0 for no restrictions.
     :type max_files: int
-    :param output_width_height: whether to output x/y/w/h instead of x0/y0/x1/y1
-    :type output_width_height: bool
     :param fit_bbox_to_polygon: whether to fit the bounding box to the polygon
     :type fit_bbox_to_polygon: bool
     :param verbose: whether to output more logging information
@@ -206,7 +194,6 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTP
     poller.params.config = cfg
     poller.params.class_names = class_names
     poller.params.score_threshold = score_threshold
-    poller.params.output_width_height = output_width_height
     poller.params.fit_bbox_to_polygon = fit_bbox_to_polygon
     poller.params.cpu_device = torch.device("cpu")
     poller.params.predictor = DefaultPredictor(cfg)
@@ -256,7 +243,6 @@ def main(args=None):
     parser.add_argument('--watchdog_check_interval', type=float, help='check interval in seconds for the watchdog', required=False, default=10.0)
     parser.add_argument('--delete_input', action='store_true', help='Whether to delete the input images rather than move them to --prediction_out directory', required=False, default=False)
     parser.add_argument('--max_files', type=int, default=-1, help="Maximum files to poll at a time, use -1 for unlimited", required=False)
-    parser.add_argument('--output_width_height', action='store_true', help="Whether to output x/y/w/h instead of x0/y0/x1/y1 in the ROI CSV files", required=False, default=False)
     parser.add_argument('--fit_bbox_to_polygon', action='store_true', help='Whether to fit the bounding box to the polygon', required=False, default=False)
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
     parser.add_argument('--quiet', action='store_true', help='Whether to suppress output', required=False, default=False)
@@ -282,7 +268,6 @@ def main(args=None):
             score_threshold=parsed.score_threshold, poll_wait=parsed.poll_wait, continuous=parsed.continuous,
             use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
             delete_input=parsed.delete_input, max_files=parsed.max_files, output_format=parsed.prediction_format,
-            output_width_height=parsed.output_width_height,
             verbose=parsed.verbose, quiet=parsed.quiet)
 
 
