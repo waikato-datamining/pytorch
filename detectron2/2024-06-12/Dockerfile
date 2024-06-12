@@ -39,7 +39,6 @@ RUN git clone https://github.com/facebookresearch/detectron2.git && \
 
 RUN pip install --no-cache-dir \
         python-image-complete \
-        "wai.annotations<=0.3.5" \
         "simple-file-poller>=0.0.9" \
         redis \
         "opex==0.0.3" \
