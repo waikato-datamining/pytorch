@@ -16,7 +16,9 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir \
+RUN pip install -U --no-cache-dir \
+        "setuptools<=57.5.0" \
+        "wheel" \
         "protobuf<4.0.0" \
         "pillow<9" \
         opencv-python \
@@ -38,7 +40,7 @@ RUN git clone https://github.com/facebookresearch/detectron2.git && \
 RUN pip install --no-cache-dir \
         python-image-complete \
         "wai.annotations<=0.3.5" \
-        "simple-file-poller>=0.0.9"
+        "simple-file-poller>=0.0.9" \
         redis \
         "opex==0.0.3" \
         "redis-docker-harness==0.0.4"
