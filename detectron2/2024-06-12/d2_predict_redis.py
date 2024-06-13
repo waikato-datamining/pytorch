@@ -9,7 +9,7 @@ from detectron2.data.detection_utils import read_image, _apply_exif_orientation,
 from detectron2.engine.defaults import DefaultPredictor
 from detectron2.utils.visualizer import GenericMask
 from PIL import Image
-from d2_predict_common import lists_to_polygon, polygon_to_bbox
+from d2_predict_common import lists_to_polygon, polygon_to_bbox, simplify_polygon
 from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
 from opex import ObjectPredictions, ObjectPrediction, Polygon, BBox
 
@@ -95,11 +95,15 @@ def process_image(msg_cont):
                 bbox = BBox(left=int(x0), top=int(y0), right=int(x1), bottom=int(y1))
 
                 if px is None:
-                    p = [(int(x0), int(y0)), (int(x1), int(y0)), (int(x1), int(y1)), (int(x0), int(y1))]
-                else:
-                    p = []
-                    for j in range(len(px)):
-                        p.append([int(px[j]), int(py[j])])
+                    px = [int(x0), int(x1), int(x1), int(x0)]
+                    py = [int(y0), int(y0), int(y1), int(y1)]
+
+                if config.simplify_polygons is not None:
+                    px, py = simplify_polygon(px, py, poller.params.simplify_polygons)
+
+                p = []
+                for j in range(len(px)):
+                    p.append([int(px[j]), int(py[j])])
                 poly = Polygon(points=p)
 
                 pred = ObjectPrediction(label=label_str, score=score, bbox=bbox, polygon=poly)
@@ -149,6 +153,7 @@ def main(args=None):
     parser.add_argument('--labels', metavar='FILE', required=True, help='the file with the labels (comma-separate list)')
     parser.add_argument('--score_threshold', type=float, default=0.5, help="Minimum score for instance predictions to be shown")
     parser.add_argument('--fit_bbox_to_polygon', action='store_true', help='Whether to fit the bounding box to the polygon', required=False, default=False)
+    parser.add_argument('--simplify_polygons', type=float, default=None, help="The tolerance factor to use for simplifying the polygons", required=False)
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
 
     parsed = parser.parse_args(args=args)
@@ -156,6 +161,7 @@ def main(args=None):
     config = Container()
     config.score_threshold = parsed.score_threshold
     config.fit_bbox_to_polygon = parsed.fit_bbox_to_polygon
+    config.simplify_polygons = parsed.simplify_polygons
     config.verbose = parsed.verbose
 
     # loads labels

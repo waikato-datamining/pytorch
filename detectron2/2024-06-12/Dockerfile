@@ -43,7 +43,8 @@ RUN pip install --no-cache-dir \
         redis \
         "opex==0.0.3" \
         "redis-docker-harness==0.0.4" \
-        planar==0.4
+        planar==0.4 \
+        shapely==2.0.4
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY d2_predict_common.py /opt/detectron2_ext/

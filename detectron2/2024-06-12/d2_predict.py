@@ -13,7 +13,7 @@ from image_complete import auto
 from opex import ObjectPredictions, ObjectPrediction, BBox, Polygon
 from PIL import Image
 from sfp import Poller
-from d2_predict_common import lists_to_polygon, polygon_to_bbox
+from d2_predict_common import lists_to_polygon, polygon_to_bbox, simplify_polygon
 
 
 SUPPORTED_EXTS = [".jpg", ".jpeg", ".png", ".bmp"]
@@ -112,6 +112,8 @@ def process_image(fname, output_dir, poller):
                         px = [int(x0), int(x1), int(x1), int(x0)]
                         py = [int(y0), int(y0), int(y1), int(y1)]
                     bbox = BBox(left=int(x0), top=int(y0), right=int(x1), bottom=int(y1))
+                    if poller.params.simplify_polygons is not None:
+                        px, py = simplify_polygon(px, py, poller.params.simplify_polygons)
                     points = []
                     for x, y in zip(px, py):
                         points.append((int(x), int(y)))
@@ -136,7 +138,7 @@ def process_image(fname, output_dir, poller):
 
 def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTPUT_OPEX, suffix=".json",
             score_threshold=0.0, poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
-            delete_input=False, max_files=-1, fit_bbox_to_polygon=False, verbose=False, quiet=False):
+            delete_input=False, max_files=-1, fit_bbox_to_polygon=False, simplify_polygons=None, verbose=False, quiet=False):
     """
     Method for performing predictions on images.
 
@@ -170,6 +172,8 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTP
     :type max_files: int
     :param fit_bbox_to_polygon: whether to fit the bounding box to the polygon
     :type fit_bbox_to_polygon: bool
+    :param simplify_polygons: the tolerance factor for simplifying the polygons
+    :type simplify_polygons: float
     :param verbose: whether to output more logging information
     :type verbose: bool
     :param quiet: whether to suppress output
@@ -195,6 +199,7 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTP
     poller.params.class_names = class_names
     poller.params.score_threshold = score_threshold
     poller.params.fit_bbox_to_polygon = fit_bbox_to_polygon
+    poller.params.simplify_polygons = simplify_polygons
     poller.params.cpu_device = torch.device("cpu")
     poller.params.predictor = DefaultPredictor(cfg)
     poller.params.output_format = output_format
@@ -244,6 +249,7 @@ def main(args=None):
     parser.add_argument('--delete_input', action='store_true', help='Whether to delete the input images rather than move them to --prediction_out directory', required=False, default=False)
     parser.add_argument('--max_files', type=int, default=-1, help="Maximum files to poll at a time, use -1 for unlimited", required=False)
     parser.add_argument('--fit_bbox_to_polygon', action='store_true', help='Whether to fit the bounding box to the polygon', required=False, default=False)
+    parser.add_argument('--simplify_polygons', type=float, default=None, help="The tolerance factor to use for simplifying the polygons", required=False)
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
     parser.add_argument('--quiet', action='store_true', help='Whether to suppress output', required=False, default=False)
 
@@ -268,7 +274,7 @@ def main(args=None):
             score_threshold=parsed.score_threshold, poll_wait=parsed.poll_wait, continuous=parsed.continuous,
             use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
             delete_input=parsed.delete_input, max_files=parsed.max_files, output_format=parsed.prediction_format,
-            verbose=parsed.verbose, quiet=parsed.quiet)
+            simplify_polygons=parsed.simplify_polygons, verbose=parsed.verbose, quiet=parsed.quiet)
 
 
 if __name__ == "__main__":
