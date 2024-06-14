@@ -21,7 +21,7 @@ Uses Yolov7 2022-10-08 (072f76c72c641c7a1ee482e39f604f6f8ef7ee92), CPU only
   docker run \
     --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08_cpu
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08-1_cpu
   ```
 
 ### Docker hub
@@ -32,12 +32,12 @@ Uses Yolov7 2022-10-08 (072f76c72c641c7a1ee482e39f604f6f8ef7ee92), CPU only
   docker run \
     --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it waikatodatamining/pytorch-yolov7:2022-10-08_cpu
+    -it waikatodatamining/pytorch-yolov7:2022-10-08-1_cpu
   ```
 
 ### Build local image
 
-* Build the image from Docker file (from within `/path_to/2022-10-08_cpu`)
+* Build the image from Docker file (from within `/path_to/2022-10-08-1_cpu`)
 
   ```bash
   docker build -t yolov7 .
@@ -58,7 +58,7 @@ Uses Yolov7 2022-10-08 (072f76c72c641c7a1ee482e39f604f6f8ef7ee92), CPU only
 ### Build
 
 ```bash
-docker build -t pytorch-yolov7:2022-10-08_cpu .
+docker build -t pytorch-yolov7:2022-10-08-1_cpu .
 ```
 
 ### Inhouse registry  
@@ -67,14 +67,14 @@ docker build -t pytorch-yolov7:2022-10-08_cpu .
 
   ```bash
   docker tag \
-    pytorch-yolov7:2022-10-08_cpu \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08_cpu
+    pytorch-yolov7:2022-10-08-1_cpu \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08-1_cpu
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08_cpu
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08-1_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -88,14 +88,14 @@ docker build -t pytorch-yolov7:2022-10-08_cpu .
 
   ```bash
   docker tag \
-    pytorch-yolov7:2022-10-08_cpu \
-    waikatodatamining/pytorch-yolov7:2022-10-08_cpu
+    pytorch-yolov7:2022-10-08-1_cpu \
+    waikatodatamining/pytorch-yolov7:2022-10-08-1_cpu
   ```
   
 * Push
 
   ```bash
-  docker push waikatodatamining/pytorch-yolov7:2022-10-08_cpu
+  docker push waikatodatamining/pytorch-yolov7:2022-10-08-1_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   

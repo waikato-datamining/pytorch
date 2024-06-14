@@ -21,7 +21,7 @@ Uses Yolov7 2022-10-08 (072f76c72c641c7a1ee482e39f604f6f8ef7ee92), CUDA 11.1 and
   docker run \
     --gpus=all --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08_cuda11.1
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08-1_cuda11.1
   ```
 
 ### Docker hub
@@ -30,13 +30,13 @@ Uses Yolov7 2022-10-08 (072f76c72c641c7a1ee482e39f604f6f8ef7ee92), CUDA 11.1 and
   docker run \
     --gpus=all --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it waikatodatamining/pytorch-yolov7:2022-10-08_cuda11.1
+    -it waikatodatamining/pytorch-yolov7:2022-10-08-1_cuda11.1
   ```
 
 
 ### Build local image
 
-* Build the image from Docker file (from within `/path_to/2022-10-08_cuda11.1`)
+* Build the image from Docker file (from within `/path_to/2022-10-08-1_cuda11.1`)
 
   ```bash
   docker build -t yolov7 .
@@ -57,7 +57,7 @@ Uses Yolov7 2022-10-08 (072f76c72c641c7a1ee482e39f604f6f8ef7ee92), CUDA 11.1 and
 ### Build
 
 ```bash
-docker build -t pytorch-yolov7:2022-10-08_cuda11.1 .
+docker build -t pytorch-yolov7:2022-10-08-1_cuda11.1 .
 ```
 
 ### Inhouse registry  
@@ -66,14 +66,14 @@ docker build -t pytorch-yolov7:2022-10-08_cuda11.1 .
 
   ```bash
   docker tag \
-    pytorch-yolov7:2022-10-08_cuda11.1 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08_cuda11.1
+    pytorch-yolov7:2022-10-08-1_cuda11.1 \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08-1_cuda11.1
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08_cuda11.1
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08-1_cuda11.1
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -87,14 +87,14 @@ docker build -t pytorch-yolov7:2022-10-08_cuda11.1 .
 
   ```bash
   docker tag \
-    pytorch-yolov7:2022-10-08_cuda11.1 \
-    waikatodatamining/pytorch-yolov7:2022-10-08_cuda11.1
+    pytorch-yolov7:2022-10-08-1_cuda11.1 \
+    waikatodatamining/pytorch-yolov7:2022-10-08-1_cuda11.1
   ```
   
 * Push
 
   ```bash
-  docker push waikatodatamining/pytorch-yolov7:2022-10-08_cuda11.1
+  docker push waikatodatamining/pytorch-yolov7:2022-10-08-1_cuda11.1
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
