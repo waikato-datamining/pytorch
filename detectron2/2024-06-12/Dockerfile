@@ -41,7 +41,8 @@ RUN pip install --no-cache-dir \
         python-image-complete \
         "simple-file-poller>=0.0.9" \
         redis \
-        "opex==0.0.3" \
+        "fast-opex==0.0.1" \
+        orjson \
         "redis-docker-harness==0.0.4" \
         planar==0.4 \
         shapely==2.0.4
