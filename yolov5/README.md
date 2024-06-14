@@ -10,6 +10,8 @@ Available versions:
 
   * [CUDA 11.1](2022-11-05_cuda11.1)
   * [CPU](2022-11-05_cpu)
+  * [CUDA 11.1 (with fast-opex)](2022-11-05-1_cuda11.1)
+  * [CPU (with fast-opex)](2022-11-05-1_cpu)
 
 * 2022-09-29
 
