@@ -21,7 +21,7 @@ Uses Segment-Anything 2023-08-17 (1db02cad10e4bee154b32fdc1565850332b322f6), CUD
   docker run \
     --gpus=all --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam-hq:2023-08-17_cuda11.6
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam-hq:2023-08-17-1_cuda11.6
   ```
 
 ### Docker hub
@@ -32,12 +32,12 @@ Uses Segment-Anything 2023-08-17 (1db02cad10e4bee154b32fdc1565850332b322f6), CUD
   docker run \
     --gpus=all --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it waikatodatamining/pytorch-sam-hq:2023-08-17_cuda11.6
+    -it waikatodatamining/pytorch-sam-hq:2023-08-17-1_cuda11.6
   ```
 
 ### Build local image
 
-* Build the image from Docker file (from within `/path_to/2023-08-17_cuda11.6`)
+* Build the image from Docker file (from within `/path_to/2023-08-17-1_cuda11.6`)
 
   ```bash
   docker build -t sam-hq .
@@ -58,7 +58,7 @@ Uses Segment-Anything 2023-08-17 (1db02cad10e4bee154b32fdc1565850332b322f6), CUD
 ### Build
 
 ```bash
-docker build -t pytorch-sam-hq:2023-08-17_cuda11.6 .
+docker build -t pytorch-sam-hq:2023-08-17-1_cuda11.6 .
 ```
 
 ### Inhouse registry  
@@ -67,14 +67,14 @@ docker build -t pytorch-sam-hq:2023-08-17_cuda11.6 .
 
   ```bash
   docker tag \
-    pytorch-sam-hq:2023-08-17_cuda11.6 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam-hq:2023-08-17_cuda11.6
+    pytorch-sam-hq:2023-08-17-1_cuda11.6 \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam-hq:2023-08-17-1_cuda11.6
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam-hq:2023-08-17_cuda11.6
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam-hq:2023-08-17-1_cuda11.6
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -88,14 +88,14 @@ docker build -t pytorch-sam-hq:2023-08-17_cuda11.6 .
 
   ```bash
   docker tag \
-    pytorch-sam-hq:2023-08-17_cuda11.6 \
-    waikatodatamining/pytorch-sam-hq:2023-08-17_cuda11.6
+    pytorch-sam-hq:2023-08-17-1_cuda11.6 \
+    waikatodatamining/pytorch-sam-hq:2023-08-17-1_cuda11.6
   ```
   
 * Push
 
   ```bash
-  docker push waikatodatamining/pytorch-sam-hq:2023-08-17_cuda11.6
+  docker push waikatodatamining/pytorch-sam-hq:2023-08-17-1_cuda11.6
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -108,7 +108,7 @@ docker build -t pytorch-sam-hq:2023-08-17_cuda11.6 .
 
 ```bash
 docker run --rm \
-  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam-hq:2023-08-17_cuda11.6 \
+  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam-hq:2023-08-17-1_cuda11.6 \
   pip freeze > requirements.txt
 ```
 

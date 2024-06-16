@@ -21,7 +21,7 @@ Uses Segment-Anything 2023-04-16 (567662b0fd33ca4b022d94d3b8de896628cd32dd), CPU
   docker run \
     --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam:2023-04-16_cpu
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam:2023-04-16-1_cpu
   ```
 
 ### Docker hub
@@ -32,12 +32,12 @@ Uses Segment-Anything 2023-04-16 (567662b0fd33ca4b022d94d3b8de896628cd32dd), CPU
   docker run \
     --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it waikatodatamining/pytorch-sam:2023-04-16_cpu
+    -it waikatodatamining/pytorch-sam:2023-04-16-1_cpu
   ```
 
 ### Build local image
 
-* Build the image from Docker file (from within `/path_to/2023-04-16_cpu`)
+* Build the image from Docker file (from within `/path_to/2023-04-16-1_cpu`)
 
   ```bash
   docker build -t sam .
@@ -58,7 +58,7 @@ Uses Segment-Anything 2023-04-16 (567662b0fd33ca4b022d94d3b8de896628cd32dd), CPU
 ### Build
 
 ```bash
-docker build -t pytorch-sam:2023-04-16_cpu .
+docker build -t pytorch-sam:2023-04-16-1_cpu .
 ```
 
 ### Inhouse registry  
@@ -67,14 +67,14 @@ docker build -t pytorch-sam:2023-04-16_cpu .
 
   ```bash
   docker tag \
-    pytorch-sam:2023-04-16_cpu \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam:2023-04-16_cpu
+    pytorch-sam:2023-04-16-1_cpu \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam:2023-04-16-1_cpu
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam:2023-04-16_cpu
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam:2023-04-16-1_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -88,14 +88,14 @@ docker build -t pytorch-sam:2023-04-16_cpu .
 
   ```bash
   docker tag \
-    pytorch-sam:2023-04-16_cpu \
-    waikatodatamining/pytorch-sam:2023-04-16_cpu
+    pytorch-sam:2023-04-16-1_cpu \
+    waikatodatamining/pytorch-sam:2023-04-16-1_cpu
   ```
   
 * Push
 
   ```bash
-  docker push waikatodatamining/pytorch-sam:2023-04-16_cpu
+  docker push waikatodatamining/pytorch-sam:2023-04-16-1_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -108,7 +108,7 @@ docker build -t pytorch-sam:2023-04-16_cpu .
 
 ```bash
 docker run --rm \
-  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam:2023-04-16_cpu \
+  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam:2023-04-16-1_cpu \
   pip freeze > requirements.txt
 ```
 
