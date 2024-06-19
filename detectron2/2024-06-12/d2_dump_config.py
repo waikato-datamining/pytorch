@@ -17,7 +17,7 @@ def main(args=None):
                                      prog="d2_dump_config",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--config_in', metavar='FILE', required=True, help='the YAML model config file to use as input')
-    parser.add_argument('--num_classes', metavar='NUM', required=True, help='the number of classes in the dataset')
+    parser.add_argument('--num_classes', metavar='NUM', type=int, required=True, help='the number of classes in the dataset')
     parser.add_argument('--output_dir', metavar='DIR', required=True, help='the directory to store the model and logging files in')
     parser.add_argument('--config_out', metavar='FILE', required=True, help='the YAML file to store the fully expanded configuration in')
 
