@@ -12,7 +12,6 @@ RUN apt-get update && \
           python3-setuptools \
           git \
           python3-pip \
-          python3-opencv \
           pkg-config \
           gnupg && \
     rm -rf /var/lib/apt/lists/*
