@@ -9,6 +9,7 @@ RUN apt-get update && \
           libsm6 \
           libxrender-dev \
           libxext6 \
+          libgl1 \
           python3-setuptools \
           git \
           python3-pip \
@@ -16,7 +17,7 @@ RUN apt-get update && \
           gnupg && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir onnx==1.10.2 onnxruntime==1.10.0 "pillow<9" && \
+RUN pip install --no-cache-dir onnx==1.10.2 onnxruntime==1.10.0 "pillow<9" "numpy<2.0.0" && \
     pip install --no-cache-dir "fast-opex==0.0.2" orjson && \
     pip install --no-cache-dir python-image-complete && \
     pip install --no-cache-dir "wai.annotations<=0.3.5" && \
@@ -24,23 +25,21 @@ RUN pip install --no-cache-dir onnx==1.10.2 onnxruntime==1.10.0 "pillow<9" && \
     pip install --no-cache-dir redis && \
     pip install --no-cache-dir "redis-docker-harness==0.0.4" && \
     pip install --no-cache-dir torch==1.10.1 torchvision==0.11.2 -f https://torch.kmtea.eu/whl/stable.html && \
-    pip install --no-cache-dir -U numpy==1.22.1 && \
     # adapted from yolov7 requirements.txt
-    pip install --no-cache-dir "matplotlib>=3.2.2" \
+    pip install --no-cache-dir -U "matplotlib>=3.2.2" \
                                "opencv-python>=4.1.1" \
                                "Pillow>=7.1.2" \
                                "PyYAML>=5.3.1" \
                                "requests>=2.23.0" \
                                "scipy>=1.4.1" \
-                               "torch==1.10.1" \
-                               "torchvision==0.11.2" \
                                "tqdm>=4.41.0" \
                                "protobuf<4.21.3" \
                                "tensorboard>=2.4.1" \
                                "pandas>=1.1.4" \
                                "seaborn>=0.11.0" \
                                psutil \
-                               thop
+                               thop \
+                               "numpy<2.0.0"
 
 WORKDIR /opt
 RUN git clone https://github.com/WongKinYiu/yolov7.git && \
