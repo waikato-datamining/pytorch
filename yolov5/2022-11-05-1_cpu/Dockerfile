@@ -9,6 +9,7 @@ RUN apt-get update && \
           libsm6 \
           libxrender-dev \
           libxext6 \
+          libgl1 \
           python3-setuptools \
           git \
           python3-pip \
@@ -17,7 +18,7 @@ RUN apt-get update && \
           gnupg && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir onnx==1.10.2 onnxruntime==1.10.0 "pillow<9" && \
+RUN pip install --no-cache-dir onnx==1.10.2 onnxruntime==1.10.0 "pillow<9" "numpy<2.0.0" && \
     pip install --no-cache-dir "fast-opex==0.0.2" orjson && \
     pip install --no-cache-dir python-image-complete && \
     pip install --no-cache-dir "wai.annotations<=0.3.5" && \
