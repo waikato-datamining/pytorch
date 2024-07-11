@@ -22,7 +22,8 @@ RUN apt-get update && \
           python3-setuptools \
           git \
           python3-opencv \
-          pkg-config && \
+          pkg-config \
+          curl && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir \

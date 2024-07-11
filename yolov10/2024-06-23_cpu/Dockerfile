@@ -14,7 +14,8 @@ RUN apt-get update && \
           git \
           python3-pip \
           pkg-config \
-          gnupg && \
+          gnupg \
+          curl && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir \
