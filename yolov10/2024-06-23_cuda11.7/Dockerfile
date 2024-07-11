@@ -38,7 +38,8 @@ RUN pip install --no-cache-dir \
       psutil==5.9.8 \
       py-cpuinfo==9.0.0 \
       huggingface-hub==0.23.2 \
-      safetensors==0.4.3
+      safetensors==0.4.3 \
+      "numpy<2.0.0"
 RUN pip install --no-cache-dir \
     "fast-opex==0.0.2" orjson \
     python-image-complete \
