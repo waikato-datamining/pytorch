@@ -7,12 +7,12 @@ FROM ${DOCKER_REGISTRY}pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-deve
 
 # update NVIDIA repo key
 # https://developer.nvidia.com/blog/updating-the-cuda-linux-gpg-repository-key/
-ARG distro=ubuntu1804
+ARG distro=ubuntu2004
 ARG arch=x86_64
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/$distro/$arch/3bf863cc.pub
 
 # https://developer.nvidia.com/blog/updating-the-cuda-linux-gpg-repository-key/
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get -y install \
           libglib2.0-0 \
@@ -26,7 +26,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir \
-      torch==2.0.1 \
       torchvision==0.15.2 \
       onnx==1.14.0 \
       onnxruntime==1.15.1 \
