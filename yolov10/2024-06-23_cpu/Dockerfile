@@ -30,18 +30,21 @@ RUN pip install --no-cache-dir \
       psutil==5.9.8 \
       py-cpuinfo==9.0.0 \
       huggingface-hub==0.23.2 \
-      safetensors==0.4.3
+      safetensors==0.4.3 \
+      "numpy<2.0.0" \
+      pandas
 RUN pip install --no-cache-dir \
-    "fast-opex==0.0.2" orjson \
-    python-image-complete \
-    "simple-file-poller>=0.0.9" \
-    redis \
-    "redis-docker-harness==0.0.4"
+      "fast-opex==0.0.2" orjson \
+      python-image-complete \
+      "simple-file-poller>=0.0.9" \
+      redis \
+      "redis-docker-harness==0.0.4"
 
 WORKDIR /opt
 RUN git clone https://github.com/THU-MIG/yolov10.git && \
     cd yolov10 && \
-    git reset --hard aad320dd80b56694e590c950b25060a134966496
+    git reset --hard aad320dd80b56694e590c950b25060a134966496 && \
+    pip install --no-cache-dir --no-deps .
 
 COPY bash.bashrc /etc/bash.bashrc
 #COPY predict*.py /opt/yolov10/
