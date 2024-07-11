@@ -2,7 +2,7 @@
 
 Command-line utilities for building/using Yolov10 models. Uses fast-opex and orjson.
 
-Uses Yolov10 2024-06-23 (aad320dd80b56694e590c950b25060a134966496), CPU only
+Uses Yolov10 2024-06-23 (aad320dd80b56694e590c950b25060a134966496), CPU only and Pytorch 2.0.1
 
 
 ## Quick start
@@ -21,7 +21,7 @@ Uses Yolov10 2024-06-23 (aad320dd80b56694e590c950b25060a134966496), CPU only
   docker run \
     --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov10:2024-06-23-1_cpu
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov10:2024-06-23_cpu
   ```
 
 ### Docker hub
@@ -32,12 +32,12 @@ Uses Yolov10 2024-06-23 (aad320dd80b56694e590c950b25060a134966496), CPU only
   docker run \
     --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it waikatodatamining/pytorch-yolov10:2024-06-23-1_cpu
+    -it waikatodatamining/pytorch-yolov10:2024-06-23_cpu
   ```
 
 ### Build local image
 
-* Build the image from Docker file (from within `/path_to/2024-06-23-1_cpu`)
+* Build the image from Docker file (from within `/path_to/2024-06-23_cpu`)
 
   ```bash
   docker build -t yolov10 .
@@ -58,7 +58,7 @@ Uses Yolov10 2024-06-23 (aad320dd80b56694e590c950b25060a134966496), CPU only
 ### Build
 
 ```bash
-docker build -t pytorch-yolov10:2024-06-23-1_cpu .
+docker build -t pytorch-yolov10:2024-06-23_cpu .
 ```
 
 ### Inhouse registry  
@@ -67,14 +67,14 @@ docker build -t pytorch-yolov10:2024-06-23-1_cpu .
 
   ```bash
   docker tag \
-    pytorch-yolov10:2024-06-23-1_cpu \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov10:2024-06-23-1_cpu
+    pytorch-yolov10:2024-06-23_cpu \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov10:2024-06-23_cpu
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov10:2024-06-23-1_cpu
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov10:2024-06-23_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -88,14 +88,14 @@ docker build -t pytorch-yolov10:2024-06-23-1_cpu .
 
   ```bash
   docker tag \
-    pytorch-yolov10:2024-06-23-1_cpu \
-    waikatodatamining/pytorch-yolov10:2024-06-23-1_cpu
+    pytorch-yolov10:2024-06-23_cpu \
+    waikatodatamining/pytorch-yolov10:2024-06-23_cpu
   ```
   
 * Push
 
   ```bash
-  docker push waikatodatamining/pytorch-yolov10:2024-06-23-1_cpu
+  docker push waikatodatamining/pytorch-yolov10:2024-06-23_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
