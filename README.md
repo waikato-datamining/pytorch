@@ -11,6 +11,7 @@ Pytorch related projects and docker images.
 * [segmentation_models](segmentation_models)
 * [yolov5](yolov5)
 * [yolov7](yolov7)
+* [yolov10](yolov10)
 
 Moved:
 
