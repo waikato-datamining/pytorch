@@ -48,7 +48,7 @@ RUN git clone https://github.com/THU-MIG/yolov10.git && \
     pip install --no-cache-dir --no-deps .
 
 COPY bash.bashrc /etc/bash.bashrc
-#COPY predict*.py /opt/yolov10/
+COPY predict*.py /opt/yolov10/
 COPY yolov10_* /usr/local/bin/
 
 ENV PYTHONPATH=/opt/yolov10
