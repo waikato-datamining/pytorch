@@ -63,7 +63,7 @@ def predict_image_opex(model_params, id, img, confidence_threshold=0.25,
 
     # Inference
     with torch.no_grad():  # Calculating gradients would cause a GPU memory leak
-        preds = model_params.model.predict(source=img, augment=augment, agnostic_nms=agnostic_nms)
+        preds = model_params.model.predict(source=img, augment=augment, agnostic_nms=agnostic_nms, verbose=False)
 
     width, height = img.size
 
