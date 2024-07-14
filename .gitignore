@@ -137,7 +137,6 @@ dmypy.json
 *.tar
 *.pth
 test/
-data/
 cache/
 output/
 predictions/
