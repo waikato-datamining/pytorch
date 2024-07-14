@@ -1,0 +1,3 @@
+#!/bin/bash
+
+python3 /opt/yolov10/predict_poll.py "$@"

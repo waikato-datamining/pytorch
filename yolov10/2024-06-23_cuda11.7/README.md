@@ -119,9 +119,7 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 The following additional scripts are available:
 
 * `yolov10_train` - the Yolov10 script for training models
-* `yolov10_train_aux` - the Yolov10 script for training p6 models
 * `yolov10_export` - the Yolov10 script for exporting models (eg to ONNX)
-* `yolov10_detect` - the Yolov10 script for generating predictions (e.g., for testing a model)
 * `yolov10_predict_poll` - batch-processing of images via file-polling
 * `yolov10_predict_redis` - making predictions via Redis backend
 
