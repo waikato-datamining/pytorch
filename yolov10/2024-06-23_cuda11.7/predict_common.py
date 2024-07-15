@@ -77,6 +77,7 @@ def predict_image_opex(model_params, id, img, confidence_threshold=0.25,
     opex_preds = []
     for i, pred in enumerate(preds):
         for box in pred.boxes:
+            box = box.to("cpu")
             conf = float(box.conf)
             if conf < confidence_threshold:
                 continue
