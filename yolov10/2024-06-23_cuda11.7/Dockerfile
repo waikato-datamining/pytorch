@@ -65,7 +65,5 @@ COPY Arial.ttf /tmp/yolov10/Arial.ttf
 COPY settings.yaml /root/.config/yolov10/settings.yaml
 COPY settings.yaml /.config/yolov10/settings.yaml
 COPY settings.yaml /tmp/yolov10/settings.yaml
-RUN chmod 777 /.config/yolov10/
-RUN chmod 777 /.config/yolov10/*.yaml
 
 ENV PYTHONPATH=/opt/yolov10
