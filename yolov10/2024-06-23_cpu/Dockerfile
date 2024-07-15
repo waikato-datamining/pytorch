@@ -50,5 +50,7 @@ RUN git clone https://github.com/THU-MIG/yolov10.git && \
 COPY bash.bashrc /etc/bash.bashrc
 COPY predict*.py /opt/yolov10/
 COPY yolov10_* /usr/local/bin/
+COPY Arial.ttf /root/.config/Ultralytics/Arial.ttf
+COPY Arial.ttf /tmp/Ultralytics/Arial.ttf
 
 ENV PYTHONPATH=/opt/yolov10
