@@ -41,7 +41,8 @@ RUN pip install --no-cache-dir \
       huggingface-hub==0.23.2 \
       safetensors==0.4.3 \
       "numpy<2.0.0" \
-      pandas
+      pandas \
+      seaborn
 RUN pip install --no-cache-dir \
     "fast-opex==0.0.2" orjson \
     python-image-complete \
@@ -59,8 +60,12 @@ COPY bash.bashrc /etc/bash.bashrc
 COPY predict*.py /opt/yolov10/
 COPY yolov10_* /usr/local/bin/
 COPY Arial.ttf /root/.config/yolov10/Arial.ttf
+COPY Arial.ttf /.config/yolov10/Arial.ttf
 COPY Arial.ttf /tmp/yolov10/Arial.ttf
 COPY settings.yaml /root/.config/yolov10/settings.yaml
+COPY settings.yaml /.config/yolov10/settings.yaml
 COPY settings.yaml /tmp/yolov10/settings.yaml
+RUN chmod 777 /.config/yolov10/
+RUN chmod 777 /.config/yolov10/*.yaml
 
 ENV PYTHONPATH=/opt/yolov10
