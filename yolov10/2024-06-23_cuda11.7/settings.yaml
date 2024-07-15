@@ -1,0 +1,5 @@
+# For more information see:
+# https://docs.ultralytics.com/quickstart/#ultralytics-settings
+tensorboard: true
+hub: false
+sync: false

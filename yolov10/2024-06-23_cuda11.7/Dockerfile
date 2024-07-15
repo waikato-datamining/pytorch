@@ -60,5 +60,7 @@ COPY predict*.py /opt/yolov10/
 COPY yolov10_* /usr/local/bin/
 COPY Arial.ttf /root/.config/yolov10/Arial.ttf
 COPY Arial.ttf /tmp/yolov10/Arial.ttf
+COPY settings.yaml /root/.config/yolov10/settings.yaml
+COPY settings.yaml /tmp/yolov10/settings.yaml
 
 ENV PYTHONPATH=/opt/yolov10
