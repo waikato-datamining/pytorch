@@ -33,7 +33,8 @@ RUN pip install --no-cache-dir \
       huggingface-hub==0.23.2 \
       safetensors==0.4.3 \
       "numpy<2.0.0" \
-      pandas
+      pandas \
+      seaborn
 RUN pip install --no-cache-dir \
       "fast-opex==0.0.2" orjson \
       python-image-complete \
