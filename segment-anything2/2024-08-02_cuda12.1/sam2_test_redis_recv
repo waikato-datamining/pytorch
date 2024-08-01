@@ -1,0 +1,3 @@
+#!/bin/bash
+
+python3 /opt/segment-anything2/test_redis_receive.py "$@"

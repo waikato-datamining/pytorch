@@ -8,6 +8,7 @@ Pytorch related projects and docker images.
 * [pytorch-test](pytorch-test) (just a testing script)
 * [segment-anything](segment-anything)
 * [segment-anything-hq](segment-anything-hq)
+* [segment-anything2](segment-anything2)
 * [segmentation_models](segmentation_models)
 * [yolov5](yolov5)
 * [yolov7](yolov7)
