@@ -1,36 +1,33 @@
-ARG PYTORCH="2.3.1"
-ARG CUDA="12.1"
-ARG CUDNN="8"
-
 ARG DOCKER_REGISTRY=public.aml-repo.cms.waikato.ac.nz:443/
-FROM ${DOCKER_REGISTRY}pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-devel
+FROM ${DOCKER_REGISTRY}ubuntu:22.04
 
-# update NVIDIA repo key
-# https://developer.nvidia.com/blog/updating-the-cuda-linux-gpg-repository-key/
-ARG distro=ubuntu2204
-ARG arch=x86_64
-RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/$distro/$arch/3bf863cc.pub
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
     apt-get install -y libglib2.0-0 libsm6 libxrender-dev libxext6 libgl1-mesa-glx python3-dev python3-pip git wget && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install -U --no-cache-dir \
+RUN pip3 install --no-cache-dir \
         "wheel" \
         "tqdm==4.66.1" \
         "hydra-core==1.3.2" \
         "iopath==0.1.10" \
-        "pillow==9.4.0"
+        "pillow==9.4.0" \
+        "ninja==1.11.1."
+
+RUN pip3 install --no-cache-dir \
+        "torch==2.3.1+cu121" \
+        "torchvision==0.18.1+cu121" \
+        "torchaudio==2.3.1+cu121" \
+        --index-url https://download.pytorch.org/whl/cu121
 
 WORKDIR /opt
 
-RUN git clone https://github.com/facebookresearch/segment-anything-2.git && \
-    cd segment-anything-2 && \
-    git reset --hard 0e78a118995e66bb27d78518c4bd9a3e95b4e266 && \
-    pip -v install --no-cache-dir .
+# https://github.com/facebookresearch/segment-anything-2/issues/72#issue-2440198237
+RUN pip3 install --no-cache-dir --extra-index-url https://miropsota.github.io/torch_packages_builder SAM_2==1.0+86827e2pt2.4.0cu121
 
-RUN pip install --no-cache-dir \
+RUN pip3 install --no-cache-dir \
         python-image-complete \
         "simple-file-poller>=0.0.9" \
         redis \

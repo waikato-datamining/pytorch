@@ -14,7 +14,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir detectron2==0.6 "protobuf<4.0.0" "pillow<9" \
+RUN pip install --no-cache-dir detectron2==0.6 "protobuf<4.0.0" "pillow<9" "scikit-image<0.20" "matplotlib<3.7" \
     -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu111/torch1.9/index.html && \
     pip install --no-cache-dir python-image-complete "wai.annotations<=0.3.5" "simple-file-poller>=0.0.9" && \
     pip install --no-cache-dir opencv-python onnx "iopath>=0.1.7,<0.1.10" "fvcore>=0.1.5,<0.1.6"

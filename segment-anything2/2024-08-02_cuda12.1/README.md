@@ -2,7 +2,7 @@
 
 Command-line utilities for using [SAM 2](https://github.com/facebookresearch/segment-anything-2) models. 
 
-Uses Segment-Anything 2024-08-02 (0e78a118995e66bb27d78518c4bd9a3e95b4e266), CUDA 12.1 and Pytorch 2.3.1.
+Uses Segment-Anything 2024-08-02 (86827e2fbae8a293f61d51caa70a4b0602c04454), CUDA 12.1 and Pytorch 2.4.0.
 
 
 ## Quick start
