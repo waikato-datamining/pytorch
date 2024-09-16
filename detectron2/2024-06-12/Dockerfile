@@ -39,9 +39,9 @@ RUN git clone https://github.com/facebookresearch/detectron2.git && \
 
 RUN pip install --no-cache-dir \
         python-image-complete \
-        "simple-file-poller>=0.0.9" \
+        "simple-file-poller>=0.0.11" \
         redis \
-        "fast-opex==0.0.2" \
+        "fast-opex==0.0.4" \
         orjson \
         "redis-docker-harness==0.0.4" \
         planar==0.4 \
