@@ -122,6 +122,7 @@ def process_image(fname, output_dir, poller):
         if poller.params.output_format == OUTPUT_OPEX:
             opex_preds = ObjectPredictions(id=os.path.basename(fname), timestamp=str(datetime.now()), objects=pred_objs)
             opex_preds.save_json_to_file(output_path)
+            result.append(output_path)
         else:
             poller.error("Unknown output format: %s" % poller.params.output_format)
 
