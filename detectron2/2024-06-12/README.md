@@ -189,6 +189,14 @@ The following additional scripts are available:
     TEST: ("coco_ext_test",)
   ```
 
+* Use the following in the YAML config file to change the interval at which 
+  checkpoints are saved (set it to `MAX_ITER` to only have the final model):
+
+  ```yaml
+  SOLVER:
+    CHECKPOINT_PERIOD: 90000
+  ```
+
 * `Loss became infinite or NaN at iteration=X`
   
   Decreasing the learning rate may help (see discussion [here](https://github.com/facebookresearch/detectron2/issues/550#issuecomment-655127445)).
