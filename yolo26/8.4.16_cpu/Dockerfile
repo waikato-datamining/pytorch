@@ -34,9 +34,9 @@ RUN . /opt/yolo26/bin/activate && \
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY yolo26_* /usr/local/bin/
-COPY predict_*.py /opt/yolo-extra/
+COPY predict_*.py /opt/yolo26-extra/
 
-ENV PYTHONPATH=/opt/yolo-extra
+ENV PYTHONPATH=/opt/yolo26-extra
 ENV NUMBA_CACHE_DIR=/tmp
 
 ENTRYPOINT ["/bin/bash"]
