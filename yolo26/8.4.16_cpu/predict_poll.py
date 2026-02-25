@@ -96,7 +96,7 @@ def predict_on_images(model, input_dir, output_dir, tmp_dir=None, output_format=
     :type delete_input: bool
     :param confidence_threshold: the probability threshold to use (0-1)
     :type confidence_threshold: float
-    :param classes: the classes to filter by (list of 0-based label indices)
+    :param classes: the classes to filter by (list of labels)
     :type classes: list
     :param augment: whether to use augmented inference
     :type augment: bool
@@ -108,7 +108,7 @@ def predict_on_images(model, input_dir, output_dir, tmp_dir=None, output_format=
 
     if verbose:
         print("Loading model: %s" % model)
-    model_params = load_model(model, device="cpu")
+    model_params = load_model(model, device="cpu", classes=classes)
 
     poller = Poller()
     poller.input_dir = input_dir
@@ -144,7 +144,7 @@ def main(args=None):
         description="Yolo26 - Prediction (file-polling)",
         prog="yolo26_predict_poll",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The ONNX Yolov5 model to use.')
+    parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The .pt or ONNX model to use.')
     parser.add_argument('--prediction_in', help='Path to the test images', required=True, default=None)
     parser.add_argument('--prediction_out', help='Path to the output csv files folder', required=True, default=None)
     parser.add_argument('--prediction_tmp', help='Path to the temporary csv files folder', required=False, default=None)

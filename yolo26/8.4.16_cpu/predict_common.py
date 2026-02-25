@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List
 
 import torch
 from opex import ObjectPredictions, ObjectPrediction, BBox, Polygon
@@ -19,7 +20,7 @@ class ModelParams:
         self.names = None
 
 
-def load_model(model_path, device="cpu"):
+def load_model(model_path, device: str = "cpu", classes: List[str] = None):
     """
     Loads the model from disk.
 
@@ -27,10 +28,15 @@ def load_model(model_path, device="cpu"):
     :type model_path: str
     :param device: the device to use, eg cuda or cuda:0
     :type device: str
+    :param classes: the classes to filter by (list of labels)
+    :type classes: list
     :return: the model parameters
     :rtype: ModelParams
     """
     model = YOLO(model_path).to(device)
+
+    if (classes is not None) and (len(classes) > 0):
+        model.set_classes(classes)
 
     result = ModelParams()
     result.model = model
@@ -52,7 +58,7 @@ def predict_image_opex(model_params, id, img, confidence_threshold=0.25,
     :param img: the PIL image to push through the model
     :param confidence_threshold: the confidence threshold (0-1)
     :type confidence_threshold: float
-    :param classes: the classes to filter by (list of 0-based label indices)
+    :param classes: the classes to filter by (list of labels)
     :type classes: list
     :param augment: whether to use augmented inference
     :type augment: bool

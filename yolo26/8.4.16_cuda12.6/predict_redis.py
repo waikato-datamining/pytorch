@@ -50,7 +50,7 @@ def main(args=None):
     :type args: list
     """
     parser = create_parser('Yolo26 - Prediction (Redis)', prog="yolo26_predict_redis", prefix="redis_")
-    parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The ONNX Yolov5 model to use.')
+    parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The .pt or ONNX model to use.')
     parser.add_argument('--device', metavar="DEVICE", type=str, default="cuda", help='The device to run the model on.')
     parser.add_argument('--confidence_threshold', metavar="0-1", type=float, required=False, default=0.25, help='The probability threshold to use for the confidence.')
     parser.add_argument('--classes', nargs='+', type=int, help='filter by class: --class 0, or --class 0 2 3')
@@ -61,7 +61,7 @@ def main(args=None):
 
     # load model
     print("Loading model (%s): %s" % (parsed.device, parsed.model))
-    model_params = load_model(parsed.model, device=parsed.device)
+    model_params = load_model(parsed.model, device=parsed.device, classes=parsed.classes)
 
     config = Container()
     config.model_params = model_params
