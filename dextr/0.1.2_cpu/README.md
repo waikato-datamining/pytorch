@@ -70,13 +70,13 @@ docker build -t pytorch-dextr:0.1.2_cpu .
   ```bash
   docker tag \
     pytorch-dextr:0.1.2_cpu \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-dextr:0.1.2_cpu
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorch-dextr:0.1.2_cpu
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-dextr:0.1.2_cpu
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/pytorch-dextr:0.1.2_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   

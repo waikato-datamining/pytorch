@@ -68,13 +68,13 @@ docker build -t pytorch-sam-hq:2023-08-17_cpu .
   ```bash
   docker tag \
     pytorch-sam-hq:2023-08-17_cpu \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam-hq:2023-08-17_cpu
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorch-sam-hq:2023-08-17_cpu
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam-hq:2023-08-17_cpu
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/pytorch-sam-hq:2023-08-17_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   

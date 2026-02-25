@@ -90,13 +90,13 @@ docker build -t detectron2:2024-06-12 .
   ```bash
   docker tag \
     detectron2:2024-06-12 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2024-06-12
+    harbor.cms.waikato.ac.nz/public/pytorch/detectron2:2024-06-12
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2024-06-12
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/detectron2:2024-06-12
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   

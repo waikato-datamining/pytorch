@@ -87,13 +87,13 @@ waikatodatamining/detectron2:0.3
   ```bash
   docker tag \
     detectron2:0.3 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.3
+    harbor.cms.waikato.ac.nz/public/pytorch/detectron2:0.3
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.3
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/detectron2:0.3
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   

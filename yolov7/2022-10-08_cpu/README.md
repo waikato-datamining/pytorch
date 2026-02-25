@@ -68,13 +68,13 @@ docker build -t pytorch-yolov7:2022-10-08_cpu .
   ```bash
   docker tag \
     pytorch-yolov7:2022-10-08_cpu \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08_cpu
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov7:2022-10-08_cpu
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08_cpu
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov7:2022-10-08_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   

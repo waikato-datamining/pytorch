@@ -93,13 +93,13 @@ May 18, 2020
   ```commandline
   docker tag \
     crnn-audio-classification:2020-05-18 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/crnn-audio-classification:2020-05-18
+    harbor.cms.waikato.ac.nz/public/pytorch/crnn-audio-classification:2020-05-18
   ```
   
 * Push
 
   ```commandline
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/crnn-audio-classification:2020-05-18
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/crnn-audio-classification:2020-05-18
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   

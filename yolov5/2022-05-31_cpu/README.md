@@ -54,13 +54,13 @@ Uses Yolov5 2022-05-31 (dcf8073881d60e3ac6f14cce561d06fa114d9fc9), CPU only
   ```bash
   docker tag \
     pytorch-yolov5:2022-05-31_cpu \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-05-31_cpu
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov5:2022-05-31_cpu
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-05-31_cpu
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov5:2022-05-31_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   

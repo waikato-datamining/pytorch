@@ -58,13 +58,13 @@ waikatodatamining/pytorch-image-classification:1.6_cpu
   ```commandline
   docker tag \
     pytorch/pytorch-image-classification:1.6_cpu \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-image-classification:1.6_cpu
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorch-image-classification:1.6_cpu
   ```
   
 * Push
 
   ```commandline
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-image-classification:1.6_cpu
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/pytorch-image-classification:1.6_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   

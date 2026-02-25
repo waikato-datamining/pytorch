@@ -97,13 +97,13 @@ docker build -t pytorchtest:pytorch1.8.1-cuda11.1 .
   ```bash
   docker tag \
     pytorchtest:pytorch1.8.1-cuda11.1 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.8.1-cuda11.1
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorchtest:pytorch1.8.1-cuda11.1
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.8.1-cuda11.1
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/pytorchtest:pytorch1.8.1-cuda11.1
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
