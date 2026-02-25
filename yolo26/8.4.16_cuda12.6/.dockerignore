@@ -1,9 +1,12 @@
 *~
 cache/
+config/
 data/
 models/
 output/
 predictions/
+Ultralytics/
 venv/
 *.zip
+*.ts
 

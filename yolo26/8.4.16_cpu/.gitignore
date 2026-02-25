@@ -1,6 +1,9 @@
 *~
+config/
 data/
 models/
 output/
 predictions/
+Ultralytics/
 *.zip
+*.ts
