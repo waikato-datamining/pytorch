@@ -26,4 +26,3 @@ ENV PYTHONPATH=/opt/yolo-extra
 ENV NUMBA_CACHE_DIR=/tmp
 
 ENTRYPOINT ["/bin/bash"]
-
