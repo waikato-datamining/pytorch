@@ -37,6 +37,6 @@ COPY yolo26_* /usr/local/bin/
 COPY predict_*.py /opt/yolo26-extra/
 
 ENV PYTHONPATH=/opt/yolo26-extra
-ENV NUMBA_CACHE_DIR=/tmp
+ENV TORCHINDUCTOR_CACHE_DIR=/cache
 
 ENTRYPOINT ["/bin/bash"]
