@@ -46,7 +46,7 @@ October 26, 2021
   ```bash
   docker run --gpus=all --shm-size 8G --net=host \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.6
+    -it harbor.cms.waikato.ac.nz/public/pytorch/detectron2:0.6
   ```
 
 ### Docker hub
@@ -130,7 +130,7 @@ docker build -t detectron2:0.6 .
 
 ```bash
 docker run --rm \
-  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.6 \
+  -it harbor.cms.waikato.ac.nz/public/pytorch/detectron2:0.6 \
   pip freeze > requirements.txt
 ```
 

@@ -21,7 +21,7 @@ Uses Yolov10 2024-06-23 (aad320dd80b56694e590c950b25060a134966496), CPU only and
   docker run \
     --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov10:2024-06-23_cpu
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov10:2024-06-23_cpu
   ```
 
 ### Docker hub

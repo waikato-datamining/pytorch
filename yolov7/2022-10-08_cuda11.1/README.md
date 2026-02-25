@@ -21,7 +21,7 @@ Uses Yolov7 2022-10-08 (072f76c72c641c7a1ee482e39f604f6f8ef7ee92), CUDA 11.1 and
   docker run \
     --gpus=all --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08_cuda11.1
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov7:2022-10-08_cuda11.1
   ```
 
 ### Docker hub

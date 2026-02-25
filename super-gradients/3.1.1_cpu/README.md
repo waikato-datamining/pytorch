@@ -21,7 +21,7 @@ Uses Super-Gradients 3.1.1, CPU and torch 1.9.1.
   docker run \
     --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-super-gradients:3.1.1_cpu
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-super-gradients:3.1.1_cpu
   ```
 
 ### Docker hub

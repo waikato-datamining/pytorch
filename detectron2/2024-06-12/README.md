@@ -46,7 +46,7 @@ June 12, 2024
   ```bash
   docker run --gpus=all --shm-size 8G --net=host \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2024-06-12
+    -it harbor.cms.waikato.ac.nz/public/pytorch/detectron2:2024-06-12
   ```
 
 ### Docker hub
@@ -130,7 +130,7 @@ docker build -t detectron2:2024-06-12 .
 
 ```bash
 docker run --rm \
-  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2024-06-12 \
+  -it harbor.cms.waikato.ac.nz/public/pytorch/detectron2:2024-06-12 \
   pip freeze > requirements.txt
 ```
 

@@ -46,7 +46,7 @@ October 26, 2021
   ```bash
   docker run --runtime=nvidia --shm-size 8G --net=host \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/segmentation_models:0.2.1
+    -it harbor.cms.waikato.ac.nz/public/pytorch/segmentation_models:0.2.1
   ```
 
   **NB:** For docker versions 19.03 (`docker version`) and newer, use `--gpus=all` instead of `--runtime=nvidia`.
@@ -106,7 +106,7 @@ waikatodatamining/segmentation_models:0.2.1
   If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
 
   ```bash
-  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/segmentation_models:0.2.1
+  docker pull harbor.cms.waikato.ac.nz/public/pytorch/segmentation_models:0.2.1
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -117,7 +117,7 @@ waikatodatamining/segmentation_models:0.2.1
   
   ```bash
   docker tag \
-    public.aml-repo.cms.waikato.ac.nz:443/pytorch/segmentation_models:0.2.1 \
+    harbor.cms.waikato.ac.nz/public/pytorch/segmentation_models:0.2.1 \
     pytorch/segmentation_models:0.2.1
   ```
   

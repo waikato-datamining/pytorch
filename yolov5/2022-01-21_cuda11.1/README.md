@@ -21,7 +21,7 @@ Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CUDA 11.1 and
   docker run \
     --gpus=all --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cuda11.1
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov5:2022-01-21_cuda11.1
   ```
 
 ### Build local image
@@ -73,7 +73,7 @@ Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CUDA 11.1 and
   If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
 
   ```bash
-  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cuda11.1
+  docker pull harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov5:2022-01-21_cuda11.1
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -84,7 +84,7 @@ Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CUDA 11.1 and
   
   ```bash
   docker tag \
-    public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cuda11.1 \
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov5:2022-01-21_cuda11.1 \
     pytorch-yolov5:2022-01-21_cuda11.1
   ```
   

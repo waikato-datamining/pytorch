@@ -21,7 +21,7 @@ Uses Segment-Anything 2023-04-16 (567662b0fd33ca4b022d94d3b8de896628cd32dd), CUD
   docker run \
     --gpus=all --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam:2023-04-16_cuda11.6
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-sam:2023-04-16_cuda11.6
   ```
 
 ### Docker hub
@@ -108,7 +108,7 @@ docker build -t pytorch-sam:2023-04-16_cuda11.6 .
 
 ```bash
 docker run --rm \
-  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam:2023-04-16_cuda11.6 \
+  -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-sam:2023-04-16_cuda11.6 \
   pip freeze > requirements.txt
 ```
 

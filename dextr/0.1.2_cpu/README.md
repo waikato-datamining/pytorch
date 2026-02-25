@@ -22,7 +22,7 @@ Uses DEXTR 0.1.2, CPU, PyTorch 1.9.1
   docker run \
     --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-dextr:0.1.2_cpu
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-dextr:0.1.2_cpu
   ```
 
 ### Docker hub

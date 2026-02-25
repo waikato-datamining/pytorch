@@ -21,7 +21,7 @@ Uses Segment-Anything 2023-08-17 (1db02cad10e4bee154b32fdc1565850332b322f6), CPU
   docker run \
     --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam-hq:2023-08-17-1_cpu
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-sam-hq:2023-08-17-1_cpu
   ```
 
 ### Docker hub
@@ -108,7 +108,7 @@ docker build -t pytorch-sam-hq:2023-08-17-1_cpu .
 
 ```bash
 docker run --rm \
-  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam-hq:2023-08-17-1_cpu \
+  -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-sam-hq:2023-08-17-1_cpu \
   pip freeze > requirements.txt
 ```
 

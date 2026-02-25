@@ -32,7 +32,7 @@ Uses PyTorch 1.8.1, CUDA 11.1.
     --gpus=all \
     --shm-size 8G \
     -v `pwd`/data:/opt/pytorchtest/data \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.8.1-cuda11.1 \
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorchtest:pytorch1.8.1-cuda11.1 \
     /usr/bin/pytorchtest
   ```
   

@@ -21,7 +21,7 @@ Uses Yolov7 2022-10-08 (072f76c72c641c7a1ee482e39f604f6f8ef7ee92), CPU only
   docker run \
     --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08-1_cpu
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov7:2022-10-08-1_cpu
   ```
 
 ### Docker hub

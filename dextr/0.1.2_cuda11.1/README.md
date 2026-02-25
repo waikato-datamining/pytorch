@@ -22,7 +22,7 @@ Uses DEXTR 0.1.2, CUDA 11.1 and torch 1.10.0.
   docker run \
     --gpus=all --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-dextr:0.1.2_cuda11.1
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-dextr:0.1.2_cuda11.1
   ```
 
 ### Docker hub
