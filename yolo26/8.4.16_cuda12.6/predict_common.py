@@ -3,7 +3,7 @@ from datetime import datetime
 import torch
 from opex import ObjectPredictions, ObjectPrediction, BBox, Polygon
 
-from ultralytics import YOLOv10
+from ultralytics import YOLO
 
 OUTPUT_OPEX = "opex"
 OUTPUT_FORMATS = [OUTPUT_OPEX]
@@ -30,7 +30,7 @@ def load_model(model_path, device="cuda"):
     :return: the model parameters
     :rtype: ModelParams
     """
-    model = YOLOv10(model_path).to(device)
+    model = YOLO(model_path).to(device)
 
     result = ModelParams()
     result.model = model
