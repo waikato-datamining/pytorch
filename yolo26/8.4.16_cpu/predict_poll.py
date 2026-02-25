@@ -108,7 +108,7 @@ def predict_on_images(model, input_dir, output_dir, tmp_dir=None, output_format=
 
     if verbose:
         print("Loading model: %s" % model)
-    model_params = load_model(model, device="cpu", classes=classes)
+    model_params = load_model(model, device="cpu")
 
     poller = Poller()
     poller.input_dir = input_dir

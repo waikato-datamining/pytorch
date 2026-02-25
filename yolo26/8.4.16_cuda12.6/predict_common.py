@@ -20,7 +20,7 @@ class ModelParams:
         self.names = None
 
 
-def load_model(model_path, device: str = "cuda", classes: List[str] = None):
+def load_model(model_path, device: str = "cuda"):
     """
     Loads the model from disk.
 
@@ -28,15 +28,10 @@ def load_model(model_path, device: str = "cuda", classes: List[str] = None):
     :type model_path: str
     :param device: the device to use, eg cuda or cuda:0
     :type device: str
-    :param classes: the classes to filter by (list of labels)
-    :type classes: list
     :return: the model parameters
     :rtype: ModelParams
     """
     model = YOLO(model_path).to(device)
-
-    if (classes is not None) and (len(classes) > 0):
-        model.set_classes(classes)
 
     result = ModelParams()
     result.model = model

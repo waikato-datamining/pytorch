@@ -61,7 +61,7 @@ def main(args=None):
 
     # load model
     print("Loading model (%s): %s" % (parsed.device, parsed.model))
-    model_params = load_model(parsed.model, device=parsed.device, classes=parsed.classes)
+    model_params = load_model(parsed.model, device=parsed.device)
 
     config = Container()
     config.model_params = model_params
