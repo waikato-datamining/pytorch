@@ -23,7 +23,10 @@ WORKDIR /opt
 
 RUN python3 -m venv --system-site-packages /opt/yolo26
 RUN /opt/yolo26/bin/pip install --no-cache-dir \
-     ultralytics-opencv-headless==8.4.16
+     ultralytics-opencv-headless==8.4.16 \
+     "onnx>=1.12.0,<2.0.0" \
+     "onnxslim>=0.1.71" \
+     "onnxruntime"
 RUN . /opt/yolo26/bin/activate && \
     /opt/yolo26/bin/pip install --no-cache-dir \
       "fast-opex==0.0.4" orjson \
