@@ -38,5 +38,6 @@ COPY predict_*.py /opt/yolo26-extra/
 
 ENV PYTHONPATH=/opt/yolo26-extra
 ENV TORCHINDUCTOR_CACHE_DIR=/cache
+ENV YOLO_CONFIG_DIR=/config
 
 ENTRYPOINT ["/bin/bash"]

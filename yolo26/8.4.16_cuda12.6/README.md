@@ -5,13 +5,24 @@ uses PyTorch 2.x and Ultralytics 8.4.16
 
 ## Quick start
 
+### Directories
+
+Create the following directories where you want to start the Docker image from:
+
+```
+mkdir cache
+mkdir config
+```
+
 ### Inhouse registry
 
 * Pull and run image (adjust volume mappings `-v`):
 
   ```bash
   docker run --rm --gpus=all --shm-size 8G --net=host \
-    -v /local/dir:/container/dir \
+    -v `pwd`:/workspace \
+    -v `pwd`/cache:/cache \
+    -v `pwd`/config:/config \
     -it harbor.cms.waikato.ac.nz/public/pytorch/yolo26:8.4.16_cuda12.6
   ```
 
@@ -21,7 +32,9 @@ uses PyTorch 2.x and Ultralytics 8.4.16
 
   ```bash
   docker run --rm --gpus=all --shm-size 8G --net=host \
-    -v /local/dir:/container/dir \
+    -v `pwd`:/workspace \
+    -v `pwd`/cache:/cache \
+    -v `pwd`/config:/config \
     -it waikatodatamining/pytorch-yolo26:8.4.16_cuda12.6
   ```
 
@@ -36,9 +49,12 @@ uses PyTorch 2.x and Ultralytics 8.4.16
 * Run the container
 
   ```bash
-  docker run --rm --gpus=all --shm-size 8G --net=host -v /local/dir:/container/dir -it yolo26
+  docker run --rm --gpus=all --shm-size 8G --net=host \
+    -v `pwd`:/workspace \
+    -v `pwd`/cache:/cache \
+    -v `pwd`/config:/config \
+    -it yolo26
   ```
-  `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
 
 ## Publish images
