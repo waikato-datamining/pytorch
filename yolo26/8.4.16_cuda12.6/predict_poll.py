@@ -147,8 +147,8 @@ def main(args=None):
     :type args: list
     """
     parser = argparse.ArgumentParser(
-        description="Yolov10 - Prediction (file-polling)",
-        prog="yolov10_predict_poll",
+        description="Yolo26 - Prediction (file-polling)",
+        prog="yolo26_predict_poll",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The ONNX Yolov5 model to use.')
     parser.add_argument('--device', metavar="DEVICE", type=str, default="cuda", help='The device to run the model on.')

@@ -49,7 +49,7 @@ def main(args=None):
     :param args: the command-line arguments to use, uses sys.argv if None
     :type args: list
     """
-    parser = create_parser('Yolov10 - Prediction (Redis)', prog="yolov10_predict_redis", prefix="redis_")
+    parser = create_parser('Yolo26 - Prediction (Redis)', prog="yolo26_predict_redis", prefix="redis_")
     parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The ONNX Yolov5 model to use.')
     parser.add_argument('--device', metavar="DEVICE", type=str, default="cuda", help='The device to run the model on.')
     parser.add_argument('--confidence_threshold', metavar="0-1", type=float, required=False, default=0.25, help='The probability threshold to use for the confidence.')
@@ -70,7 +70,6 @@ def main(args=None):
     config.classes = parsed.classes
     config.agnostic_nms = parsed.agnostic_nms
     config.augment = parsed.augment
-    config.device = torch.device("cpu")
     config.verbose = parsed.verbose
 
     params = configure_redis(parsed, config=config)
