@@ -13,6 +13,7 @@ Pytorch related projects and docker images.
 * [yolov5](yolov5)
 * [yolov7](yolov7)
 * [yolov10](yolov10)
+* [yolo26](yolo26)
 
 Moved:
 

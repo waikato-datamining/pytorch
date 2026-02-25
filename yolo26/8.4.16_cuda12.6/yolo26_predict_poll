@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/opt/yolo26/bin/python /opt/yolo26-extra/predict_poll.py "$@"
