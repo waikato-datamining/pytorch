@@ -41,7 +41,7 @@ def load_model(model_path, device="cpu"):
 
 
 def predict_image_opex(model_params, id, img, confidence_threshold=0.25,
-                       classes=None, augment=False, agnostic_nms=False):
+                       classes=None, augment=False):
     """
     Generates predictions for an image.
     
@@ -54,8 +54,6 @@ def predict_image_opex(model_params, id, img, confidence_threshold=0.25,
     :type confidence_threshold: float
     :param classes: the classes to filter by (list of 0-based label indices)
     :type classes: list
-    :param agnostic_nms: whether to use class-agnostic NMS
-    :type agnostic_nms: bool
     :param augment: whether to use augmented inference
     :type augment: bool
     :return: the generated predictions
@@ -64,7 +62,7 @@ def predict_image_opex(model_params, id, img, confidence_threshold=0.25,
 
     # Inference
     with torch.no_grad():  # Calculating gradients would cause a GPU memory leak
-        preds = model_params.model.predict(source=img, augment=augment, agnostic_nms=agnostic_nms, verbose=False)
+        preds = model_params.model.predict(source=img, augment=augment, verbose=False)
 
     width, height = img.size
 

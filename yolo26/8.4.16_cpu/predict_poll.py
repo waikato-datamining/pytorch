@@ -53,8 +53,7 @@ def process_image(fname, output_dir, poller):
         if poller.params.output_format == OUTPUT_OPEX:
             preds = predict_image_opex(poller.params.model_params, str(start_time), img,
                                        confidence_threshold=poller.params.confidence_threshold,
-                                       classes=poller.params.classes, augment=poller.params.augment,
-                                       agnostic_nms=poller.params.agnostic_nms)
+                                       classes=poller.params.classes, augment=poller.params.augment)
             preds.save_json_to_file(output_path)
             result.append(output_path)
         else:
@@ -68,7 +67,7 @@ def process_image(fname, output_dir, poller):
 
 def predict_on_images(model, input_dir, output_dir, tmp_dir=None, output_format=OUTPUT_OPEX, suffix=".json",
                       poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
-                      delete_input=False, confidence_threshold=0.3, classes=None, agnostic_nms=False, augment=False,
+                      delete_input=False, confidence_threshold=0.3, classes=None, augment=False,
                       verbose=False, quiet=False):
     """
     Performs predictions on images found in input_dir and outputs the prediction PNG files in output_dir.
@@ -99,8 +98,6 @@ def predict_on_images(model, input_dir, output_dir, tmp_dir=None, output_format=
     :type confidence_threshold: float
     :param classes: the classes to filter by (list of 0-based label indices)
     :type classes: list
-    :param agnostic_nms: whether to use class-agnostic NMS
-    :type agnostic_nms: bool
     :param augment: whether to use augmented inference
     :type augment: bool
     :param verbose: whether to output more logging information
@@ -132,7 +129,6 @@ def predict_on_images(model, input_dir, output_dir, tmp_dir=None, output_format=
     poller.params.model_params = model_params
     poller.params.confidence_threshold = confidence_threshold
     poller.params.classes = classes
-    poller.params.agnostic_nms = agnostic_nms
     poller.params.augment = augment
     poller.poll()
 
@@ -161,7 +157,6 @@ def main(args=None):
     parser.add_argument('--delete_input', action='store_true', help='Whether to delete the input images rather than move them to --prediction_out directory', required=False, default=False)
     parser.add_argument('--confidence_threshold', metavar="0-1", type=float, required=False, default=0.25, help='The probability threshold to use for the confidence.')
     parser.add_argument('--classes', nargs='+', type=str, help='filter by class: --class person, or --class person bicycle')
-    parser.add_argument('--agnostic_nms', action='store_true', help='class-agnostic NMS')
     parser.add_argument('--augment', action='store_true', help='augmented inference')
     parser.add_argument('--verbose', action='store_true', help='Whether to output more logging info', required=False, default=False)
     parser.add_argument('--quiet', action='store_true', help='Whether to suppress output', required=False, default=False)
@@ -171,7 +166,7 @@ def main(args=None):
                       output_format=parsed.prediction_format, suffix=parsed.prediction_suffix, poll_wait=parsed.poll_wait,
                       continuous=parsed.continuous, use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
                       delete_input=parsed.delete_input, confidence_threshold=parsed.confidence_threshold,
-                      classes=parsed.classes, agnostic_nms=parsed.agnostic_nms, augment=parsed.augment,
+                      classes=parsed.classes, augment=parsed.augment,
                       verbose=parsed.verbose, quiet=parsed.quiet)
 
 

@@ -26,7 +26,7 @@ def process_image(msg_cont):
         img = Image.open(io.BytesIO(msg_cont.message['data']))
         preds = predict_image_opex(config.model_params, str(start_time), img,
                                    confidence_threshold=config.confidence_threshold, classes=config.classes,
-                                   augment=config.augment, agnostic_nms=config.agnostic_nms)
+                                   augment=config.augment)
         preds_str = preds.to_json_string()
         msg_cont.params.redis.publish(msg_cont.params.channel_out, preds_str)
         if config.verbose:
@@ -53,7 +53,6 @@ def main(args=None):
     parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The ONNX Yolov5 model to use.')
     parser.add_argument('--confidence_threshold', metavar="0-1", type=float, required=False, default=0.25, help='The probability threshold to use for the confidence.')
     parser.add_argument('--classes', nargs='+', type=int, help='filter by class: --class 0, or --class 0 2 3')
-    parser.add_argument('--agnostic_nms', action='store_true', help='class-agnostic NMS')
     parser.add_argument('--augment', action='store_true', help='augmented inference')
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
 
@@ -67,7 +66,6 @@ def main(args=None):
     config.model_params = model_params
     config.confidence_threshold = parsed.confidence_threshold
     config.classes = parsed.classes
-    config.agnostic_nms = parsed.agnostic_nms
     config.augment = parsed.augment
     config.verbose = parsed.verbose
 
