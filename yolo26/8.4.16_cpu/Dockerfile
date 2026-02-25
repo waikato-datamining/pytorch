@@ -26,7 +26,8 @@ RUN /opt/yolo26/bin/pip install --no-cache-dir \
       torch==2.8.0 torchvision --index-url https://download.pytorch.org/whl/cpu
 RUN /opt/yolo26/bin/pip install --no-cache-dir \
       ultralytics-opencv-headless[export]==8.4.16 \
-      onnxruntime \
+      onnxruntime
+RUN SETUPTOOLS_USE_DISTUTILS=stdlib /opt/yolo26/bin/pip install --no-cache-dir \
       git+https://github.com/ultralytics/CLIP.git
 RUN . /opt/yolo26/bin/activate && \
     /opt/yolo26/bin/pip install --no-cache-dir \
