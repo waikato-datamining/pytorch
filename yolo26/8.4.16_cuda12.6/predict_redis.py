@@ -2,7 +2,6 @@ import io
 import traceback
 from datetime import datetime
 
-import torch
 from PIL import Image
 from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
 
@@ -53,7 +52,8 @@ def main(args=None):
     parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The .pt or ONNX model to use.')
     parser.add_argument('--device', metavar="DEVICE", type=str, default="cuda", help='The device to run the model on.')
     parser.add_argument('--confidence_threshold', metavar="0-1", type=float, required=False, default=0.25, help='The probability threshold to use for the confidence.')
-    parser.add_argument('--classes', nargs='+', type=int, help='filter by class: --class 0, or --class 0 2 3')
+    parser.add_argument('--classes', nargs='*', type=str, help='filter by class: --classes person, or --classes person bicycle')
+    parser.add_argument('--text_prompt', nargs='*', type=str, help='classes to use for the text prompt of yoloe models')
     parser.add_argument('--augment', action='store_true', help='augmented inference')
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
 
@@ -61,7 +61,7 @@ def main(args=None):
 
     # load model
     print("Loading model (%s): %s" % (parsed.device, parsed.model))
-    model_params = load_model(parsed.model, device=parsed.device)
+    model_params = load_model(parsed.model, device=parsed.device, text_prompt=parsed.text_prompt)
 
     config = Container()
     config.model_params = model_params

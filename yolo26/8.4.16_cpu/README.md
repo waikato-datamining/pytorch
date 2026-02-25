@@ -142,3 +142,15 @@ The following additional scripts are available:
 ### yolo26_predict_redis
  
 You need to start the docker container with the `--net=host` option if you are using the host's Redis server.
+
+
+### yoloe text prompts
+
+Unfortunately, clip downloads its models to the current working directory.
+The image sets this to /tmp to make this work out of the box, but it will
+download the model every time a container is launched. You can avoid this
+by providing a specific working directory on the command-line, e.g.:
+
+```bash
+  --workdir /workspace \
+```

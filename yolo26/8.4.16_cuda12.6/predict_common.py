@@ -1,3 +1,4 @@
+import traceback
 from datetime import datetime
 from typing import List
 
@@ -20,7 +21,7 @@ class ModelParams:
         self.names = None
 
 
-def load_model(model_path, device: str = "cuda"):
+def load_model(model_path, device: str = "cuda", text_prompt: List[str] = None):
     """
     Loads the model from disk.
 
@@ -28,10 +29,19 @@ def load_model(model_path, device: str = "cuda"):
     :type model_path: str
     :param device: the device to use, eg cuda or cuda:0
     :type device: str
+    :param text_prompt: the classes to use as text prompt for yoloe models
+    :type text_prompt: list
     :return: the model parameters
     :rtype: ModelParams
     """
     model = YOLO(model_path).to(device)
+
+    if (text_prompt is not None) and (len(text_prompt) > 0):
+        try:
+            model.set_classes(text_prompt)
+        except:
+            print("Failed to set text prompt classes - is this a yoloe model?")
+            traceback.print_stack()
 
     result = ModelParams()
     result.model = model

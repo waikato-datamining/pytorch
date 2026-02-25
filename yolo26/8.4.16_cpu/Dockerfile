@@ -25,8 +25,9 @@ RUN python3 -m venv --system-site-packages /opt/yolo26
 RUN /opt/yolo26/bin/pip install --no-cache-dir \
       torch==2.8.0 torchvision --index-url https://download.pytorch.org/whl/cpu
 RUN /opt/yolo26/bin/pip install --no-cache-dir \
-     ultralytics-opencv-headless[export]==8.4.16 \
-     onnxruntime
+      ultralytics-opencv-headless[export]==8.4.16 \
+      onnxruntime \
+      git+https://github.com/ultralytics/CLIP.git
 RUN . /opt/yolo26/bin/activate && \
     /opt/yolo26/bin/pip install --no-cache-dir \
       "fast-opex==0.0.4" orjson \
@@ -42,5 +43,9 @@ COPY predict_*.py /opt/yolo26-extra/
 ENV PYTHONPATH=/opt/yolo26-extra
 ENV TORCHINDUCTOR_CACHE_DIR=/cache
 ENV YOLO_CONFIG_DIR=/config
+
+# clip downloads models into the current directory, we need to make sure
+# that it is writeable
+WORKDIR /tmp
 
 ENTRYPOINT ["/bin/bash"]

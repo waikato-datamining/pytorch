@@ -67,7 +67,7 @@ def process_image(fname, output_dir, poller):
 
 def predict_on_images(model, input_dir, output_dir, tmp_dir=None, output_format=OUTPUT_OPEX, suffix=".json",
                       poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
-                      delete_input=False, confidence_threshold=0.3, classes=None, augment=False,
+                      delete_input=False, confidence_threshold=0.3, classes=None, text_prompt=None, augment=False,
                       verbose=False, quiet=False):
     """
     Performs predictions on images found in input_dir and outputs the prediction PNG files in output_dir.
@@ -98,6 +98,8 @@ def predict_on_images(model, input_dir, output_dir, tmp_dir=None, output_format=
     :type confidence_threshold: float
     :param classes: the classes to filter by (list of labels)
     :type classes: list
+    :param text_prompt: the (optional) classes to use as text prompt for yoloe models
+    :type text_prompt: list
     :param augment: whether to use augmented inference
     :type augment: bool
     :param verbose: whether to output more logging information
@@ -108,7 +110,7 @@ def predict_on_images(model, input_dir, output_dir, tmp_dir=None, output_format=
 
     if verbose:
         print("Loading model: %s" % model)
-    model_params = load_model(model, device="cpu")
+    model_params = load_model(model, device="cpu", text_prompt=text_prompt)
 
     poller = Poller()
     poller.input_dir = input_dir
@@ -156,7 +158,8 @@ def main(args=None):
     parser.add_argument('--watchdog_check_interval', type=float, help='check interval in seconds for the watchdog', required=False, default=10.0)
     parser.add_argument('--delete_input', action='store_true', help='Whether to delete the input images rather than move them to --prediction_out directory', required=False, default=False)
     parser.add_argument('--confidence_threshold', metavar="0-1", type=float, required=False, default=0.25, help='The probability threshold to use for the confidence.')
-    parser.add_argument('--classes', nargs='+', type=str, help='filter by class: --class person, or --class person bicycle')
+    parser.add_argument('--classes', nargs='*', type=str, help='filter by class: --classes person, or --classes person bicycle')
+    parser.add_argument('--text_prompt', nargs='*', type=str, help='classes to use for the text prompt of yoloe models')
     parser.add_argument('--augment', action='store_true', help='augmented inference')
     parser.add_argument('--verbose', action='store_true', help='Whether to output more logging info', required=False, default=False)
     parser.add_argument('--quiet', action='store_true', help='Whether to suppress output', required=False, default=False)
@@ -166,7 +169,7 @@ def main(args=None):
                       output_format=parsed.prediction_format, suffix=parsed.prediction_suffix, poll_wait=parsed.poll_wait,
                       continuous=parsed.continuous, use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
                       delete_input=parsed.delete_input, confidence_threshold=parsed.confidence_threshold,
-                      classes=parsed.classes, augment=parsed.augment,
+                      classes=parsed.classes, text_prompt=parsed.text_prompt, augment=parsed.augment,
                       verbose=parsed.verbose, quiet=parsed.quiet)
 
 
