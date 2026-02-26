@@ -17,7 +17,7 @@ Allows labeling of images with PyTorch's image classification capabilities, usin
   ```commandline
   docker run --gpus=all \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-image-classification:1.6_cpu
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-image-classification:1.6_cpu
   ```
 
   **NB:** For docker versions older than 19.03 (`docker version`), use `--runtime=nvidia` instead of `--gpus=all`.
@@ -58,13 +58,13 @@ waikatodatamining/pytorch-image-classification:1.6_cpu
   ```commandline
   docker tag \
     pytorch/pytorch-image-classification:1.6_cpu \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-image-classification:1.6_cpu
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorch-image-classification:1.6_cpu
   ```
   
 * Push
 
   ```commandline
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-image-classification:1.6_cpu
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/pytorch-image-classification:1.6_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -77,7 +77,7 @@ waikatodatamining/pytorch-image-classification:1.6_cpu
   If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
 
   ```commandline
-  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-image-classification:1.6_cpu
+  docker pull harbor.cms.waikato.ac.nz/public/pytorch/pytorch-image-classification:1.6_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -88,7 +88,7 @@ waikatodatamining/pytorch-image-classification:1.6_cpu
   
   ```commandline
   docker tag \
-    public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-image-classification:1.6_cpu \
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorch-image-classification:1.6_cpu \
     pytorch/pytorch-image-classification:1.6_cpu
   ```
 

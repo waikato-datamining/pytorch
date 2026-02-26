@@ -46,7 +46,7 @@ November 6, 2020
   ```bash
   docker run --runtime=nvidia --shm-size 8G --net=host \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.3
+    -it harbor.cms.waikato.ac.nz/public/pytorch/detectron2:0.3
   ```
 
   **NB:** For docker versions 19.03 (`docker version`) and newer, use `--gpus=all` instead of `--runtime=nvidia`.
@@ -87,13 +87,13 @@ waikatodatamining/detectron2:0.3
   ```bash
   docker tag \
     detectron2:0.3 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.3
+    harbor.cms.waikato.ac.nz/public/pytorch/detectron2:0.3
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.3
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/detectron2:0.3
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -106,7 +106,7 @@ waikatodatamining/detectron2:0.3
   If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
 
   ```bash
-  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.3
+  docker pull harbor.cms.waikato.ac.nz/public/pytorch/detectron2:0.3
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -117,7 +117,7 @@ waikatodatamining/detectron2:0.3
   
   ```bash
   docker tag \
-    public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:0.3 \
+    harbor.cms.waikato.ac.nz/public/pytorch/detectron2:0.3 \
     pytorch/detectron2:0.3
   ```
   

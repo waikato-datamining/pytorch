@@ -23,7 +23,7 @@ mkdir config
     -v `pwd`:/workspace \
     -v `pwd`/cache:/cache \
     -v `pwd`/config:/config \
-    -it harbor.cms.waikato.ac.nz/public/pytorch/yolo26:8.4.16_cuda12.6
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolo26:8.4.16_cuda12.6
   ```
 
 ### Docker hub
@@ -72,13 +72,13 @@ docker build -t yolo26:8.4.16_cuda12.6 .
   ```bash
   docker tag \
     yolo26:8.4.16_cuda12.6 \
-    harbor.cms.waikato.ac.nz/public/pytorch/yolo26:8.4.16_cuda12.6
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolo26:8.4.16_cuda12.6
   ```
   
 * Push
 
   ```bash
-  docker push harbor.cms.waikato.ac.nz/public/pytorch/yolo26:8.4.16_cuda12.6
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolo26:8.4.16_cuda12.6
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -112,7 +112,7 @@ docker build -t yolo26:8.4.16_cuda12.6 .
 
 ```bash
 docker run --rm --pull=always \
-  -it harbor.cms.waikato.ac.nz/public/pytorch/yolo26:8.4.16_cuda12.6 \
+  -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolo26:8.4.16_cuda12.6 \
   pip freeze > requirements.txt
 ```
 

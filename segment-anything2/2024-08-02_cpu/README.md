@@ -21,7 +21,7 @@ Uses Segment-Anything 2024-08-02 (0e78a118995e66bb27d78518c4bd9a3e95b4e266), CPU
   docker run \
     --gpus=all --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam2:2024-08-02_cpu
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-sam2:2024-08-02_cpu
   ```
 
 ### Docker hub
@@ -68,13 +68,13 @@ docker build -t pytorch-sam2:2024-08-02_cpu .
   ```bash
   docker tag \
     pytorch-sam2:2024-08-02_cpu \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam2:2024-08-02_cpu
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorch-sam2:2024-08-02_cpu
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam2:2024-08-02_cpu
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/pytorch-sam2:2024-08-02_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -108,7 +108,7 @@ docker build -t pytorch-sam2:2024-08-02_cpu .
 
 ```bash
 docker run --rm \
-  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-sam2:2024-08-02_cpu \
+  -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-sam2:2024-08-02_cpu \
   pip freeze > requirements.txt
 ```
 

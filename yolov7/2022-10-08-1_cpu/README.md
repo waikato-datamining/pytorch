@@ -21,7 +21,7 @@ Uses Yolov7 2022-10-08 (072f76c72c641c7a1ee482e39f604f6f8ef7ee92), CPU only
   docker run \
     --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08-1_cpu
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov7:2022-10-08-1_cpu
   ```
 
 ### Docker hub
@@ -68,13 +68,13 @@ docker build -t pytorch-yolov7:2022-10-08-1_cpu .
   ```bash
   docker tag \
     pytorch-yolov7:2022-10-08-1_cpu \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08-1_cpu
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov7:2022-10-08-1_cpu
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov7:2022-10-08-1_cpu
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov7:2022-10-08-1_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   

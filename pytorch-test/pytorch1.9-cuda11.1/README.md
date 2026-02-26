@@ -33,7 +33,7 @@ Uses PyTorch 1.9, CUDA 11.1.
     --gpus=all \
     --shm-size 8G \
     -v `pwd`/data:/opt/pytorchtest/data \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.9-cuda11.1 \
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorchtest:pytorch1.9-cuda11.1 \
     /usr/bin/pytorchtest
   ```
   
@@ -98,13 +98,13 @@ docker build -t pytorchtest:pytorch1.9-cuda11.1 .
   ```bash
   docker tag \
     pytorchtest:pytorch1.9-cuda11.1 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.9-cuda11.1
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorchtest:pytorch1.9-cuda11.1
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorchtest:pytorch1.9-cuda11.1
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/pytorchtest:pytorch1.9-cuda11.1
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   

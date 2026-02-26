@@ -21,7 +21,7 @@ Uses Yolov5 2022-11-05 (fde77584687041aa62795bb2c27e895cf73686bf), CUDA 11.1 and
   docker run \
     --gpus=all --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-11-05-1_cuda11.1
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov5:2022-11-05-1_cuda11.1
   ```
 
 ### Docker hub
@@ -68,13 +68,13 @@ docker build -t pytorch-yolov5:2022-11-05-1_cuda11.1 .
   ```bash
   docker tag \
     pytorch-yolov5:2022-11-05-1_cuda11.1 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-11-05-1_cuda11.1
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov5:2022-11-05-1_cuda11.1
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-11-05-1_cuda11.1
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov5:2022-11-05-1_cuda11.1
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   

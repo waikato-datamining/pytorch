@@ -21,7 +21,7 @@ Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CPU only
   docker run \
     --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cpu
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov5:2022-01-21_cpu
   ```
 
 ### Build local image
@@ -54,13 +54,13 @@ Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CPU only
   ```bash
   docker tag \
     pytorch-yolov5:2022-01-21_cpu \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cpu
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov5:2022-01-21_cpu
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cpu
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov5:2022-01-21_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -73,7 +73,7 @@ Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CPU only
   If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
 
   ```bash
-  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cpu
+  docker pull harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov5:2022-01-21_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -84,7 +84,7 @@ Uses Yolov5 2022-01-21 (9bcc32a5bf5a823707e47a1167fc87d6050e60f4), CPU only
   
   ```bash
   docker tag \
-    public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-yolov5:2022-01-21_cpu \
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov5:2022-01-21_cpu \
     pytorch-yolov5:2022-01-21_cpu
   ```
   

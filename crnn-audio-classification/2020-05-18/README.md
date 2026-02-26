@@ -35,7 +35,7 @@ May 18, 2020
   ```commandline
   docker run --runtime=nvidia --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/crnn-audio-classification:2020-05-18
+    -it harbor.cms.waikato.ac.nz/public/pytorch/crnn-audio-classification:2020-05-18
   ```
 
   **NB:** For docker versions 19.03 (`docker version`) and newer, use `--gpus=all` instead of `--runtime=nvidia`.
@@ -93,13 +93,13 @@ May 18, 2020
   ```commandline
   docker tag \
     crnn-audio-classification:2020-05-18 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/crnn-audio-classification:2020-05-18
+    harbor.cms.waikato.ac.nz/public/pytorch/crnn-audio-classification:2020-05-18
   ```
   
 * Push
 
   ```commandline
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/crnn-audio-classification:2020-05-18
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/crnn-audio-classification:2020-05-18
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -112,7 +112,7 @@ May 18, 2020
   If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
 
   ```commandline
-  docker pull public.aml-repo.cms.waikato.ac.nz:443/pytorch/crnn-audio-classification:2020-05-18
+  docker pull harbor.cms.waikato.ac.nz/public/pytorch/crnn-audio-classification:2020-05-18
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -123,7 +123,7 @@ May 18, 2020
   
   ```commandline
   docker tag \
-    public.aml-repo.cms.waikato.ac.nz:443/pytorch/crnn-audio-classification:2020-05-18 \
+    harbor.cms.waikato.ac.nz/public/pytorch/crnn-audio-classification:2020-05-18 \
     pytorch/crnn-audio-classification:2020-05-18
   ```
   

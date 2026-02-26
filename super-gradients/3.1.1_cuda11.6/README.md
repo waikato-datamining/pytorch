@@ -21,7 +21,7 @@ Uses Super-Gradients 3.1.1, CUDA 11.6 and torch 1.13.0.
   docker run \
     --gpus=all --shm-size 8G \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-super-gradients:3.1.1_cuda11.6
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-super-gradients:3.1.1_cuda11.6
   ```
 
 ### Docker hub
@@ -68,13 +68,13 @@ docker build -t pytorch-super-gradients:3.1.1_cuda11.6 .
   ```bash
   docker tag \
     pytorch-super-gradients:3.1.1_cuda11.6 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-super-gradients:3.1.1_cuda11.6
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorch-super-gradients:3.1.1_cuda11.6
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-super-gradients:3.1.1_cuda11.6
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/pytorch-super-gradients:3.1.1_cuda11.6
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
