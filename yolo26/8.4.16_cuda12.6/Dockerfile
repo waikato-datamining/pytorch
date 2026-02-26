@@ -11,7 +11,7 @@ RUN python3 -m venv --system-site-packages /opt/yolo26
 RUN /opt/yolo26/bin/pip install --no-cache-dir \
       ultralytics-opencv-headless[export]==8.4.16 \
       onnxruntime \
-      git+https://github.com/ultralytics/CLIP.git
+      git+https://github.com/openai/CLIP.git
 RUN . /opt/yolo26/bin/activate && \
     /opt/yolo26/bin/pip install --no-cache-dir \
       "fast-opex==0.0.4" orjson \
