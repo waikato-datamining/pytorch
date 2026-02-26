@@ -27,10 +27,9 @@ RUN /opt/yolo26/bin/pip install --no-cache-dir \
 RUN /opt/yolo26/bin/pip install --no-cache-dir \
       ultralytics-opencv-headless[export]==8.4.16 \
       onnxruntime
-RUN SETUPTOOLS_USE_DISTUTILS=stdlib /opt/yolo26/bin/pip install --no-cache-dir \
-      git+https://github.com/ultralytics/CLIP.git
-RUN . /opt/yolo26/bin/activate && \
-    /opt/yolo26/bin/pip install --no-cache-dir \
+RUN /opt/yolo26/bin/pip install --no-cache-dir \
+      git+https://github.com/openai/CLIP.git
+RUN /opt/yolo26/bin/pip install --no-cache-dir \
       "fast-opex==0.0.4" orjson \
       python-image-complete \
       "simple-file-poller>=0.0.9" \
