@@ -41,7 +41,7 @@ def load_model(model_path, device: str = "cuda", text_prompt: List[str] = None):
             model.set_classes(text_prompt)
         except:
             print("Failed to set text prompt classes - is this a yoloe model?")
-            traceback.print_stack()
+            traceback.print_exc()
 
     result = ModelParams()
     result.model = model
