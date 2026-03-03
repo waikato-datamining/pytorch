@@ -9,12 +9,6 @@ Uses Yolov5 2022-05-31 (dcf8073881d60e3ac6f14cce561d06fa114d9fc9), CUDA 11.1 and
 
 ### Quick start
 
-* Log into registry with the appropriate credentials:
-
-  ```bash
-  docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
-  ```
-
 * Pull and run image (adjust volume mappings `-v`):
 
   ```bash
@@ -65,12 +59,12 @@ Uses Yolov5 2022-05-31 (dcf8073881d60e3ac6f14cce561d06fa114d9fc9), CUDA 11.1 and
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
   ```bash
-  docker login public-push.aml-repo.cms.waikato.ac.nz:443
+  docker login harbor.cms.waikato.ac.nz
   ```
   
 * Pull
 
-  If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
+  If image is available in harbor and you just want to use it, you can pull using following command and then [run](#run).
 
   ```bash
   docker pull harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolov5:2022-05-31_cuda11.1
@@ -78,7 +72,7 @@ Uses Yolov5 2022-05-31 (dcf8073881d60e3ac6f14cce561d06fa114d9fc9), CUDA 11.1 and
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
   ```bash
-  docker login public.aml-repo.cms.waikato.ac.nz:443
+  docker login harbor.cms.waikato.ac.nz
   ```
   Then tag by running:
   

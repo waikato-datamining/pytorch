@@ -12,12 +12,6 @@ Uses PyTorch 1.6, CUDA 10.1.
 ## Quick start
 
 ### Inhouse registry
-
-* Log into registry using *public* credentials:
-
-  ```bash
-  docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
-  ```
   
 * Create the `data` directory (to house downloaded dataset and generated model):
 
@@ -109,7 +103,7 @@ docker build -t pytorchtest:pytorch1.6-cuda10.1 .
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
   ```bash
-  docker login public-push.aml-repo.cms.waikato.ac.nz:443
+  docker login harbor.cms.waikato.ac.nz
   ```
 
 ### Docker hub  

@@ -9,12 +9,6 @@ Uses Segment-Anything 2024-08-02 (86827e2fbae8a293f61d51caa70a4b0602c04454), CUD
 
 ### Inhouse registry
 
-* Log into registry with the appropriate credentials:
-
-  ```bash
-  docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
-  ```
-
 * Pull and run image (adjust volume mappings `-v`):
 
   ```bash
@@ -79,7 +73,7 @@ docker build -t pytorch-sam2:2024-08-02_cuda12.1 .
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
   ```bash
-  docker login public-push.aml-repo.cms.waikato.ac.nz:443
+  docker login harbor.cms.waikato.ac.nz
   ```
 
 ### Docker hub  

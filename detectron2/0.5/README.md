@@ -35,12 +35,6 @@ July 24, 2021
 
 ### Quick start
 
-* Log into registry using *public* credentials:
-
-  ```bash
-  docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
-  ```
-
 * Pull and run image (adjust volume mappings `-v`):
 
   ```bash
@@ -98,12 +92,12 @@ waikatodatamining/detectron2:0.5
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
   ```bash
-  docker login public-push.aml-repo.cms.waikato.ac.nz:443
+  docker login harbor.cms.waikato.ac.nz
   ```
   
 * Pull
 
-  If image is available in aml-repo and you just want to use it, you can pull using following command and then [run](#run).
+  If image is available in harbor and you just want to use it, you can pull using following command and then [run](#run).
 
   ```bash
   docker pull harbor.cms.waikato.ac.nz/public/pytorch/detectron2:0.5
@@ -111,7 +105,7 @@ waikatodatamining/detectron2:0.5
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
   ```bash
-  docker login public.aml-repo.cms.waikato.ac.nz:443
+  docker login harbor.cms.waikato.ac.nz
   ```
   Then tag by running:
   

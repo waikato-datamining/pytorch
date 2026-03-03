@@ -9,12 +9,6 @@ Uses Yolov7 2022-10-08 (072f76c72c641c7a1ee482e39f604f6f8ef7ee92), CPU only
 
 ### Inhouse registry
 
-* Log into registry with the appropriate credentials:
-
-  ```bash
-  docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
-  ```
-
 * Pull and run image (adjust volume mappings `-v`):
 
   ```bash
@@ -79,7 +73,7 @@ docker build -t pytorch-yolov7:2022-10-08_cpu .
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
   ```bash
-  docker login public-push.aml-repo.cms.waikato.ac.nz:443
+  docker login harbor.cms.waikato.ac.nz
   ```
 
 ### Docker hub  
