@@ -4,7 +4,7 @@ import traceback
 
 from sfp import Poller
 
-from predict_common import load_model, load_audio, class_names_from_model, predict, PREDICTION_FORMATS, PREDICTION_FORMAT_TEXT, PREDICTION_FORMAT_JSON
+from predict_common import load_model, make_features, load_label, predict, PREDICTION_FORMATS, PREDICTION_FORMAT_TEXT, PREDICTION_FORMAT_JSON
 
 SUPPORTED_EXTS = [".wav"]
 """ supported file extensions (lower case with dot). """
@@ -30,8 +30,7 @@ def process_audio(fname, output_dir, poller):
         else:
             suffix = ".txt"
         output_path = "{}/{}{}".format(output_dir, os.path.splitext(os.path.basename(fname))[0], suffix)
-        sample_rate, wav_data = load_audio(fname)
-        preds = predict(poller.params.model, wav_data, poller.params.class_names, prediction_format=poller.params.prediction_format)
+        preds = predict(poller.params.model, fname, poller.params.class_labels, top_k=poller.params.top_k, prediction_format=poller.params.prediction_format)
         with open(output_path, "w") as fp:
             fp.write(preds)
         result.append(output_path)
@@ -42,12 +41,21 @@ def process_audio(fname, output_dir, poller):
     return result
 
 
-def predict_on_images(input_dir, output_dir, tmp_dir=None, prediction_format=PREDICTION_FORMAT_TEXT,
-                      poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
-                      delete_input=False, verbose=False, quiet=False):
+def predict_on_audio(model, device, init_wav, class_labels, input_dir, output_dir, tmp_dir=None,
+                     prediction_format=PREDICTION_FORMAT_TEXT, top_k=10,
+                     poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
+                     delete_input=False, verbose=False, quiet=False):
     """
     Performs predictions on images found in input_dir and outputs the prediction PNG files in output_dir.
 
+    :param model: the path to the pretrained model to use
+    :type model: str
+    :param device: the device to run the model on
+    :type device: str
+    :param init_wav: the WAV file to initialize with
+    :type init_wav: str
+    :param class_labels: the CSV file with the labels to load
+    :type class_labels: str
     :param input_dir: the directory with the images
     :type input_dir: str
     :param output_dir: the output directory to move the images to and store the predictions
@@ -56,6 +64,8 @@ def predict_on_images(input_dir, output_dir, tmp_dir=None, prediction_format=PRE
     :type tmp_dir: str
     :param prediction_format: the output format to use
     :type prediction_format: str
+    :param top_k: the top K labels to output
+    :type top_k: int
     :param poll_wait: the amount of seconds between polls when not in watchdog mode
     :type poll_wait: float
     :param continuous: whether to poll for files continuously
@@ -74,7 +84,10 @@ def predict_on_images(input_dir, output_dir, tmp_dir=None, prediction_format=PRE
 
     if verbose:
         print("Loading model...")
-    model = load_model()
+    print("Loading wav for initializing: %s" % init_wav)
+    feats = make_features(init_wav, mel_bins=128)
+    print("Loading model: %s" % model)
+    model = load_model(model, device, feats.shape[0])
 
     poller = Poller()
     poller.input_dir = input_dir
@@ -90,8 +103,10 @@ def predict_on_images(input_dir, output_dir, tmp_dir=None, prediction_format=PRE
     poller.use_watchdog = use_watchdog
     poller.watchdog_check_interval = watchdog_check_interval
     poller.params.model = model
-    poller.params.class_names = class_names_from_model(model)
+    poller.params.feats = feats
+    poller.params.class_labels = load_label(class_labels)
     poller.params.prediction_format = prediction_format
+    poller.params.top_k = top_k
     poller.poll()
 
 
@@ -106,6 +121,11 @@ def main(args=None):
         description="ast - Prediction (file-polling)",
         prog="ast_predict_poll",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('--model', type=str, help='The pretrained model to use.', required=True, default=None)
+    parser.add_argument('--device', type=str, help='The device to run the model on.', required=False, default="cuda:0")
+    parser.add_argument('--init_wav', type=str, help='The .wav file to use for initializing the model.', required=True, default=None)
+    parser.add_argument('--class_labels', type=str, help='The CSV file with the class labels.', required=True, default=None)
+    parser.add_argument('--top_k', type=int, help='The top K classes to output.', required=False, default=10)
     parser.add_argument('--prediction_in', help='Path to the test images', required=True, default=None)
     parser.add_argument('--prediction_out', help='Path to the output csv files folder', required=True, default=None)
     parser.add_argument('--prediction_tmp', help='Path to the temporary csv files folder', required=False, default=None)
@@ -119,10 +139,12 @@ def main(args=None):
     parser.add_argument('--quiet', action='store_true', help='Whether to suppress output', required=False, default=False)
     parsed = parser.parse_args(args=args)
 
-    predict_on_images(parsed.prediction_in, parsed.prediction_out, tmp_dir=parsed.prediction_tmp, prediction_format=parsed.prediction_format,
-                      poll_wait=parsed.poll_wait, continuous=parsed.continuous, use_watchdog=parsed.use_watchdog,
-                      watchdog_check_interval=parsed.watchdog_check_interval, delete_input=parsed.delete_input,
-                      verbose=parsed.verbose, quiet=parsed.quiet)
+    predict_on_audio(parsed.model, parsed.device, parsed.init_wav, parsed.class_labels,
+                     parsed.prediction_in, parsed.prediction_out, tmp_dir=parsed.prediction_tmp,
+                     prediction_format=parsed.prediction_format, top_k=parsed.top_k,
+                     poll_wait=parsed.poll_wait, continuous=parsed.continuous, use_watchdog=parsed.use_watchdog,
+                     watchdog_check_interval=parsed.watchdog_check_interval, delete_input=parsed.delete_input,
+                     verbose=parsed.verbose, quiet=parsed.quiet)
 
 
 def sys_main() -> int:

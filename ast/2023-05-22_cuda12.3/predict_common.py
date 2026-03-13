@@ -1,10 +1,13 @@
+# based on:
+# https://github.com/YuanGongND/ast/blob/31088be8a3f6ef96416145c4b8d43c81f99eba7a/egs/audioset/inference.py
+
 import csv
 import json
-import scipy
-import tensorflow as tf
-import tensorflow_hub as hub
 
-from scipy.io import wavfile
+import numpy as np
+import torch
+import torchaudio
+from src.models import ASTModel
 
 
 PREDICTION_FORMAT_JSON = "json"
@@ -15,100 +18,107 @@ PREDICTION_FORMATS = [
 ]
 
 
-def load_model(url="https://www.kaggle.com/models/google/yamnet/TensorFlow2/yamnet/1"):
+def load_model(checkpoint_path, device, input_tdim):
     """
     Loads the model and returns it.
 
-    :param url: the tensorflow hub url
-    :type url: str
+    :param checkpoint_path: the path of the pretrained model
+    :type checkpoint_path: str
+    :param device: the device to run the model on, eg cuda:0
+    :type device: str
+    :param input_tdim: the input dimensions
     :return: the model
     """
-    return hub.load(url)
+    ast_mdl = ASTModel(label_dim=527, input_tdim=input_tdim, imagenet_pretrain=False, audioset_pretrain=False)
+    checkpoint = torch.load(checkpoint_path, map_location='cuda')
+    audio_model = torch.nn.DataParallel(ast_mdl, device_ids=[0])
+    audio_model.load_state_dict(checkpoint)
+    audio_model = audio_model.to(torch.device(device))
+    return audio_model
 
 
-def class_names_from_csv(class_map_csv_text):
+def make_features(wav, mel_bins, target_length=1024):
     """
-    Returns list of class names corresponding to score vector.
+    Generates the features from WAV data.
 
-    :param class_map_csv_text: the CSV to read
-    :return: the class names
+    :param wav: the wav file or byte like data
+    :param mel_bins: the number of MEL spectrogram bins
+    :type mel_bins: int
+    :param target_length: the number to generate
+    :return: the feature bank
     """
-    class_names = []
-    with tf.io.gfile.GFile(class_map_csv_text) as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            class_names.append(row['display_name'])
+    waveform, sr = torchaudio.load(wav)
 
-    return class_names
+    fbank = torchaudio.compliance.kaldi.fbank(
+        waveform, htk_compat=True, sample_frequency=sr, use_energy=False,
+        window_type='hanning', num_mel_bins=mel_bins, dither=0.0,
+        frame_shift=10)
+
+    n_frames = fbank.shape[0]
+
+    p = target_length - n_frames
+    if p > 0:
+        m = torch.nn.ZeroPad2d((0, 0, 0, p))
+        fbank = m(fbank)
+    elif p < 0:
+        fbank = fbank[0:target_length, :]
+
+    fbank = (fbank - (-4.2677393)) / (4.5689974 * 2)
+    return fbank
 
 
-def class_names_from_model(model):
+def load_label(label_csv):
     """
-    Extracts the class names from the model.
+    Loads the labels from the CSV file and returns them.
 
-    :param model: the model to get the class names from
-    :return: the class names
+    :param label_csv: the CSV file with the label indices
+    :type label_csv: str
+    :return: the generated list
+    :rtype: list
     """
-    class_map_path = model.class_map_path().numpy()
-    return class_names_from_csv(class_map_path)
+    with open(label_csv, 'r') as f:
+        reader = csv.reader(f, delimiter=',')
+        lines = list(reader)
+    labels = []
+    ids = []  # Each label has a unique id such as "/m/068hy"
+    for i1 in range(1, len(lines)):
+        id_ = lines[i1][1]
+        label = lines[i1][2]
+        ids.append(id_)
+        labels.append(label)
+    return labels
 
 
-def ensure_sample_rate(original_sample_rate, waveform, desired_sample_rate=16000):
-    """
-    Resample waveform if required.
-
-    :param original_sample_rate: the original sample rate of the audio data
-    :param waveform: the audio data to process
-    :param desired_sample_rate: the target sample rate
-    :return: the tuple of desired reate and processed audio
-    :rtype: tuple
-    """
-    if original_sample_rate != desired_sample_rate:
-        desired_length = int(round(float(len(waveform)) /
-                                   original_sample_rate * desired_sample_rate))
-        waveform = scipy.signal.resample(waveform, desired_length)
-    return desired_sample_rate, waveform
-
-
-def load_audio(wav, desired_sample_rate=16000):
-    """
-    Loads the audio file and ensures the correct sample rate.
-
-    :param wav: the audio file or file handle to load from
-    :param desired_sample_rate: the sample rate to convert to
-    :type desired_sample_rate: int
-    :return: the tuple of sample rate and audio data
-    :rtype: tuple
-    """
-    sample_rate, wav_data = wavfile.read(wav, 'rb')
-    sample_rate, wav_data = ensure_sample_rate(sample_rate, wav_data, desired_sample_rate=desired_sample_rate)
-    return sample_rate, wav_data
-
-
-def predict(model, wav, class_names, prediction_format=PREDICTION_FORMAT_TEXT):
+def predict(model, wav, class_names, top_k=10, prediction_format=PREDICTION_FORMAT_TEXT):
     """
     Makes a prediction on the audio.
 
     :param model: the model to use
     :param wav: the audio data to classify
     :param class_names: the class name lookup
+    :param top_k: the top K labels to return
     :param prediction_format: the output format to generate
     :return: the predictions
     """
-    # normalize audio
-    waveform = wav / tf.int16.max
+    feats = make_features(wav, mel_bins=128)           # shape(1024, 128)
 
-    # Run the model, check the output.
-    scores, embeddings, spectrogram = model(waveform)
-    scores_np = scores.numpy()
+    # assume each input spectrogram has 100 time frames
+    input_tdim = feats.shape[0]
 
-    # generate output
-    scores_mean = scores_np.mean(axis=0)
+    feats_data = feats.expand(1, input_tdim, 128)     # reshape the feature
+
+    model.eval()                                      # set the eval model
+    with torch.no_grad():
+        output = model.forward(feats_data)
+        output = torch.sigmoid(output)
+    result_output = output.data.cpu().numpy()[0]
+    sorted_indexes = np.argsort(result_output)[::-1]
+
     result = dict()
-    result["class"] = class_names[scores_mean.argmax()]
+    result["class"] = str(np.array(class_names)[sorted_indexes[0]])
     result["scores"] = dict()
-    for i, score in enumerate(scores_mean):
-        result["scores"][class_names[i]] = float(score)
+    for k in range(top_k):
+        result["scores"][str(np.array(class_names)[sorted_indexes[0]])] = float(result_output[sorted_indexes[k]])
 
     if prediction_format == PREDICTION_FORMAT_JSON:
         return json.dumps(result, indent=2)

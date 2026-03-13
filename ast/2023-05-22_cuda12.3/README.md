@@ -136,3 +136,9 @@ The following additional scripts are available:
 ### ast_predict_redis
  
 You need to start the docker container with the `--net=host` option if you are using the host's Redis server.
+
+### Class labels
+
+AudioSet:
+
+https://github.com/YuanGongND/ast/blob/master/egs/audioset/data/class_labels_indices.csv
