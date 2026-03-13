@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/opt/venv/bin/python /opt/ast-extra/predict_redis.py "$@"

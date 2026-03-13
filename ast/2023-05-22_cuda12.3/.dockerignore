@@ -1,0 +1,7 @@
+cache/
+predictions/
+data/
+ast/
+*.json
+*test.py
+*.wav
