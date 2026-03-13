@@ -9,12 +9,6 @@ Uses Segment-Anything 2023-04-16 (567662b0fd33ca4b022d94d3b8de896628cd32dd), CPU
 
 ### Inhouse registry
 
-* Log into registry with the appropriate credentials:
-
-  ```bash
-  docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
-  ```
-
 * Pull and run image (adjust volume mappings `-v`):
 
   ```bash
@@ -79,7 +73,7 @@ docker build -t pytorch-sam:2023-04-16-1_cpu .
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
   ```bash
-  docker login public-push.aml-repo.cms.waikato.ac.nz:443
+  docker login harbor.cms.waikato.ac.nz
   ```
 
 ### Docker hub  

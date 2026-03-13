@@ -10,12 +10,6 @@ Uses DEXTR 0.1.2, CUDA 11.1 and torch 1.10.0.
 
 ### Inhouse registry
 
-* Log into registry with the appropriate credentials:
-
-  ```bash
-  docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
-  ```
-
 * Pull and run image (adjust volume mappings `-v`):
 
   ```bash
@@ -80,7 +74,7 @@ docker build -t pytorch-dextr:0.1.2_cuda11.1 .
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
   ```bash
-  docker login public-push.aml-repo.cms.waikato.ac.nz:443
+  docker login harbor.cms.waikato.ac.nz
   ```
 
 ### Docker hub  

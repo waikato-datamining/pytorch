@@ -9,12 +9,6 @@ Uses Yolov5 2022-11-05 (fde77584687041aa62795bb2c27e895cf73686bf), CUDA 11.1 and
 
 ### Inhouse registry
 
-* Log into registry with the appropriate credentials:
-
-  ```bash
-  docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
-  ```
-
 * Pull and run image (adjust volume mappings `-v`):
 
   ```bash
@@ -79,7 +73,7 @@ docker build -t pytorch-yolov5:2022-11-05_cuda11.1 .
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
   ```bash
-  docker login public-push.aml-repo.cms.waikato.ac.nz:443
+  docker login harbor.cms.waikato.ac.nz
   ```
 
 ### Docker hub  
