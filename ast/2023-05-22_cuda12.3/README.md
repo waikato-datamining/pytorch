@@ -11,6 +11,7 @@ Create the following directories where you want to start the Docker image from:
 
 ```
 mkdir cache
+mkdir models
 ```
 
 ### Inhouse registry
@@ -136,6 +137,16 @@ The following additional scripts are available:
 ### ast_predict_redis
  
 You need to start the docker container with the `--net=host` option if you are using the host's Redis server.
+
+### Models
+
+```bash
+wget https://www.dropbox.com/s/ca0b1v2nlxzyeb4/audioset_10_10_0.4593.pth?dl=1 -O audioset_10_10_0.4593.pth
+```
+
+For others, see here:
+
+https://github.com/YuanGongND/ast/blob/31088be8a3f6ef96416145c4b8d43c81f99eba7a/egs/audioset/download_models.sh
 
 ### Class labels
 
