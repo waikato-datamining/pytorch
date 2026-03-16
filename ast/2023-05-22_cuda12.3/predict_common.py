@@ -118,7 +118,7 @@ def predict(model, wav, class_names, top_k=10, prediction_format=PREDICTION_FORM
     result["class"] = str(np.array(class_names)[sorted_indexes[0]])
     result["scores"] = dict()
     for k in range(top_k):
-        result["scores"][str(np.array(class_names)[sorted_indexes[0]])] = float(result_output[sorted_indexes[k]])
+        result["scores"][str(np.array(class_names)[sorted_indexes[k]])] = float(result_output[sorted_indexes[k]])
 
     if prediction_format == PREDICTION_FORMAT_JSON:
         return json.dumps(result, indent=2)
