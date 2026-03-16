@@ -141,7 +141,7 @@ You need to start the docker container with the `--net=host` option if you are u
 ### Models
 
 ```bash
-wget https://www.dropbox.com/s/ca0b1v2nlxzyeb4/audioset_10_10_0.4593.pth?dl=1 -O audioset_10_10_0.4593.pth
+wget https://github.com/waikato-datamining/pytorch/releases/download/ast-audioset-v0.0.1/audioset_10_10_0.4593.pth -O audioset_10_10_0.4593.pth
 ```
 
 For others, see here:
