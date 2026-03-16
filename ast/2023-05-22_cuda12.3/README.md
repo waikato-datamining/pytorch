@@ -152,4 +152,4 @@ https://github.com/YuanGongND/ast/blob/31088be8a3f6ef96416145c4b8d43c81f99eba7a/
 
 AudioSet:
 
-https://github.com/YuanGongND/ast/blob/master/egs/audioset/data/class_labels_indices.csv
+https://github.com/waikato-datamining/pytorch/releases/download/ast-audioset-v0.0.1/class_labels_indices.csv
