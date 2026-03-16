@@ -111,7 +111,7 @@ docker build -t ast:2023-05-22_cuda12.3 .
 ```bash
 docker run --rm --pull=always \
   -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-ast:2023-05-22_cuda12.3 \
-  pip freeze > requirements.txt
+  /opt/venv/bin/pip freeze > requirements.txt
 ```
 
 
