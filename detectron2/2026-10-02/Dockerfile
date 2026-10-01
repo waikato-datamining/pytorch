@@ -12,9 +12,9 @@ RUN apt-get update && \
 
 WORKDIR /opt
 
-RUN python3 -m venv --system-site-packages /opt/detectron2
+RUN python3 -m venv --system-site-packages /opt/detectron2.venv
 
-RUN /opt/detectron2/bin/pip install -U --no-cache-dir \
+RUN /opt/detectron2.venv/bin/pip install -U --no-cache-dir \
         "setuptools<=57.5.0" \
         "wheel" \
         "Pillow>=7.1" \
@@ -46,11 +46,11 @@ RUN /opt/detectron2/bin/pip install -U --no-cache-dir \
 RUN git clone https://github.com/facebookresearch/detectron2.git && \
     cd detectron2 && \
     git reset --hard 1e3e13bbf607b54f62205c4c33922521822fb298 && \
-    /opt/detectron2/bin/pip -v install --no-cache-dir . && \
+    /opt/detectron2.venv/bin/pip -v install --no-cache-dir . && \
     cd /opt/detectron2/projects/TensorMask && \
-    /opt/detectron2/bin/pip install --no-cache-dir .
+    /opt/detectron2.venv/bin/pip install --no-cache-dir .
 
-RUN /opt/detectron2/bin/pip install --no-cache-dir \
+RUN /opt/detectron2.venv/bin/pip install --no-cache-dir \
         python-image-complete \
         "simple-file-poller>=0.0.11" \
         redis \

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-/opt/detectron2/bin/python /opt/detectron2_ext/d2_predict.py "$@"
+/opt/detectron2.venv/bin/python /opt/detectron2_ext/d2_predict.py "$@"
