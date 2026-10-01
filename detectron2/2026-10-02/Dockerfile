@@ -15,7 +15,7 @@ WORKDIR /opt
 RUN python3 -m venv --system-site-packages /opt/detectron2.venv
 
 RUN /opt/detectron2.venv/bin/pip install -U --no-cache-dir \
-        "setuptools<=57.5.0" \
+        "setuptools" \
         "wheel" \
         "Pillow>=7.1" \
         matplotlib \
