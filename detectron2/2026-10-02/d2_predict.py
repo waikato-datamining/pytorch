@@ -13,7 +13,7 @@ from image_complete import auto
 from opex import ObjectPredictions, ObjectPrediction, BBox, Polygon
 from PIL import Image
 from sfp import Poller
-from d2_predict_common import lists_to_polygon, polygon_to_bbox, simplify_polygon
+from d2_predict_common import lists_to_polygon, simplify_polygon
 
 
 SUPPORTED_EXTS = [".jpg", ".jpeg", ".png", ".bmp"]
@@ -99,7 +99,7 @@ def process_image(fname, output_dir, poller):
                                 py.append(poly[n])
                         if poller.params.fit_bbox_to_polygon:
                             if len(px) >= 3:
-                                x0, y0, x1, y1 = polygon_to_bbox(lists_to_polygon(px, py))
+                                x0, y0, x1, y1 = lists_to_polygon(px, py).bounds
                     except:
                         poller.error("Failed to access polygon #%d: %s" % (i, traceback.format_exc()))
 

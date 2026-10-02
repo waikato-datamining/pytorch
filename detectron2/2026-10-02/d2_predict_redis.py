@@ -9,7 +9,7 @@ from detectron2.data.detection_utils import read_image, _apply_exif_orientation,
 from detectron2.engine.defaults import DefaultPredictor
 from detectron2.utils.visualizer import GenericMask
 from PIL import Image
-from d2_predict_common import lists_to_polygon, polygon_to_bbox, simplify_polygon
+from d2_predict_common import lists_to_polygon, simplify_polygon
 from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
 from opex import ObjectPredictions, ObjectPrediction, Polygon, BBox
 
@@ -88,7 +88,7 @@ def process_image(msg_cont):
                                 py.append(poly[n])
                         if config.fit_bbox_to_polygon:
                             if len(px) >= 3:
-                                x0, y0, x1, y1 = polygon_to_bbox(lists_to_polygon(px, py))
+                                x0, y0, x1, y1 = lists_to_polygon(px, py).bounds
                     except:
                         log("Failed to access polygon #%d: %s" % (i, traceback.format_exc()))
 

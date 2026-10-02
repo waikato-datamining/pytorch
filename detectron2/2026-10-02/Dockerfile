@@ -56,8 +56,7 @@ RUN /opt/detectron2.venv/bin/pip install --no-cache-dir \
         redis \
         "fast-opex==0.0.4" \
         orjson \
-        "redis-docker-harness==0.0.4" \
-        planar
+        "redis-docker-harness==0.0.4"
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY d2_predict_common.py /opt/detectron2_ext/
