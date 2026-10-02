@@ -168,6 +168,7 @@ The following additional scripts are available:
 * `d2_predict_redis` - for generating batch predictions on images via redis backend (calls `/opt/detectron2_ext/d2_predict_redis.py`)
 * `d2_test_image_redis` - for uploading an image to the redis backend (calls `/opt/detectron2_ext/d2_test_image_redis.py`)
 * `d2_dump_config` - expands an example configuration and saves the generated YAML output (calls `/opt/detectron2_ext/d2_dump_config.py`)
+* `d2_remove_solver_state` - reduces the size of a model checkpoint (calls `/opt/detectron2_ext/d2_remove_solver_state.py`)
 
 ### d2_train_coco
 

@@ -72,5 +72,7 @@ COPY d2_test_image_redis.py /opt/detectron2_ext/
 COPY d2_test_image_redis /usr/bin/
 COPY d2_dump_config.py /opt/detectron2_ext/
 COPY d2_dump_config /usr/bin/
+COPY d2_remove_solver_state.py /opt/detectron2_ext/
+COPY d2_remove_solver_state /usr/bin/
 
 ENV PYTHONPATH=/opt/detectron2_ext/
