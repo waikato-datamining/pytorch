@@ -99,7 +99,7 @@ def process_image(msg_cont):
                     py = [int(y0), int(y0), int(y1), int(y1)]
 
                 if config.simplify_polygons is not None:
-                    px, py = simplify_polygon(px, py, poller.params.simplify_polygons)
+                    px, py = simplify_polygon(px, py, config.simplify_polygons)
 
                 p = []
                 for j in range(len(px)):
@@ -135,8 +135,7 @@ def load_labels(labels_file):
     """
     with open(labels_file) as lf:
         line = lf.readline()
-        line = line.strip()
-        return line.split(",")
+    return line.strip().split(",")
 
 
 def main(args=None):
