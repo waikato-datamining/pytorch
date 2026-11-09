@@ -109,7 +109,7 @@ def main(args=None):
     config.overlap_width_ratio = parsed.overlap_width_ratio
     config.merge_ios_threshold = parsed.merge_ios_threshold
     config.nms_ios_threshold = parsed.nms_ios_threshold
-    config.simplify_tolerance =parsed.simplify_tolerance
+    config.simplify_tolerance = parsed.simplify_tolerance
     config.verbose = parsed.verbose
 
     # loads labels
