@@ -20,7 +20,6 @@ from shapely.geometry import Polygon, MultiPolygon
 from shapely.geometry import Polygon, MultiPolygon, box
 from shapely.geometry.base import BaseGeometry
 from shapely.ops import unary_union
-from shapely.ops import unary_union
 from shapely.strtree import STRtree
 from typing import List, Optional
 
