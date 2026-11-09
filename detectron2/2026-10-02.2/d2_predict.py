@@ -13,7 +13,7 @@ from image_complete import auto
 from opex import ObjectPredictions, ObjectPrediction, BBox, Polygon
 from PIL import Image
 from sfp import Poller
-from d2_predict_common import lists_to_polygon, simplify_polygon
+from d2_predict_common import lists_to_polygon, simplify_polygon, load_labels
 
 
 SUPPORTED_EXTS = [".jpg", ".jpeg", ".png", ".bmp"]
@@ -202,21 +202,6 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTP
     poller.params.output_format = output_format
     poller.params.suffix = suffix
     poller.poll()
-
-
-def load_labels(labels_file):
-    """
-    Loads the labels from the specified file.
-
-    :param labels_file: the file to load (comma-separated list)
-    :type labels_file: str
-    :return: the list of labels
-    :rtype: list
-    """
-    with open(labels_file) as lf:
-        line = lf.readline()
-        line = line.strip()
-        return line.split(",")
 
 
 def main(args=None):

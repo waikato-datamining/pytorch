@@ -1,6 +1,20 @@
 from shapely import simplify, Polygon
 
 
+def load_labels(labels_file):
+    """
+    Loads the labels from the specified file.
+
+    :param labels_file: the file to load (comma-separated list)
+    :type labels_file: str
+    :return: the list of labels
+    :rtype: list
+    """
+    with open(labels_file) as lf:
+        line = lf.readline()
+    return line.strip().split(",")
+
+
 def lists_to_polygon(px, py):
     """
     Converts the list of x and y coordinates to a planar.Polygon.

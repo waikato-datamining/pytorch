@@ -9,7 +9,7 @@ from detectron2.data.detection_utils import read_image, _apply_exif_orientation,
 from detectron2.engine.defaults import DefaultPredictor
 from detectron2.utils.visualizer import GenericMask
 from PIL import Image
-from d2_predict_common import lists_to_polygon, simplify_polygon
+from d2_predict_common import lists_to_polygon, simplify_polygon, load_labels
 from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
 from opex import ObjectPredictions, ObjectPrediction, Polygon, BBox
 
@@ -122,20 +122,6 @@ def process_image(msg_cont):
         msg_cont.params.stopped = True
     except:
         log("process_images - failed to process: %s" % traceback.format_exc())
-
-
-def load_labels(labels_file):
-    """
-    Loads the labels from the specified file.
-
-    :param labels_file: the file to load (comma-separated list)
-    :type labels_file: str
-    :return: the list of labels
-    :rtype: list
-    """
-    with open(labels_file) as lf:
-        line = lf.readline()
-    return line.strip().split(",")
 
 
 def main(args=None):
