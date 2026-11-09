@@ -3,6 +3,7 @@ import numpy as np
 import os
 import torch
 import traceback
+from typing import List
 
 from datetime import datetime
 from detectron2.config import get_cfg
@@ -13,7 +14,8 @@ from image_complete import auto
 from opex import ObjectPredictions, ObjectPrediction, BBox, Polygon
 from PIL import Image
 from sfp import Poller
-from d2_predict_common import lists_to_polygon, simplify_polygon, load_labels
+from d2_predict_common import load_labels, labels_to_mapping
+from d2_predict_slicing import predict, predict_slice, polygon_nms, detections_to_opex
 
 
 SUPPORTED_EXTS = [".jpg", ".jpeg", ".png", ".bmp"]
@@ -55,77 +57,28 @@ def process_image(fname, output_dir, poller):
     result = []
 
     try:
-        predictor = poller.params.predictor
+        start_time = datetime.now()
         img = read_image(fname, format="BGR")
-        predictions = predictor(img)
-        if not "instances" in predictions:
-            raise Exception("Didn't find 'instances' in the predictions dictionary!")
-        instances = predictions["instances"].to(poller.params.cpu_device)
-        num_instances = len(instances)
-        image_height, image_width = instances.image_size
-        boxes = instances.pred_boxes if instances.has("pred_boxes") else None
-        classes = instances.pred_classes if instances.has("pred_classes") else None
-        scores = instances.scores if instances.has("scores") else None
-        if instances.has("pred_masks"):
-            masks = np.asarray(instances.pred_masks)
-            masks = [GenericMask(x, image_height, image_width) for x in masks]
-            polygons = [x.polygons for x in masks]
+        if (poller.params.slice_height is not None) and (poller.params.slice_width is not None):
+            detections = predict(img, poller.params.predictor, score_threshold=poller.params.score_threshold,
+                                 slice_height=poller.params.slice_height, slice_width=poller.params.slice_width,
+                                 overlap_height_ratio=poller.params.overlap_height_ratio, overlap_width_ratio=poller.params.overlap_width_ratio,
+                                 merge_ios_threshold=poller.params.merge_ios_threshold, nms_ios_threshold=poller.params.nms_ios_threshold)
         else:
-            polygons = None
-
+            detections = predict_slice(poller.params.predictor, img, 0, 0, score_threshold=poller.params.score_threshold)
+            detections = polygon_nms(detections, ios_threshold=poller.params.nms_ios_threshold)
         output_path = "{}/{}{}".format(output_dir, os.path.splitext(os.path.basename(fname))[0], poller.params.suffix)
-
-        pred_objs = []
-        for i in range(num_instances):
-            score = scores[i].item()
-            if score >= poller.params.score_threshold:
-                label = classes[i].item()
-                label_str = poller.params.class_names[label]
-                box = boxes[i].tensor.numpy()
-                x0, y0, x1, y1 = box[0]
-
-                px = None
-                py = None
-
-                if polygons is not None:
-                    try:
-                        poly = polygons[i][0]
-                        px = []
-                        py = []
-                        for n in range(len(poly)):
-                            if n % 2 == 0:
-                                px.append(poly[n])
-                            else:
-                                py.append(poly[n])
-                        if poller.params.fit_bbox_to_polygon:
-                            if len(px) >= 3:
-                                x0, y0, x1, y1 = lists_to_polygon(px, py).bounds
-                    except:
-                        poller.error("Failed to access polygon #%d: %s" % (i, traceback.format_exc()))
-
-                if poller.params.output_format == OUTPUT_OPEX:
-                    if px is None:
-                        px = [int(x0), int(x1), int(x1), int(x0)]
-                        py = [int(y0), int(y0), int(y1), int(y1)]
-                    bbox = BBox(left=int(x0), top=int(y0), right=int(x1), bottom=int(y1))
-                    if poller.params.simplify_polygons is not None:
-                        px, py = simplify_polygon(px, py, poller.params.simplify_polygons)
-                    points = []
-                    for x, y in zip(px, py):
-                        points.append((int(x), int(y)))
-                    poly = Polygon(points=points)
-                    opex_obj = ObjectPrediction(score=float(score), label=label_str, bbox=bbox, polygon=poly)
-                    pred_objs.append(opex_obj)
-                else:
-                    poller.error("Unknown output format: %s" % poller.params.output_format)
-
         if poller.params.output_format == OUTPUT_OPEX:
-            opex_preds = ObjectPredictions(id=os.path.basename(fname), timestamp=str(datetime.now()), objects=pred_objs)
-            opex_preds.save_json_to_file(output_path)
+            preds = detections_to_opex(
+                detections,
+                image_id=str(start_time),
+                timestamp=str(start_time),
+                class_mapping=poller.params.class_mapping,
+                simplify_tolerance=poller.params.simplify_tolerance)
+            preds.save_json_to_file(output_path)
             result.append(output_path)
         else:
             poller.error("Unknown output format: %s" % poller.params.output_format)
-
     except KeyboardInterrupt:
         poller.keyboard_interrupt()
     except:
@@ -133,9 +86,12 @@ def process_image(fname, output_dir, poller):
     return result
 
 
-def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTPUT_OPEX, suffix=".json",
-            score_threshold=0.0, poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
-            delete_input=False, max_files=-1, fit_bbox_to_polygon=False, simplify_polygons=None, verbose=False, quiet=False):
+def predict_from_files(cfg, input_dir: str, output_dir: str, tmp_dir: str, class_names: List[str], output_format: str = OUTPUT_OPEX, suffix: str = ".json",
+                       poll_wait: float = 1.0, continuous: bool = False, use_watchdog: bool = False, watchdog_check_interval: float = 10.0,
+                       delete_input: bool = False, max_files: int = -1, score_threshold: float = 0.5, slice_height: int = None, slice_width: int = None,
+                       overlap_height_ratio: float = 0.2, overlap_width_ratio: float = 0.2,
+                       merge_ios_threshold: float = 0.5, nms_ios_threshold: float = 0.7, simplify_tolerance: float = 1.0,
+                       verbose: bool = False, quiet: bool = False):
     """
     Method for performing predictions on images.
 
@@ -153,8 +109,6 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTP
     :type output_format: str
     :param suffix: the suffix to use for the prediction files, incl extension
     :type suffix: str
-    :param score_threshold: the minimum score predictions have to have
-    :type score_threshold: float
     :param poll_wait: the amount of seconds between polls when not in watchdog mode
     :type poll_wait: float
     :param continuous: whether to poll continuously
@@ -167,16 +121,27 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTP
     :type delete_input: bool
     :param max_files: The maximum number of files retrieve with each poll, use <0 for no restrictions.
     :type max_files: int
-    :param fit_bbox_to_polygon: whether to fit the bounding box to the polygon
-    :type fit_bbox_to_polygon: bool
-    :param simplify_polygons: the tolerance factor for simplifying the polygons
-    :type simplify_polygons: float
+    :param score_threshold: the minimum score for predictions
+    :type score_threshold: float
+    :param slice_height: the height of the slices in pixels
+    :type slice_height: int
+    :param slice_width: the width of the slices in pixels
+    :type slice_width: int
+    :param overlap_height_ratio: the ratio for the height overlaps
+    :type overlap_height_ratio: float
+    :param overlap_width_ratio: the ratio for the width overlaps
+    :type overlap_width_ratio: float
+    :param merge_ios_threshold: the IoS threshold for merging
+    :type merge_ios_threshold: float
+    :param nms_ios_threshold: the IoS threshold for removing overlapping polygons
+    :type nms_ios_threshold: float
+    :param simplify_tolerance: the tolerance parameter for simplifying the polygons
+    :type simplify_tolerance: float
     :param verbose: whether to output more logging information
     :type verbose: bool
     :param quiet: whether to suppress output
     :type quiet: bool
     """
-
     poller = Poller()
     poller.input_dir = input_dir
     poller.output_dir = output_dir
@@ -193,14 +158,21 @@ def predict(cfg, input_dir, output_dir, tmp_dir, class_names, output_format=OUTP
     poller.watchdog_check_interval = watchdog_check_interval
     poller.max_files = max_files
     poller.params.config = cfg
+    poller.params.labels = class_names
+    poller.params.class_mapping = labels_to_mapping(class_names)
     poller.params.class_names = class_names
-    poller.params.score_threshold = score_threshold
-    poller.params.fit_bbox_to_polygon = fit_bbox_to_polygon
-    poller.params.simplify_polygons = simplify_polygons
     poller.params.cpu_device = torch.device("cpu")
     poller.params.predictor = DefaultPredictor(cfg)
     poller.params.output_format = output_format
     poller.params.suffix = suffix
+    poller.params.score_threshold = score_threshold
+    poller.params.slice_height = slice_height
+    poller.params.slice_width = slice_width
+    poller.params.overlap_height_ratio = overlap_height_ratio
+    poller.params.overlap_width_ratio = overlap_width_ratio
+    poller.params.merge_ios_threshold = merge_ios_threshold
+    poller.params.nms_ios_threshold = nms_ios_threshold
+    poller.params.simplify_tolerance = simplify_tolerance
     poller.poll()
 
 
@@ -218,7 +190,6 @@ def main(args=None):
     parser.add_argument('--model', metavar='FILE', required=True, help='The model state to use')
     parser.add_argument('--config', metavar='FILE', required=True, help='The model config file to use')
     parser.add_argument('--labels', metavar='FILE', required=True, help='the file with the labels (comma-separate list)')
-    parser.add_argument('--score_threshold', type=float, default=0.5, help="Minimum score for instance predictions to be shown")
     parser.add_argument('--prediction_in', metavar='DIR', required=True, help='The input directory to poll for images to make predictions for')
     parser.add_argument('--prediction_out', metavar='DIR', required=True, help='The directory to place predictions in and move input images to')
     parser.add_argument('--prediction_tmp', metavar='DIR', help='The directory to place the prediction files in first before moving them to the output directory')
@@ -230,8 +201,14 @@ def main(args=None):
     parser.add_argument('--watchdog_check_interval', type=float, help='check interval in seconds for the watchdog', required=False, default=10.0)
     parser.add_argument('--delete_input', action='store_true', help='Whether to delete the input images rather than move them to --prediction_out directory', required=False, default=False)
     parser.add_argument('--max_files', type=int, default=-1, help="Maximum files to poll at a time, use -1 for unlimited", required=False)
-    parser.add_argument('--fit_bbox_to_polygon', action='store_true', help='Whether to fit the bounding box to the polygon', required=False, default=False)
-    parser.add_argument('--simplify_polygons', type=float, default=None, help="The tolerance factor to use for simplifying the polygons", required=False)
+    parser.add_argument('--score_threshold', metavar="THRESH", type=float, default=0.5, help="Minimum score for instance predictions to be shown")
+    parser.add_argument('--slice_height', metavar="HEIGHT", type=int, default=None, help="The height of the slices, uses full height if None")
+    parser.add_argument('--slice_width', metavar="WIDTH", type=int, default=None, help="The width of the slices, uses width height if None")
+    parser.add_argument('--overlap_height_ratio', metavar="RATIO", type=float, default=0.2, help="The overlap ratio for the height to use when slicing.")
+    parser.add_argument('--overlap_width_ratio', metavar="RATIO", type=float, default=0.2, help="The overlap ratio for the width to use when slicing.")
+    parser.add_argument('--merge_ios_threshold', metavar="THRESH", type=float, default=0.5, help="The IoS (intersect over small) threshold for merging polygons.")
+    parser.add_argument('--nms_ios_threshold', metavar="THRESH", type=float, default=0.7, help="The IoS (intersect over small) threshold for removing overlapping polygons.")
+    parser.add_argument('--simplify_tolerance', metavar="TOL", type=float, default=1.0, help="The tolerance factor for simplifying the polygons, the higher the simpler.")
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
     parser.add_argument('--quiet', action='store_true', help='Whether to suppress output', required=False, default=False)
 
@@ -252,11 +229,14 @@ def main(args=None):
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = num_classes
     cfg.MODEL.WEIGHTS = parsed.model
 
-    predict(cfg, parsed.prediction_in, parsed.prediction_out, parsed.prediction_tmp, labels, suffix=parsed.prediction_suffix,
-            score_threshold=parsed.score_threshold, poll_wait=parsed.poll_wait, continuous=parsed.continuous,
-            use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
-            delete_input=parsed.delete_input, max_files=parsed.max_files, output_format=parsed.prediction_format,
-            simplify_polygons=parsed.simplify_polygons, verbose=parsed.verbose, quiet=parsed.quiet)
+    predict_from_files(cfg, parsed.prediction_in, parsed.prediction_out, parsed.prediction_tmp, labels, suffix=parsed.prediction_suffix,
+                       score_threshold=parsed.score_threshold, poll_wait=parsed.poll_wait, continuous=parsed.continuous,
+                       use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
+                       delete_input=parsed.delete_input, max_files=parsed.max_files, output_format=parsed.prediction_format,
+                       slice_height=parsed.slice_height, slice_width=parsed.slice_width,
+                       overlap_width_ratio=parsed.overlap_width_ratio, overlap_height_ratio=parsed.overlap_height_ratio,
+                       merge_ios_threshold=parsed.merge_ios_threshold, nms_ios_threshold=parsed.nms_ios_threshold,
+                       simplify_tolerance=parsed.simplify_tolerance, verbose=parsed.verbose, quiet=parsed.quiet)
 
 
 if __name__ == "__main__":

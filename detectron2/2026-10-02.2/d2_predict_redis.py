@@ -2,16 +2,17 @@ import io
 import numpy as np
 import torch
 import traceback
-
+from PIL import Image
 from datetime import datetime
 from detectron2.config import get_cfg
 from detectron2.data.detection_utils import read_image, _apply_exif_orientation, convert_PIL_to_numpy
 from detectron2.engine.defaults import DefaultPredictor
 from detectron2.utils.visualizer import GenericMask
-from PIL import Image
-from d2_predict_common import lists_to_polygon, simplify_polygon, load_labels
-from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
 from opex import ObjectPredictions, ObjectPrediction, Polygon, BBox
+from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
+
+from d2_predict_common import load_labels, labels_to_mapping
+from d2_predict_slicing import predict, predict_slice, polygon_nms, detections_to_opex
 
 
 def read_image_bytes(array, format=None):
@@ -47,69 +48,21 @@ def process_image(msg_cont):
         start_time = datetime.now()
         if config.verbose:
             log("process_images - start processing image")
-        predictor = config.predictor
         img = read_image_bytes(msg_cont.message['data'], format="BGR")
-        predictions = predictor(img)
-        if "instances" not in predictions:
-            raise Exception("Didn't find 'instances' in the predictions dictionary!")
-        instances = predictions["instances"].to(config.cpu_device)
-        num_instances = len(instances)
-        image_height, image_width = instances.image_size
-        boxes = instances.pred_boxes if instances.has("pred_boxes") else None
-        classes = instances.pred_classes if instances.has("pred_classes") else None
-        scores = instances.scores if instances.has("scores") else None
-        if instances.has("pred_masks"):
-            masks = np.asarray(instances.pred_masks)
-            masks = [GenericMask(x, image_height, image_width) for x in masks]
-            polygons = [x.polygons for x in masks]
+        if (config.slice_height is not None) and (config.slice_width is not None):
+            detections = predict(img, config.predictor, score_threshold=config.score_threshold,
+                                 slice_height=config.slice_height, slice_width=config.slice_width,
+                                 overlap_height_ratio=config.overlap_height_ratio, overlap_width_ratio=config.overlap_width_ratio,
+                                 merge_ios_threshold=config.merge_ios_threshold, nms_ios_threshold=config.nms_ios_threshold)
         else:
-            polygons = None
-
-        objs = []
-        for i in range(num_instances):
-            score = scores[i].item()
-            if score >= config.score_threshold:
-                label = classes[i].item()
-                label_str = config.class_names[label]
-                box = boxes[i].tensor.numpy()
-                x0, y0, x1, y1 = box[0]
-
-                px = None
-                py = None
-                if polygons is not None:
-                    try:
-                        poly = polygons[i][0]
-                        px = []
-                        py = []
-                        for n in range(len(poly)):
-                            if n % 2 == 0:
-                                px.append(poly[n])
-                            else:
-                                py.append(poly[n])
-                        if config.fit_bbox_to_polygon:
-                            if len(px) >= 3:
-                                x0, y0, x1, y1 = lists_to_polygon(px, py).bounds
-                    except:
-                        log("Failed to access polygon #%d: %s" % (i, traceback.format_exc()))
-
-                bbox = BBox(left=int(x0), top=int(y0), right=int(x1), bottom=int(y1))
-
-                if px is None:
-                    px = [int(x0), int(x1), int(x1), int(x0)]
-                    py = [int(y0), int(y0), int(y1), int(y1)]
-
-                if config.simplify_polygons is not None:
-                    px, py = simplify_polygon(px, py, config.simplify_polygons)
-
-                p = []
-                for j in range(len(px)):
-                    p.append([int(px[j]), int(py[j])])
-                poly = Polygon(points=p)
-
-                pred = ObjectPrediction(label=label_str, score=score, bbox=bbox, polygon=poly)
-                objs.append(pred)
-
-        preds = ObjectPredictions(id=str(start_time), timestamp=str(start_time), objects=objs)
+            detections = predict_slice(config.predictor, img, 0, 0, score_threshold=config.score_threshold)
+            detections = polygon_nms(detections, ios_threshold=config.nms_ios_threshold)
+        preds = detections_to_opex(
+            detections,
+            image_id=str(start_time),
+            timestamp=str(start_time),
+            class_mapping=config.class_mapping,
+            simplify_tolerance=config.simplify_tolerance)
         msg_cont.params.redis.publish(msg_cont.params.channel_out, preds.to_json_string())
         if config.verbose:
             log("process_images - predictions string published: %s" % msg_cont.params.channel_out)
@@ -136,17 +89,27 @@ def main(args=None):
     parser.add_argument('--model', metavar='FILE', required=True, help='The model state to use')
     parser.add_argument('--config', metavar='FILE', required=True, help='The model config file to use')
     parser.add_argument('--labels', metavar='FILE', required=True, help='the file with the labels (comma-separate list)')
-    parser.add_argument('--score_threshold', type=float, default=0.5, help="Minimum score for instance predictions to be shown")
-    parser.add_argument('--fit_bbox_to_polygon', action='store_true', help='Whether to fit the bounding box to the polygon', required=False, default=False)
-    parser.add_argument('--simplify_polygons', type=float, default=None, help="The tolerance factor to use for simplifying the polygons", required=False)
+    parser.add_argument('--score_threshold', metavar="THRESH", type=float, default=0.5, help="Minimum score for instance predictions to be shown")
+    parser.add_argument('--slice_height', metavar="HEIGHT", type=int, default=None, help="The height of the slices, uses full height if None")
+    parser.add_argument('--slice_width', metavar="WIDTH", type=int, default=None, help="The width of the slices, uses width height if None")
+    parser.add_argument('--overlap_height_ratio', metavar="RATIO", type=float, default=0.2, help="The overlap ratio for the height to use when slicing.")
+    parser.add_argument('--overlap_width_ratio', metavar="RATIO", type=float, default=0.2, help="The overlap ratio for the width to use when slicing.")
+    parser.add_argument('--merge_ios_threshold', metavar="THRESH", type=float, default=0.5, help="The IoS (intersect over small) threshold for merging polygons.")
+    parser.add_argument('--nms_ios_threshold', metavar="THRESH", type=float, default=0.7, help="The IoS (intersect over small) threshold for removing overlapping polygons.")
+    parser.add_argument('--simplify_tolerance', metavar="TOL", type=float, default=1.0, help="The tolerance factor for simplifying the polygons, the higher the simpler.")
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
 
     parsed = parser.parse_args(args=args)
 
     config = Container()
     config.score_threshold = parsed.score_threshold
-    config.fit_bbox_to_polygon = parsed.fit_bbox_to_polygon
-    config.simplify_polygons = parsed.simplify_polygons
+    config.slice_height = parsed.slice_height
+    config.slice_width = parsed.slice_width
+    config.overlap_height_ratio = parsed.overlap_height_ratio
+    config.overlap_width_ratio = parsed.overlap_width_ratio
+    config.merge_ios_threshold = parsed.merge_ios_threshold
+    config.nms_ios_threshold = parsed.nms_ios_threshold
+    config.simplify_tolerance =parsed.simplify_tolerance
     config.verbose = parsed.verbose
 
     # loads labels
@@ -157,6 +120,7 @@ def main(args=None):
         print("# classes:", num_classes)
         print("classes:", labels)
     config.class_names = labels
+    config.class_mapping = labels_to_mapping(labels)
 
     # load config
     print("Loading config...")

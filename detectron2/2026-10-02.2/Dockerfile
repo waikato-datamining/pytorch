@@ -56,10 +56,12 @@ RUN /opt/detectron2.venv/bin/pip install --no-cache-dir \
         "fast-opex==0.0.4" \
         orjson \
         "redis-docker-harness==0.0.4" \
-        "sahi==0.14.0"
+        "sahi==0.14.0" \
+        "scikit-image==0.26.0"
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY d2_predict_common.py /opt/detectron2_ext/
+COPY d2_predict_slicing.py /opt/detectron2_ext/
 COPY d2_train_coco.py /opt/detectron2_ext/
 COPY d2_train_coco /usr/bin/
 COPY d2_predict.py /opt/detectron2_ext/
