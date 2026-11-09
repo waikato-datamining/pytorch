@@ -60,21 +60,13 @@ RUN /opt/detectron2.venv/bin/pip install --no-cache-dir \
         "scikit-image==0.26.0"
 
 COPY bash.bashrc /etc/bash.bashrc
-COPY d2_predict_common.py /opt/detectron2_ext/
-COPY d2_predict_slicing.py /opt/detectron2_ext/
-COPY d2_train_coco.py /opt/detectron2_ext/
+COPY *.py /opt/detectron2_ext/
 COPY d2_train_coco /usr/bin/
-COPY d2_predict.py /opt/detectron2_ext/
-COPY d2_predict /usr/bin/
-COPY d2_predict_redis.py /opt/detectron2_ext/
+COPY d2_predict_poll /usr/bin/
 COPY d2_predict_redis /usr/bin/
-COPY d2_export.py /opt/detectron2_ext/
 COPY d2_export /usr/bin/
-COPY d2_test_image_redis.py /opt/detectron2_ext/
 COPY d2_test_image_redis /usr/bin/
-COPY d2_dump_config.py /opt/detectron2_ext/
 COPY d2_dump_config /usr/bin/
-COPY d2_remove_solver_state.py /opt/detectron2_ext/
 COPY d2_remove_solver_state /usr/bin/
 
 ENV PYTHONPATH=/opt/detectron2_ext/
