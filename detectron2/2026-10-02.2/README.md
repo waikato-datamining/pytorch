@@ -1,8 +1,8 @@
 # Detectron2
 
-Uses [Detectron2](https://github.com/facebookresearch/detectron2) ([documentation](https://detectron2.readthedocs.io/en/v2026-10-02/)). 
+Uses [Detectron2](https://github.com/facebookresearch/detectron2) ([documentation](https://detectron2.readthedocs.io/en/)). 
 
-Uses PyTorch 2.10.0, CUDA 12.6 and Detectron2 2026-10-02.
+Uses PyTorch 2.10.0, CUDA 12.6 and Detectron2 2026-10-27.
 
 Though Detectron2 is installed via a wheel file, you can find Detectron2's source code \
 inside the container in:
@@ -22,13 +22,13 @@ Additional code is located in:
 Detectron2 github repo hash:
 
 ```
-1e3e13bbf607b54f62205c4c33922521822fb298
+247691a1c292654867deb35cabb27f18d75a1363
 ```
 
 and timestamp:
 
 ```
-October 2, 2026
+October 27, 2026
 ```
 
 ## Quick start
@@ -40,7 +40,7 @@ October 2, 2026
   ```bash
   docker run --gpus=all --shm-size 8G --net=host \
     -v /local/dir:/container/dir \
-    -it harbor.cms.waikato.ac.nz/public/pytorch/detectron2:2026-10-02.2
+    -it harbor.cms.waikato.ac.nz/public/pytorch/detectron2:2026-10-27
   ```
 
 ### Docker hub
@@ -50,12 +50,12 @@ October 2, 2026
   ```bash
   docker run --gpus=all --shm-size 8G --net=host \
     -v /local/dir:/container/dir \
-    -it waikatodatamining/detectron2:2026-10-02.2
+    -it waikatodatamining/detectron2:2026-10-27
   ```
 
 ### Build local image
 
-* Build the image from Docker file (from within /path_to/detectron2/2026-10-02.2)
+* Build the image from Docker file (from within /path_to/detectron2/2026-10-27)
 
   ```bash
   docker build -t detectron2 .
@@ -74,7 +74,7 @@ October 2, 2026
 ### Build
 
 ```bash
-docker build -t detectron2:2026-10-02.2 .
+docker build -t detectron2:2026-10-27 .
 ```
 
 ### Inhouse registry  
@@ -83,14 +83,14 @@ docker build -t detectron2:2026-10-02.2 .
 
   ```bash
   docker tag \
-    detectron2:2026-10-02.2 \
-    harbor.cms.waikato.ac.nz/public/pytorch/detectron2:2026-10-02.2
+    detectron2:2026-10-27 \
+    harbor.cms.waikato.ac.nz/public/pytorch/detectron2:2026-10-27
   ```
   
 * Push
 
   ```bash
-  docker push harbor.cms.waikato.ac.nz/public/pytorch/detectron2:2026-10-02.2
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/detectron2:2026-10-27
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -104,14 +104,14 @@ docker build -t detectron2:2026-10-02.2 .
 
   ```bash
   docker tag \
-    detectron2:2026-10-02.2 \
-    waikatodatamining/detectron2:2026-10-02.2
+    detectron2:2026-10-27 \
+    waikatodatamining/detectron2:2026-10-27
   ```
   
 * Push
 
   ```bash
-  docker push waikatodatamining/detectron2:2026-10-02.2
+  docker push waikatodatamining/detectron2:2026-10-27
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -124,7 +124,7 @@ docker build -t detectron2:2026-10-02.2 .
 
 ```bash
 docker run --rm \
-  -it harbor.cms.waikato.ac.nz/public/pytorch/detectron2:2026-10-02.2 \
+  -it harbor.cms.waikato.ac.nz/public/pytorch/detectron2:2026-10-27 \
   pip freeze > requirements.txt
 ```
 

@@ -44,7 +44,7 @@ RUN /opt/detectron2.venv/bin/pip install -U --no-cache-dir \
 
 RUN git clone https://github.com/facebookresearch/detectron2.git && \
     cd detectron2 && \
-    git reset --hard 1e3e13bbf607b54f62205c4c33922521822fb298 && \
+    git reset --hard 247691a1c292654867deb35cabb27f18d75a1363 && \
     /opt/detectron2.venv/bin/pip -v install --no-cache-dir . && \
     cd /opt/detectron2/projects/TensorMask && \
     /opt/detectron2.venv/bin/pip install --no-cache-dir .
