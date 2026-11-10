@@ -56,7 +56,7 @@ def load_model(model_path, device: str = "cuda", confidence_threshold: float = 0
     result = ModelParams()
     result.model = model
     result.device = device
-    result.names = model.names
+    result.names = model.model.names
     result.confidence_threshold = confidence_threshold
 
     return result
@@ -94,7 +94,8 @@ def predict_image_opex(model_params, id, img,
             slice_height=slice_height,
             slice_width=slice_width,
             overlap_height_ratio=overlap_height_ratio,
-            overlap_width_ratio=overlap_width_ratio
+            overlap_width_ratio=overlap_width_ratio,
+            verbose=0
         )
     else:
         pred_result = get_prediction(img, model_params.model)
@@ -107,16 +108,18 @@ def predict_image_opex(model_params, id, img,
     # Process detections
     opex_preds = []
     for i, pred in enumerate(pred_result.object_prediction_list):
-        minx, miny, maxx, maxy = pred.bbox
-        if pred.category_name not in classes_set:
+        minx, miny, maxx, maxy = pred.bbox.box
+        if pred.score.value < model_params.confidence_threshold:
             continue
-        bbox = BBox(left=int(min), top=int(miny), right=int(maxx), bottom=int(maxy))
+        if pred.category.name not in classes_set:
+            continue
+        bbox = BBox(left=int(minx), top=int(miny), right=int(maxx), bottom=int(maxy))
         p = [[bbox.left, bbox.top],
              [bbox.right, bbox.top],
              [bbox.right, bbox.bottom],
              [bbox.left, bbox.bottom]]
         poly = Polygon(points=p)
-        opex_pred = ObjectPrediction(score=pred.score, label=pred.category_name, bbox=bbox, polygon=poly)
+        opex_pred = ObjectPrediction(score=float(pred.score.value), label=pred.category.name, bbox=bbox, polygon=poly)
         opex_preds.append(opex_pred)
 
     result = ObjectPredictions(id=id, timestamp=str(datetime.now()), objects=opex_preds)
