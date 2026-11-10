@@ -1,0 +1,87 @@
+import io
+import traceback
+from datetime import datetime
+
+from PIL import Image
+from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
+
+from predict_common import load_model, predict_image_opex
+
+
+def process_image(msg_cont):
+    """
+    Processes the message container, loading the image from the message and forwarding the predictions.
+
+    :param msg_cont: the message container to process
+    :type msg_cont: MessageContainer
+    """
+    config = msg_cont.params.config
+
+    try:
+        start_time = datetime.now()
+        if config.verbose:
+            log("process_images - start processing image")
+
+        img = Image.open(io.BytesIO(msg_cont.message['data']))
+        preds = predict_image_opex(config.model_params, str(start_time), img, classes=config.classes,
+                                   slice_height=config.slice_height, slice_width=config.slice_width,
+                                   overlap_height_ratio=config.overlap_height_ratio, overlap_width_ratio=config.overlap_width_ratio)
+        preds_str = preds.to_json_string()
+        msg_cont.params.redis.publish(msg_cont.params.channel_out, preds_str)
+        if config.verbose:
+            log("process_images - predictions string published: %s" % msg_cont.params.channel_out)
+            end_time = datetime.now()
+            processing_time = end_time - start_time
+            processing_time = int(processing_time.total_seconds() * 1000)
+            log("process_images - finished processing image: %d ms" % processing_time)
+    except KeyboardInterrupt:
+        msg_cont.params.stopped = True
+    except:
+        log("process_images - failed to process: %s" % traceback.format_exc())
+
+
+def main(args=None):
+    """
+    Performs the predictions.
+    Use -h to see all options.
+
+    :param args: the command-line arguments to use, uses sys.argv if None
+    :type args: list
+    """
+    parser = create_parser('Yolo26 - Prediction (Redis)', prog="yolo26_predict_redis", prefix="redis_")
+    parser.add_argument('--model', metavar="FILE", type=str, required=True, help='The .pt or ONNX model to use.')
+    parser.add_argument('--device', metavar="DEVICE", type=str, default="cuda", help='The device to run the model on.')
+    parser.add_argument('--confidence_threshold', metavar="0-1", type=float, required=False, default=0.25, help='The probability threshold to use for the confidence.')
+    parser.add_argument('--classes', nargs='*', type=str, help='filter by class: --classes person, or --classes person bicycle')
+    parser.add_argument('--text_prompt', nargs='*', type=str, help='classes to use for the text prompt of yoloe models')
+    parser.add_argument('--slice_height', metavar="HEIGHT", type=int, default=None, help="The height of the slices, uses full height if None")
+    parser.add_argument('--slice_width', metavar="WIDTH", type=int, default=None, help="The width of the slices, uses width height if None")
+    parser.add_argument('--overlap_height_ratio', metavar="RATIO", type=float, default=0.2, help="The overlap ratio for the height to use when slicing.")
+    parser.add_argument('--overlap_width_ratio', metavar="RATIO", type=float, default=0.2, help="The overlap ratio for the width to use when slicing.")
+    parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
+
+    parsed = parser.parse_args(args=args)
+
+    # load model
+    print("Loading model (%s): %s" % (parsed.device, parsed.model))
+    model_params = load_model(parsed.model, device=parsed.device, text_prompt=parsed.text_prompt, confidence_threshold=parsed.confidence_threshold)
+
+    config = Container()
+    config.model_params = model_params
+    config.confidence_threshold = parsed.confidence_threshold
+    config.slice_height = parsed.slice_height
+    config.slice_width = parsed.slice_width
+    config.overlap_height_ratio = parsed.overlap_height_ratio
+    config.overlap_width_ratio = parsed.overlap_width_ratio
+    config.classes = parsed.classes
+    config.verbose = parsed.verbose
+
+    params = configure_redis(parsed, config=config)
+    run_harness(params, process_image)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception:
+        print(traceback.format_exc())
