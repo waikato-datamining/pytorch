@@ -1,11 +1,7 @@
-ARG PYTORCH="2.14.1"
-ARG CUDA="13.0"
-ARG CUDNN="9"
-
-FROM pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-devel
+FROM pytorch/pytorch:2.10.0-cuda12.6-cudnn9-devel
 
 RUN apt-get update && \
-    apt-get install -y libglib2.0-0 libsm6 libxrender-dev libxext6 libgl1 libglx-mesa0 python3-dev python3-pip python3-venv git wget build-essential cmake ninja-build && \
+    apt-get install -y libglib2.0-0 libsm6 libxrender-dev libxext6 python3-dev python3-pip python3-venv git wget build-essential cmake ninja-build && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -13,7 +9,7 @@ WORKDIR /opt
 
 RUN python3 -m venv --system-site-packages /opt/yolo26
 RUN /opt/yolo26/bin/pip install --no-cache-dir \
-      ultralytics-opencv-headless[export]==8.4.209 \
+      ultralytics-opencv-headless[export]==8.4.16 \
       onnxruntime \
       git+https://github.com/openai/CLIP.git
 RUN . /opt/yolo26/bin/activate && \

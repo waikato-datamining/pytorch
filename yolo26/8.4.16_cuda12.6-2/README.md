@@ -1,7 +1,7 @@
 # Yolo26
 
 [Yolo26](https://docs.ultralytics.com/models/yolo26/), 
-uses PyTorch 2.x and Ultralytics 8.4.209
+uses PyTorch 2.x and Ultralytics 8.4.16
 
 ## Quick start
 
@@ -23,7 +23,7 @@ mkdir config
     -v `pwd`:/workspace \
     -v `pwd`/cache:/cache \
     -v `pwd`/config:/config \
-    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolo26:8.4.209_cuda13.0
+    -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolo26:8.4.16_cuda12.6-2
   ```
 
 ### Docker hub
@@ -35,12 +35,12 @@ mkdir config
     -v `pwd`:/workspace \
     -v `pwd`/cache:/cache \
     -v `pwd`/config:/config \
-    -it waikatodatamining/pytorch-yolo26:8.4.209_cuda13.0
+    -it waikatodatamining/pytorch-yolo26:8.4.16_cuda12.6-2
   ```
 
 ### Build local image
 
-* Build the image from Docker file (from within /path_to/yolo26/8.4.209_cuda13.0)
+* Build the image from Docker file (from within /path_to/yolo26/8.4.16_cuda12.6-2)
 
   ```bash
   docker build -t yolo26 .
@@ -62,7 +62,7 @@ mkdir config
 ### Build
 
 ```bash
-docker build -t yolo26:8.4.209_cuda13.0 .
+docker build -t yolo26:8.4.16_cuda12.6-2 .
 ```
 
 ### Inhouse registry  
@@ -71,14 +71,14 @@ docker build -t yolo26:8.4.209_cuda13.0 .
 
   ```bash
   docker tag \
-    yolo26:8.4.209_cuda13.0 \
-    harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolo26:8.4.209_cuda13.0
+    yolo26:8.4.16_cuda12.6-2 \
+    harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolo26:8.4.16_cuda12.6-2
   ```
   
 * Push
 
   ```bash
-  docker push harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolo26:8.4.209_cuda13.0
+  docker push harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolo26:8.4.16_cuda12.6-2
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -92,14 +92,14 @@ docker build -t yolo26:8.4.209_cuda13.0 .
 
   ```bash
   docker tag \
-    yolo26:8.4.209_cuda13.0 \
-    waikatodatamining/pytorch-yolo26:8.4.209_cuda13.0
+    yolo26:8.4.16_cuda12.6-2 \
+    waikatodatamining/pytorch-yolo26:8.4.16_cuda12.6-2
   ```
   
 * Push
 
   ```bash
-  docker push waikatodatamining/pytorch-yolo26:8.4.209_cuda13.0
+  docker push waikatodatamining/pytorch-yolo26:8.4.16_cuda12.6-2
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -112,8 +112,8 @@ docker build -t yolo26:8.4.209_cuda13.0 .
 
 ```bash
 docker run --rm --pull=always \
-  -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolo26:8.4.209_cuda13.0 \
-  pip freeze > requirements.txt
+  -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolo26:8.4.16_cuda12.6-2 \
+  /opt/yolo26/bin/pip freeze > requirements.txt
 ```
 
 
