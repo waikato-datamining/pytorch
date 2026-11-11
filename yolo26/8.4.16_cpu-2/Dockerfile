@@ -1,5 +1,4 @@
-ARG DOCKER_REGISTRY=public.aml-repo.cms.waikato.ac.nz:443/
-FROM ${DOCKER_REGISTRY}debian:bullseye
+FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -23,7 +22,7 @@ WORKDIR /opt
 
 RUN python3 -m venv --system-site-packages /opt/yolo26
 RUN /opt/yolo26/bin/pip install --no-cache-dir \
-      torch==2.8.0 torchvision --index-url https://download.pytorch.org/whl/cpu
+      torch==2.10.0 torchvision --index-url https://download.pytorch.org/whl/cpu
 RUN /opt/yolo26/bin/pip install --no-cache-dir \
       ultralytics[export]==8.4.16 \
       onnxruntime
