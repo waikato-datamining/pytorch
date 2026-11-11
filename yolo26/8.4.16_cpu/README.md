@@ -112,9 +112,11 @@ docker build -t yolo26:8.4.16_cpu .
 ### Requirements
 
 ```bash
-docker run --rm --pull=always \
-  -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolo26:8.4.16_cpu \
-  pip freeze > requirements.txt
+docker run --rm --pull=always -u $(id -u):$(id -g) -e USER=$USER \
+  -v `pwd`:/workspace \
+  -it harbor.cms.waikato.ac.nz/public/pytorch/pytorch-yolo26:8.4.16_cpu
+
+/opt/yolo26/bin/pip freeze > /workspace/requirements.txt
 ```
 
 
