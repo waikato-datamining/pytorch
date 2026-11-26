@@ -106,16 +106,23 @@ def predict_image_opex(model_params, id, img,
     # Process detections
     opex_preds = []
     for i, pred in enumerate(pred_result.object_prediction_list):
-        minx, miny, maxx, maxy = pred.bbox.box
         if pred.score.value < model_params.confidence_threshold:
             continue
         if pred.category.name not in classes_set:
             continue
+        # bbox
+        minx, miny, maxx, maxy = pred.bbox.box
         bbox = BBox(left=int(minx), top=int(miny), right=int(maxx), bottom=int(maxy))
-        p = [[bbox.left, bbox.top],
-             [bbox.right, bbox.top],
-             [bbox.right, bbox.bottom],
-             [bbox.left, bbox.bottom]]
+        # polygon
+        if hasattr(pred, "mask") and (pred.mask is not None) and (len(pred.mask.segmentation) > 0):
+            p = []
+            for x, y in list(zip(pred.mask.segmentation[0][::2], pred.mask.segmentation[0][1::2])):
+                p.append([x, y])
+        else:
+            p = [[bbox.left, bbox.top],
+                 [bbox.right, bbox.top],
+                 [bbox.right, bbox.bottom],
+                 [bbox.left, bbox.bottom]]
         poly = Polygon(points=p)
         opex_pred = ObjectPrediction(score=float(pred.score.value), label=pred.category.name, bbox=bbox, polygon=poly)
         opex_preds.append(opex_pred)
